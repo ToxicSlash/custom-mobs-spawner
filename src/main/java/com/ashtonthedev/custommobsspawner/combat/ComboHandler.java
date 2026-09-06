@@ -87,6 +87,16 @@ public final class ComboHandler {
         reset(player, false);
     }
 
+    public static void clearPlayer(UUID uuid) {
+        if (uuid == null) {
+            return;
+        }
+        COMBOS.remove(uuid);
+        RESET_DELAYS.remove(uuid);
+        LAST_MELEE_COMBO_GAIN_TICKS.remove(uuid);
+        LAST_SUSTAINED_MAGIC_COMBO_GAIN_TICKS.remove(uuid);
+    }
+
     public static void decrementFromDamageTaken(ServerPlayerEntity player, DamageSource source) {
         if (source.getAttacker() == player || source.getSource() == player) {
             return;
@@ -110,10 +120,7 @@ public final class ComboHandler {
 
         int combo = Math.max(0, current - amount);
         if (combo <= 0) {
-            COMBOS.remove(uuid);
-            RESET_DELAYS.remove(uuid);
-            LAST_MELEE_COMBO_GAIN_TICKS.remove(uuid);
-            LAST_SUSTAINED_MAGIC_COMBO_GAIN_TICKS.remove(uuid);
+            clearPlayer(uuid);
         } else {
             COMBOS.put(uuid, combo);
             RESET_DELAYS.putIfAbsent(uuid, RESET_TICKS);
@@ -123,10 +130,9 @@ public final class ComboHandler {
 
     private static void reset(ServerPlayerEntity player, boolean markCombat) {
         UUID uuid = player.getUuid();
-        boolean hadCombo = COMBOS.remove(uuid) != null;
-        boolean hadDelay = RESET_DELAYS.remove(uuid) != null;
-        LAST_MELEE_COMBO_GAIN_TICKS.remove(uuid);
-        LAST_SUSTAINED_MAGIC_COMBO_GAIN_TICKS.remove(uuid);
+        boolean hadCombo = COMBOS.containsKey(uuid);
+        boolean hadDelay = RESET_DELAYS.containsKey(uuid);
+        clearPlayer(uuid);
         if (!hadCombo && !hadDelay && !markCombat) {
             return;
         }
@@ -166,10 +172,7 @@ public final class ComboHandler {
                 continue;
             }
 
-            COMBOS.remove(uuid);
-            RESET_DELAYS.remove(uuid);
-            LAST_MELEE_COMBO_GAIN_TICKS.remove(uuid);
-            LAST_SUSTAINED_MAGIC_COMBO_GAIN_TICKS.remove(uuid);
+            clearPlayer(uuid);
             sync(player, 0, false);
         }
     }
