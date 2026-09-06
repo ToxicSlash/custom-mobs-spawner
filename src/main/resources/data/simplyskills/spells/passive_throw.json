@@ -1,0 +1,85 @@
+{
+  "school": "PHYSICAL_MELEE",
+  "range": 26,
+  "learn": {
+    "tier": 1
+  },
+  "cast": {
+    "duration": 0.5,
+    "particles": [ ]
+  },
+  "release": {
+    "target": {
+      "type": "PROJECTILE",
+      "projectile": {
+        "launch_properties": {
+          "velocity": 0.8
+        },
+        "projectile": {
+          "homing_angle": 46.0,
+          "perks": {
+            "bounce": 1
+          },
+          "client_data": {
+            "travel_particles": [ ],
+            "model": {
+              "use_held_item": true,
+              "light_emission": "NONE",
+              "rotate_degrees_per_tick": -36.0,
+              "scale": 1,
+              "orientation": "ALONG_MOTION"
+            }
+          },
+          "travel_sound_interval": 8,
+          "travel_sound": {
+            "id": "minecraft:entity.player.attack.strong"
+          }
+        }
+      }
+    },
+    "sound": {
+      "id": "minecraft:entity.player.attack.strong"
+    }
+  },
+  "impact": [
+    {
+      "action": {
+        "type": "DAMAGE",
+        "damage": {
+          "spell_power_coefficient": 1
+        }
+      },
+      "sound": {
+        "id": "simplyskills:hit_03"
+      }
+    },
+    {
+      "action": {
+        "type": "STATUS_EFFECT",
+        "status_effect": {
+          "effect_id": "simplyskills:death_mark",
+          "duration": 8,
+          "amplifier": 0,
+          "apply_limit": {
+            "health_base": 100,
+            "spell_power_multiplier": 1
+          },
+          "show_particles": false
+        }
+      },
+      "particles": [
+        {
+          "particle_id": "spell_engine:dripping_blood",
+          "shape": "SPHERE",
+          "origin": "CENTER",
+          "count": 10.0,
+          "min_speed": 0.05,
+          "max_speed": 0.3
+        }
+      ]
+    }
+  ],
+  "cost": {
+    "durability": 0
+  }
+}

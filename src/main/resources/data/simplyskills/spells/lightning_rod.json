@@ -1,0 +1,99 @@
+{
+  "range": 3.0,
+  "school": "LIGHTNING",
+  "learn": {
+    "tier": 1
+  },
+  "cast": {
+    "duration": 0
+  },
+  "release": {
+    "target": {
+      "type": "AREA",
+      "area": {
+        "vertical_range_multiplier": 0.5
+      }
+    },
+    "sound": {
+      "id": "simplyskills:soundeffect_35"
+    },
+    "particles": [
+      {
+        "particle_id": "spell_engine:smoke_medium",
+        "shape": "CIRCLE",
+        "origin": "CENTER",
+        "count": 50.0,
+        "min_speed": 0.2,
+        "max_speed": 0.3,
+        "pre_spawn_travel": 6
+      },
+      {
+        "particle_id": "spell_engine:smoke_medium",
+        "shape": "CIRCLE",
+        "origin": "CENTER",
+        "count": 60.0,
+        "min_speed": 0.2,
+        "max_speed": 0.3,
+        "pre_spawn_travel": 8
+      },
+      {
+        "particle_id": "spell_engine:smoke_medium",
+        "shape": "SPHERE",
+        "origin": "CENTER",
+        "count": 50,
+        "min_speed": 0.25,
+        "max_speed": 0.25,
+        "pre_spawn_travel": 4
+      },
+      {
+        "particle_id": "spell_engine:electric_arc_a",
+        "shape": "PILLAR",
+        "origin": "FEET",
+        "count": 6.0,
+        "min_speed": 0.01,
+        "max_speed": 0.05,
+        "extent": 3
+      },
+      {
+        "particle_id": "spell_engine:electric_arc_b",
+        "shape": "PILLAR",
+        "origin": "FEET",
+        "count": 8.0,
+        "min_speed": 0.01,
+        "max_speed": 0.05,
+        "extent": 5
+      }
+    ]
+  },
+  "impact": [
+    {
+      "action": {
+        "type": "DAMAGE",
+        "damage": {
+          "spell_power_coefficient": 1
+        }
+      }
+    },
+    {
+      "action": {
+        "type": "STATUS_EFFECT",
+        "status_effect": {
+          "effect_id": "minecraft:weakness",
+          "duration": 3,
+          "apply_mode": "ADD",
+          "apply_limit": {
+            "health_base": 500,
+            "spell_power_multiplier": 2
+          },
+          "show_particles": false
+        }
+      },
+      "sound": {
+        "id": "simplyskills:soundeffect_35"
+      }
+    }
+  ],
+  "cost": {
+    "exhaust": 0
+  }
+}

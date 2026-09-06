@@ -1,0 +1,59 @@
+plugins {
+    id "fabric-loom" version "1.7-SNAPSHOT"
+    id "maven-publish"
+}
+
+version = project.mod_version
+group = project.maven_group
+
+base {
+    archivesName = project.archives_base_name
+}
+
+repositories {
+    mavenCentral()
+}
+
+configurations.configureEach {
+    resolutionStrategy.eachDependency { details ->
+        if (details.requested.group == "org.lwjgl") {
+            details.useVersion "3.3.1"
+            details.because "Minecraft 1.20.1 and Sodium 0.5.13 require LWJGL 3.3.1 in the dev runtime."
+        }
+    }
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    compileOnly files("run/mods/bettercombat-fabric-1.9.0+1.20.1.jar")
+    compileOnly files("run/mods/rpgmana-1.1.0.jar")
+    compileOnly files("run/mods/amethyst_core-1.5.0+1.20.1.jar")
+    compileOnly files("run/mods/amethyst_imbuement-1.20.1-19.8.jar")
+    compileOnly files("run/mods/fzzy_core-0.5.1+1.20.1.jar")
+    compileOnly files("run/mods/fzzy_config-0.7.6+1.20.1.jar")
+    modCompileOnly files("run/mods/Botania-1.20.1-453-FABRIC.jar")
+    modCompileOnly files("run/mods/trinkets-3.7.2.jar")
+    modCompileOnly files("run/mods/spell_engine-0.15.12+1.20.1.jar")
+    modCompileOnly files("run/mods/spell_power-0.12.0+1.20.1.jar")
+}
+
+processResources {
+    inputs.property "version", project.version
+
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    it.options.release = 17
+}
+
+java {
+    withSourcesJar()
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}

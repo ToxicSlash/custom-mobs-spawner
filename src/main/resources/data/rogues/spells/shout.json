@@ -1,0 +1,69 @@
+{
+  "range": 12,
+  "school": "PHYSICAL_MELEE",
+  "learn": {
+    "tier": 2
+  },
+  "cast": {
+    "duration": 0
+  },
+  "release": {
+    "target": {
+      "type": "AREA",
+      "area": {
+        "vertical_range_multiplier": 0.5
+      }
+    },
+    "animation": "spell_engine:one_handed_shout_release",
+    "sound": {
+      "id": "rogues:shout_release"
+    },
+    "particles": []
+  },
+  "impact": [
+    {
+      "action": {
+        "type": "STATUS_EFFECT",
+        "status_effect": {
+          "effect_id": "rogues:demoralize",
+          "duration": 8,
+          "apply_mode": "ADD",
+          "apply_limit": {
+            "health_base": 50,
+            "spell_power_multiplier": 2
+          },
+          "show_particles": false
+        }
+      },
+      "particles": [
+        {
+          "particle_id": "spell_engine:weakness_smoke",
+          "shape": "SPHERE",
+          "origin": "CENTER",
+          "count": 25,
+          "min_speed": 0.2,
+          "max_speed": 0.2
+        }
+      ],
+      "sound": {
+        "id": "rogues:demoralize_impact"
+      }
+    },
+    {
+      "action": {
+        "type": "DAMAGE",
+        "damage": {
+          "spell_power_coefficient": 0.35,
+          "knockback": 0
+        }
+      }
+    }
+  ],
+  "cost": {
+    "exhaust": 0.35,
+    "cooldown_duration": 14,
+    "item_id": "rpgmana:mana",
+    "rpgmana": 30,
+    "cooldown_haste_affected": true
+  }
+}

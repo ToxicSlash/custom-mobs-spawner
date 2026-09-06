@@ -1,0 +1,17 @@
+{
+  "custom_mob": "cmobs:overworld/zombie/frail_zombie",
+  "dimensions": [
+    "minecraft:overworld"
+  ],
+  "biomes": [
+    "#minecraft:is_overworld"
+  ],
+  "min_light": 0,
+  "max_light": 7,
+  "blocks": [
+    "#minecraft:dirt",
+    "#minecraft:sand",
+    "#minecraft:terracotta",
+    "#minecraft:base_stone_overworld"
+  ]
+}

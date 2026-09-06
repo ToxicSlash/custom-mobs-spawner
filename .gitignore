@@ -1,0 +1,24 @@
+.gradle/
+build/
+
+# Local backups / nested scratch repositories
+.cmobs-backup/
+cmobs/
+
+# Local Minecraft/Fabric run output
+run/
+run/.fabric/tmp/
+run/logs/
+run/crash-reports/
+run/screenshots/
+run/saves/
+run/usercache.json
+run/data/
+runClient-*.log
+runClient-*.err.log
+runServer-*.log
+runServer-*.err.log
+
+# IDE/local files
+*.iml
+.idea/

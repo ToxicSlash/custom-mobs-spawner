@@ -1,0 +1,53 @@
+{
+  "required": true,
+  "package": "com.ashtonthedev.custommobsspawner.mixin",
+  "plugin": "com.ashtonthedev.custommobsspawner.mixin.CmobsMixinPlugin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "AbstractSkeletonEntityMixin",
+    "AmethystCoreDamagePenetrationMixin",
+    "AmethystCoreAugmentScepterRpgManaMixin",
+    "AmethystCoreMissileDamagePenetrationMixin",
+    "AmethystImbuementManaPotionRpgManaMixin",
+    "AmethystManaRegenerationOverchargeMixin",
+    "AmethystImbuementSpellScrollRpgManaMixin",
+    "AmethystImbuementStatusRpgManaMixin",
+    "ArmorDamageScaleZenithArmorMixin",
+    "BetterTrimsDevBridgeMixin",
+    "ItemMixin",
+    "ItemStackMixin",
+    "LivingEntityAccessor",
+    "LivingEntityMixin",
+    "MobEntityMixin",
+    "PersistentProjectileEntityAccessor",
+    "PersistentProjectileEntityMixin",
+    "PlayerEntityMixin",
+    "ProjectileEntityMixin",
+    "RpgManaCooldownRegenMixin",
+    "RpgManaDeathResetMixin",
+    "RpgManaDefaultsMixin",
+    "RpgManaOverchargeClampMixin",
+    "RpgManaPersistenceMixin",
+    "RpgManaSpellEngineAttemptThresholdMixin",
+    "RpgManaSpellEngineThresholdMixin",
+    "ServerPlayNetworkHandlerMixin",
+    "SpellRegistrySwordFinisherMixin",
+    "SpellDamagePenetrationEnchantmentHelperMixin",
+    "SpellDamagePenetrationLivingEntityMixin",
+    "SpellEngineDamagePenetrationMixin",
+    "SpellProjectileMixin"
+  ],
+  "client": [
+    "client.BetterCombatTargetFinderMixin",
+    "client.HeldItemRendererMixin",
+    "client.LivingEntityRendererMixin",
+    "client.MinecraftClientAccessor",
+    "client.MinecraftClientMixin",
+    "client.RpgManaInGameHudMixin",
+    "client.SpellEngineSkillCooldownMixin",
+    "client.VisceralCombatEventsClientMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

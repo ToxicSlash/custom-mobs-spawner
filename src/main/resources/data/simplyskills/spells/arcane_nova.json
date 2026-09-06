@@ -1,0 +1,84 @@
+{
+  "range": 6.0,
+  "school": "ARCANE",
+  "learn": {
+    "tier": 2
+  },
+  "cast": {
+    "duration": 0.5,
+    "animation": "spell_engine:one_handed_area_charge",
+    "sound": {
+      "id": "spell_engine:generic_frost_casting",
+      "randomness": 0
+    },
+    "particles": [
+      {
+        "particle_id": "spell_engine:arcane_spell",
+        "shape": "PILLAR",
+        "origin": "CENTER",
+        "count": 0.5,
+        "min_speed": 0.1,
+        "max_speed": 0.2
+      }
+    ]
+  },
+  "release": {
+    "target": {
+      "type": "AREA",
+      "area": {
+        "vertical_range_multiplier": 0.5
+      }
+    },
+    "sound": {
+      "id": "simplyskills:spell_arcane_nova",
+      "volume": 0.1,
+      "pitch": 1.2
+    },
+    "particles": [
+      {
+        "particle_id": "spell_engine:arcane_spell",
+        "shape": "CIRCLE",
+        "origin": "CENTER",
+        "count": 130.0,
+        "min_speed": 0.2,
+        "max_speed": 0.6
+      },
+      {
+        "particle_id": "spell_engine:arcane_spell",
+        "shape": "CIRCLE",
+        "origin": "CENTER",
+        "count": 30.0,
+        "min_speed": 0.5,
+        "max_speed": 0.9
+      }
+    ]
+  },
+  "impact": [
+    {
+      "action": {
+        "type": "DAMAGE",
+        "damage": {
+          "spell_power_coefficient": 1.1
+        }
+      },
+      "particles": [
+        {
+          "particle_id": "spell_engine:arcane_hit",
+          "shape": "SPHERE",
+          "origin": "CENTER",
+          "count": 30.0,
+          "min_speed": 0.2,
+          "max_speed": 0.7
+        }
+      ],
+      "sound": {
+        "id": "simplyskills:spell_arcane_hit",
+        "volume": 0.1,
+        "pitch": 1.4
+      }
+    }
+  ],
+  "cost": {
+    "durability": 0
+  }
+}
