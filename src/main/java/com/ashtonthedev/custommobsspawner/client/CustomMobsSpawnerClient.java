@@ -10,8 +10,12 @@ public class CustomMobsSpawnerClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         EntityRendererRegistry.register(ModEntities.CUSTOM_ZOMBIE, ZombieEntityRenderer::new);
-        if (FabricLoader.getInstance().isModLoaded("bettercombat")) {
+        FabricLoader loader = FabricLoader.getInstance();
+        if (loader.isModLoaded("bettercombat")) {
             BetterCombatClientCompat.register();
+        }
+        if (loader.isModLoaded("rpgmana")) {
+            RpgManaBarOverlay.register();
         }
         PostureHudOverlay.register();
         ComboHudOverlay.register();
