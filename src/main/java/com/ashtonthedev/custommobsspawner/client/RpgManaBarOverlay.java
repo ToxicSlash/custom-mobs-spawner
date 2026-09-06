@@ -29,7 +29,7 @@ public final class RpgManaBarOverlay {
 
     private static void render(DrawContext context, float tickDelta) {
         MinecraftClient client = MinecraftClient.getInstance();
-        if (client.player == null || !(client.player instanceof ManaInterface manaInterface)) {
+        if (client.player == null || client.options.hudHidden || !(client.player instanceof ManaInterface manaInterface)) {
             return;
         }
         if (Rpgmana.clientConfig != null && Rpgmana.clientConfig.alt) {
