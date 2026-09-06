@@ -5,6 +5,7 @@ import com.ashtonthedev.custommobsspawner.command.CustomMobsCommand;
 import com.ashtonthedev.custommobsspawner.command.CustomSummonCommand;
 import com.ashtonthedev.custommobsspawner.combat.ModAttributes;
 import com.ashtonthedev.custommobsspawner.combat.ComboHandler;
+import com.ashtonthedev.custommobsspawner.combat.SpellComboHandler;
 import com.ashtonthedev.custommobsspawner.combat.MobPostureHandler;
 import com.ashtonthedev.custommobsspawner.combat.PlayerParryHandler;
 import com.ashtonthedev.custommobsspawner.compat.BotaniaManaPoolRpgManaCompat;
@@ -22,12 +23,15 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.fabricmc.fabric.api.gamerule.v1.GameRuleFactory;
 import net.fabricmc.fabric.api.gamerule.v1.GameRuleRegistry;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.GameRules;
+
+import java.util.UUID;
 
 public class CustomMobsSpawner implements ModInitializer {
     public static final String MOD_ID = "cmobs";
@@ -62,6 +66,11 @@ public class CustomMobsSpawner implements ModInitializer {
         ServerPlayNetworking.registerGlobalReceiver(CustomSkillRegistry.FAILED_ATTACK_PACKET, (server, player, handler, buf, responseSender) ->
                 server.execute(() -> CustomSkillRegistry.queueFailedPlayerAttack(player))
         );
+        ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
+            UUID uuid = handler.player.getUuid();
+            ComboHandler.clearPlayer(uuid);
+            SpellComboHandler.clearPlayer(uuid);
+        });
         ServerEntityEvents.ENTITY_LOAD.register((entity, world) -> CustomMobData.tryReplace(entity, world));
         ServerTickEvents.START_SERVER_TICK.register(ModStatusEffects::tickServer);
         ServerTickEvents.END_WORLD_TICK.register(world -> {
