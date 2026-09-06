@@ -18,6 +18,7 @@ import net.spell_power.api.enchantment.SpellPowerEnchanting;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
@@ -28,6 +29,10 @@ public final class RpgManaSpellEngineCompat {
     private static final double MANA_EPSILON = 0.0001D;
     private static final long INSUFFICIENT_MANA_MESSAGE_INTERVAL_TICKS = 10L;
     private static final Map<UUID, Long> LAST_INSUFFICIENT_MANA_MESSAGE_TICKS = new ConcurrentHashMap<>();
+    private static final Map<String, Field> RPG_MANA_FIELDS = new ConcurrentHashMap<>();
+    private static final Map<String, Field> RPG_MANA_CONFIG_FIELDS = new ConcurrentHashMap<>();
+    private static final Map<String, Pattern> REGEX_PATTERNS = new ConcurrentHashMap<>();
+    private static final Set<String> INVALID_REGEX_PATTERNS = ConcurrentHashMap.newKeySet();
 
     private RpgManaSpellEngineCompat() {
     }
@@ -93,13 +98,13 @@ public final class RpgManaSpellEngineCompat {
         if (!isRpgManaManagedSpell(spellId, spell)) {
             return false;
         }
-        return !targets.isEmpty()
+        return (targets != null && !targets.isEmpty())
                 || spell.release.target == null
                 || spell.release.target.type == Spell.Release.Target.Type.CURSOR;
     }
 
     private static boolean isRpgManaManagedSpell(Identifier spellId, Spell spell) {
-        if (spell == null || spell.release == null || spell.cost == null || spell.cost.item_id == null) {
+        if (spellId == null || spell == null || spell.release == null || spell.cost == null || spell.cost.item_id == null) {
             return false;
         }
         if (spell.cost.item_id.contains("arrow")) {
@@ -138,18 +143,19 @@ public final class RpgManaSpellEngineCompat {
             if (spell.impact.length > 0) {
                 damageCoefficient /= spell.impact.length;
             }
-            if (spell.release != null
-                    && spell.release.target != null
+            if (spell.release.target != null
                     && spell.release.target.projectile != null
                     && spell.release.target.projectile.launch_properties != null) {
                 projectileCount += spell.release.target.projectile.launch_properties.extra_launch_count;
             }
         }
 
+        EntityAttribute manaCostAttribute = rpgManaAttribute("MANACOST");
+        double manaCostPercent = manaCostAttribute == null ? 100.0D : player.getAttributeValue(manaCostAttribute);
         float costMultiplier =
                 rpgManaConfigFloat("inspiration") * 0.01F * rpgManaEnchantmentLevel("ARCHMAGE", player)
                         - rpgManaConfigFloat("manastabilized") * 0.01F * rpgManaEnchantmentLevel("MANASTABILIZED", player)
-                        + (float) (player.getAttributeValue(rpgManaAttribute("MANACOST")) * 0.01D);
+                        + (float) (manaCostPercent * 0.01D);
         float baseCost = cost.calculateManaCost()
                 ? Math.max(20.0F, 40.0F * damageCoefficient * projectileCount)
                 : cost.getManaCost();
@@ -176,7 +182,7 @@ public final class RpgManaSpellEngineCompat {
             return 0.0F;
         }
         try {
-            return config.getClass().getField(fieldName).getFloat(config);
+            return rpgManaConfigField(config, fieldName).getFloat(config);
         } catch (ReflectiveOperationException | RuntimeException ignored) {
             return 0.0F;
         }
@@ -188,7 +194,7 @@ public final class RpgManaSpellEngineCompat {
             return "";
         }
         try {
-            Object value = config.getClass().getField(fieldName).get(config);
+            Object value = rpgManaConfigField(config, fieldName).get(config);
             return value instanceof String string ? string : "";
         } catch (ReflectiveOperationException | RuntimeException ignored) {
             return "";
@@ -197,7 +203,7 @@ public final class RpgManaSpellEngineCompat {
 
     private static Object rpgManaConfig() {
         try {
-            return Class.forName("com.cleannrooster.rpgmana.Rpgmana").getField("config").get(null);
+            return rpgManaField("config").get(null);
         } catch (ReflectiveOperationException | RuntimeException ignored) {
             return null;
         }
@@ -215,22 +221,50 @@ public final class RpgManaSpellEngineCompat {
     private static EntityAttribute rpgManaAttribute(String fieldName) {
         try {
             return (EntityAttribute) rpgManaField(fieldName).get(null);
-        } catch (ReflectiveOperationException | RuntimeException exception) {
-            throw new IllegalStateException("RPGMana attribute is not available: " + fieldName, exception);
+        } catch (ReflectiveOperationException | RuntimeException ignored) {
+            return null;
         }
     }
 
     private static Field rpgManaField(String fieldName) throws ReflectiveOperationException {
-        return Class.forName("com.cleannrooster.rpgmana.Rpgmana").getField(fieldName);
+        Field cached = RPG_MANA_FIELDS.get(fieldName);
+        if (cached != null) {
+            return cached;
+        }
+        Field resolved = Class.forName("com.cleannrooster.rpgmana.Rpgmana").getField(fieldName);
+        Field existing = RPG_MANA_FIELDS.putIfAbsent(fieldName, resolved);
+        return existing == null ? resolved : existing;
+    }
+
+    private static Field rpgManaConfigField(Object config, String fieldName) throws ReflectiveOperationException {
+        String key = config.getClass().getName() + '#' + fieldName;
+        Field cached = RPG_MANA_CONFIG_FIELDS.get(key);
+        if (cached != null) {
+            return cached;
+        }
+        Field resolved = config.getClass().getField(fieldName);
+        Field existing = RPG_MANA_CONFIG_FIELDS.putIfAbsent(key, resolved);
+        return existing == null ? resolved : existing;
     }
 
     private static boolean matches(String subject, String nullableRegex) {
         if (subject == null || nullableRegex == null || nullableRegex.isEmpty()) {
             return false;
         }
+        if (INVALID_REGEX_PATTERNS.contains(nullableRegex)) {
+            return false;
+        }
+
         try {
-            return Pattern.compile(nullableRegex, Pattern.CASE_INSENSITIVE).matcher(subject).find();
-        } catch (PatternSyntaxException ignored) {
+            Pattern pattern = REGEX_PATTERNS.get(nullableRegex);
+            if (pattern == null) {
+                Pattern compiled = Pattern.compile(nullableRegex, Pattern.CASE_INSENSITIVE);
+                Pattern existing = REGEX_PATTERNS.putIfAbsent(nullableRegex, compiled);
+                pattern = existing == null ? compiled : existing;
+            }
+            return pattern.matcher(subject).find();
+        } catch (PatternSyntaxException exception) {
+            INVALID_REGEX_PATTERNS.add(nullableRegex);
             return false;
         }
     }
