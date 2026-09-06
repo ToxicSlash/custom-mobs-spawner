@@ -6,6 +6,7 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.network.PacketByteBuf;
@@ -20,10 +21,12 @@ import java.util.concurrent.ConcurrentHashMap;
 public final class ComboHandler {
     public static final Identifier COMBO_SYNC_PACKET = CustomMobsSpawner.id("combo_sync");
     private static final int RESET_TICKS = 100;
+    private static final int SUSTAINED_MAGIC_COMBO_INTERVAL_TICKS = 100;
     private static final Map<UUID, Integer> COMBOS = new ConcurrentHashMap<>();
     private static final Map<UUID, Integer> CLIENT_COMBOS = new ConcurrentHashMap<>();
     private static final Map<UUID, Integer> RESET_DELAYS = new ConcurrentHashMap<>();
     private static final Map<UUID, Long> LAST_MELEE_COMBO_GAIN_TICKS = new ConcurrentHashMap<>();
+    private static final Map<UUID, Long> LAST_SUSTAINED_MAGIC_COMBO_GAIN_TICKS = new ConcurrentHashMap<>();
 
     private ComboHandler() {
     }
@@ -40,6 +43,16 @@ public final class ComboHandler {
 
         long time = player.getWorld().getTime();
         UUID uuid = player.getUuid();
+        if (isSustainedMagicDamage(source)) {
+            Long previousMagicGainTick = LAST_SUSTAINED_MAGIC_COMBO_GAIN_TICKS.get(uuid);
+            if (previousMagicGainTick != null && time - previousMagicGainTick < SUSTAINED_MAGIC_COMBO_INTERVAL_TICKS) {
+                return;
+            }
+            LAST_SUSTAINED_MAGIC_COMBO_GAIN_TICKS.put(uuid, time);
+            increment(player);
+            return;
+        }
+
         Long previousGainTick = LAST_MELEE_COMBO_GAIN_TICKS.get(uuid);
         if (previousGainTick != null && previousGainTick == time) {
             return;
@@ -100,6 +113,7 @@ public final class ComboHandler {
             COMBOS.remove(uuid);
             RESET_DELAYS.remove(uuid);
             LAST_MELEE_COMBO_GAIN_TICKS.remove(uuid);
+            LAST_SUSTAINED_MAGIC_COMBO_GAIN_TICKS.remove(uuid);
         } else {
             COMBOS.put(uuid, combo);
             RESET_DELAYS.putIfAbsent(uuid, RESET_TICKS);
@@ -112,6 +126,7 @@ public final class ComboHandler {
         boolean hadCombo = COMBOS.remove(uuid) != null;
         boolean hadDelay = RESET_DELAYS.remove(uuid) != null;
         LAST_MELEE_COMBO_GAIN_TICKS.remove(uuid);
+        LAST_SUSTAINED_MAGIC_COMBO_GAIN_TICKS.remove(uuid);
         if (!hadCombo && !hadDelay && !markCombat) {
             return;
         }
@@ -141,6 +156,7 @@ public final class ComboHandler {
             Integer combo = COMBOS.get(uuid);
             if (combo == null || combo <= 0) {
                 LAST_MELEE_COMBO_GAIN_TICKS.remove(uuid);
+                LAST_SUSTAINED_MAGIC_COMBO_GAIN_TICKS.remove(uuid);
                 continue;
             }
 
@@ -153,8 +169,13 @@ public final class ComboHandler {
             COMBOS.remove(uuid);
             RESET_DELAYS.remove(uuid);
             LAST_MELEE_COMBO_GAIN_TICKS.remove(uuid);
+            LAST_SUSTAINED_MAGIC_COMBO_GAIN_TICKS.remove(uuid);
             sync(player, 0, false);
         }
+    }
+
+    private static boolean isSustainedMagicDamage(DamageSource source) {
+        return source.isOf(DamageTypes.MAGIC) || source.isOf(DamageTypes.INDIRECT_MAGIC);
     }
 
     private static ServerPlayerEntity playerDamageSource(DamageSource source) {
