@@ -15,10 +15,13 @@ import java.util.concurrent.ConcurrentHashMap;
 public final class SpellComboHandler {
     private static final int AREA_HIT_CACHE_TICKS = 5;
     private static final int SPELL_COMBO_INTERVAL_TICKS = 20;
+    private static final int SPELL_COMBO_GAIN = 1;
+    private static final int CACHE_CLEANUP_INTERVAL_TICKS = 100;
     private static final Map<AreaHitKey, Long> RECENT_AREA_HITS = new ConcurrentHashMap<>();
     private static final Map<UUID, Long> LAST_COMBO_GAIN_TICKS = new ConcurrentHashMap<>();
     private static final ThreadLocal<Integer> SPELL_IMPACT_DEPTH = ThreadLocal.withInitial(() -> 0);
     private static final ThreadLocal<Integer> COMBO_GAIN_SUPPRESSION_DEPTH = ThreadLocal.withInitial(() -> 0);
+    private static long lastCleanupTick = Long.MIN_VALUE;
 
     private SpellComboHandler() {
     }
@@ -70,14 +73,14 @@ public final class SpellComboHandler {
         }
 
         long time = world.getTime();
-        cleanup(time);
+        cleanupIfNeeded(time);
         if (!markSpellHit(player, livingTarget, source, spellInfo, time)) {
             return;
         }
 
         CustomSkillRegistry.markSuccessfulPlayerAttack(player);
         if (!isComboGainSuppressed() && comboIntervalReady(player, time)) {
-            ComboHandler.increment(player, 3);
+            ComboHandler.increment(player, SPELL_COMBO_GAIN);
         }
         CustomSkillRegistry.runSpellHit(player, livingTarget, spellInfo);
     }
@@ -102,12 +105,21 @@ public final class SpellComboHandler {
                 source == null ? null : source.getUuid(),
                 spellInfo == null ? null : spellInfo.id()
         );
-        return RECENT_AREA_HITS.putIfAbsent(key, time) == null;
+        Long previous = RECENT_AREA_HITS.get(key);
+        if (previous != null && time - previous <= AREA_HIT_CACHE_TICKS) {
+            return false;
+        }
+        RECENT_AREA_HITS.put(key, time);
+        return true;
     }
 
-    private static void cleanup(long time) {
-        RECENT_AREA_HITS.entrySet().removeIf(entry -> time - entry.getValue() > AREA_HIT_CACHE_TICKS);
-        LAST_COMBO_GAIN_TICKS.entrySet().removeIf(entry -> time - entry.getValue() > SPELL_COMBO_INTERVAL_TICKS * 4L);
+    private static void cleanupIfNeeded(long time) {
+        if (lastCleanupTick != Long.MIN_VALUE && time - lastCleanupTick < CACHE_CLEANUP_INTERVAL_TICKS) {
+            return;
+        }
+        lastCleanupTick = time;
+        RECENT_AREA_HITS.entrySet().removeIf(entry -> time - entry.getValue() > CACHE_CLEANUP_INTERVAL_TICKS);
+        LAST_COMBO_GAIN_TICKS.entrySet().removeIf(entry -> time - entry.getValue() > CACHE_CLEANUP_INTERVAL_TICKS);
     }
 
     private record AreaHitKey(UUID casterId, UUID targetId, UUID sourceId, Identifier spellId) {
