@@ -56,6 +56,14 @@ public final class SpellComboHandler {
         }
     }
 
+    public static void clearPlayer(UUID uuid) {
+        if (uuid == null) {
+            return;
+        }
+        LAST_COMBO_GAIN_TICKS.remove(uuid);
+        RECENT_AREA_HITS.keySet().removeIf(key -> uuid.equals(key.casterId()));
+    }
+
     public static void recordImpact(
             World world,
             LivingEntity caster,
