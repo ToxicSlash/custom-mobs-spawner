@@ -1,0 +1,66 @@
+name: CMobs regression
+on:
+  push:
+    branches: [dev]
+    paths-ignore: ['**/*.md']
+  workflow_dispatch:
+    inputs:
+      suite:
+        type: choice
+        options: [full, build]
+        default: full
+permissions:
+  contents: read
+concurrency:
+  group: cmobs-dev-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  background:
+    runs-on: [self-hosted, Windows, "${{ vars.ADADV_BACKGROUND_RUNNER_LABEL || 'background' }}"]
+    timeout-minutes: 45
+    env:
+      CMOBS_MOD_SOURCE: "${{ vars.CMOBS_MOD_SOURCE }}"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Resource and schema integrity
+        id: resources
+        run: python -m unittest discover -s tests -v
+      - name: Resolve pinned local integration jars
+        id: deps
+        if: ${{ !cancelled() }}
+        run: python tools/prepare_ci.py
+      - name: Compile and package
+        id: build
+        if: ${{ !cancelled() && steps.deps.outcome == 'success' }}
+        shell: cmd
+        run: gradlew.bat build --no-daemon --console=plain
+      - name: Publish diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cmobs-stage1-background
+          path: |
+            ci-output/
+            build/libs/*.jar
+          if-no-files-found: warn
+  visual:
+    if: ${{ inputs.suite != 'build' }}
+    runs-on: [self-hosted, Windows, "${{ vars.ADADV_VISUAL_RUNNER_LABEL || 'visual-test' }}"]
+    timeout-minutes: 10
+    steps:
+      - name: Verify visual runner identity
+        shell: powershell
+        run: |
+          Write-Host "Runner: $env:RUNNER_NAME"
+          Write-Host "Interactive session: $([Environment]::UserInteractive)"
+          if (-not [Environment]::UserInteractive) { throw 'Visual runner is not interactive' }
+          # Runner identity only; Minecraft client startup is a separate acceptance gate.
