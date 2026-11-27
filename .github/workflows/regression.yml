@@ -31,16 +31,47 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
+      - name: Locate installed Python
+        id: locate_python
+        run: |
+          where py >nul 2>&1
+          if not errorlevel 1 (
+            py -3 -c "import sys; print(sys.executable)" > python-path.txt 2>nul
+            if not errorlevel 1 goto found_python
+          )
+          where python >nul 2>&1
+          if not errorlevel 1 (
+            python -c "import sys; print(sys.executable)" > python-path.txt 2>nul
+            if not errorlevel 1 goto found_python
+          )
+          for %%P in ("%LOCALAPPDATA%\Python\pythoncore-3.15-64\python.exe" "%LOCALAPPDATA%\Programs\Python\Python315\python.exe" "%LOCALAPPDATA%\Programs\Python\Python314\python.exe" "%LOCALAPPDATA%\Programs\Python\Python313\python.exe" "%LOCALAPPDATA%\Programs\Python\Python312\python.exe" "%LOCALAPPDATA%\Programs\Python\Python311\python.exe") do (
+            if exist %%P (
+              echo %%~P > python-path.txt
+              goto found_python
+            )
+          )
+          echo Installing portable Python in runner temporary directory
+          set "PORTABLE=%RUNNER_TEMP%\cozy-python-3.11.9"
+          if not exist "%PORTABLE%\python.exe" (
+            curl.exe --fail --location --retry 3 https://www.python.org/ftp/python/3.11.9/python-3.11.9-embed-amd64.zip --output "%RUNNER_TEMP%\cozy-python.zip"
+            if errorlevel 1 exit /b 1
+            if not exist "%PORTABLE%" mkdir "%PORTABLE%"
+            tar.exe -xf "%RUNNER_TEMP%\cozy-python.zip" -C "%PORTABLE%"
+            if errorlevel 1 exit /b 1
+          )
+          "%PORTABLE%\python.exe" -c "import sys; print(sys.executable)" > python-path.txt
+          if errorlevel 1 exit /b 1
+          :found_python
+          set /p PYTHON_EXE=<python-path.txt
+          echo PYTHON_EXE=%PYTHON_EXE%>>"%GITHUB_ENV%"
+          echo Using %PYTHON_EXE%
       - name: Resource and schema integrity
         id: resources
-        run: python -m unittest discover -s tests -v
+        run: '"%PYTHON_EXE%" -m unittest discover -s tests -v'
       - name: Resolve pinned local integration jars
         id: deps
-        if: ${{ !cancelled() }}
-        run: python tools/prepare_ci.py
+        if: ${{ !cancelled() && steps.locate_python.outcome == 'success' }}
+        run: '"%PYTHON_EXE%" tools/prepare_ci.py'
       - name: Compile and package
         id: build
         if: ${{ !cancelled() && steps.deps.outcome == 'success' }}
@@ -48,7 +79,7 @@ jobs:
         run: gradlew.bat build --no-daemon --console=plain
       - name: Dedicated server and custom mob datapack smoke
         if: ${{ !cancelled() && steps.build.outcome == 'success' && inputs.suite != 'build' }}
-        run: python tools/smoke_server.py
+        run: '"%PYTHON_EXE%" tools/smoke_server.py'
       - name: Publish diagnostics
         if: always()
         uses: actions/upload-artifact@v4
