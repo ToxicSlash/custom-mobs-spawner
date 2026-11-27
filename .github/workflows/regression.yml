@@ -30,6 +30,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
+          ref: ${{ needs.visual.outputs.recovered_sha || github.sha }}
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -101,6 +102,10 @@ jobs:
   visual:
     runs-on: [self-hosted, Windows, "${{ vars.ADADV_VISUAL_RUNNER_LABEL || 'visual-test' }}"]
     timeout-minutes: 20
+    permissions:
+      contents: write
+    outputs:
+      recovered_sha: ${{ steps.recover.outputs.sha }}
     defaults:
       run:
         shell: cmd
@@ -110,7 +115,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          persist-credentials: false
+          persist-credentials: true
       - name: Verify visual runner identity
         if: ${{ inputs.suite != 'build' }}
         run: |
@@ -153,6 +158,13 @@ jobs:
           echo Using %PYTHON_EXE%
       - name: Discover local compile and runtime inputs as desktop user
         run: '"%PYTHON_EXE%" tools/prepare_ci.py --export'
+      - name: Restore pinned source resources on dev
+        id: recover
+        if: ${{ !cancelled() && steps.locate_python.outcome == 'success' && github.ref == 'refs/heads/dev' }}
+        run: |
+          "%PYTHON_EXE%" tools/recover_resources.py
+          if errorlevel 1 exit /b 1
+          for /f %%S in ('git rev-parse HEAD') do echo sha=%%S>>"%GITHUB_OUTPUT%"
       - uses: actions/upload-artifact@v4
         if: always()
         with:
