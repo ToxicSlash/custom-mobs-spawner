@@ -1,0 +1,28 @@
+{
+  "trigger": "timed",
+  "interval_ticks": 20,
+  "chance": 0.1,
+  "conditions": [
+    {
+      "type": "nearby_entity",
+      "entity_type": "minecraft:player",
+      "radius": 30.0
+    }
+  ],
+  "actions": [
+    {
+      "type": "sound",
+      "id": "minecraft:entity.blaze.ambient",
+      "category": "hostile",
+      "volume": 0.3,
+      "pitch": 0.6
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:entity.wither.ambient",
+      "category": "hostile",
+      "volume": 0.05,
+      "pitch": 2.0
+    }
+  ]
+}

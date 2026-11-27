@@ -1,0 +1,15 @@
+{
+  "trigger": "when_attacks",
+  "chance": 1.0,
+  "actions": [
+    {
+      "type": "effect",
+      "id": "minecraft:speed",
+      "duration": 120,
+      "amplifier": 0,
+      "stack": true,
+      "increment": 1,
+      "max_amplifier": 5
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "trigger": "timed",
+  "interval_ticks": 5,
+  "conditions": [
+    {
+      "type": "nearby_entity",
+      "entity_type": "minecraft:player",
+      "radius": 40.0
+    }
+  ],
+  "actions": [
+    {
+      "type": "particle",
+      "id": "minecraft:flame",
+      "count": 1,
+      "y_offset": 0.05,
+      "spread": 0.0,
+      "speed": 0.01
+    }
+  ]
+}

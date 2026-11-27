@@ -1,0 +1,114 @@
+{
+  "trigger": "timed",
+  "interval_ticks": 10,
+  "chance": 1.0,
+  "requires_living_target": true,
+  "require_unarmed": true,
+  "trigger_range": 2.35,
+  "cooldown_on_start": true,
+  "global_cooldown_ticks": 20,
+  "cooldown_ticks": 90,
+  "telegraph": [
+    {
+      "delay_ticks": 0,
+      "actions": [
+        {
+          "type": "sound",
+          "id": "minecraft:entity.zombie.ambient",
+          "category": "hostile",
+          "volume": 0.9,
+          "pitch": 0.75
+        },
+        {
+          "type": "particle",
+          "id": "minecraft:angry_villager",
+          "count": 5,
+          "y_offset": 1.45,
+          "spread": 0.25,
+          "speed": 0.0
+        }
+      ]
+    },
+    {
+      "delay_ticks": 6,
+      "actions": [
+        {
+          "type": "particle",
+          "id": "minecraft:crit",
+          "count": 8,
+          "y_offset": 1.0,
+          "spread": 0.3,
+          "speed": 0.04
+        }
+      ]
+    },
+    {
+      "delay_ticks": 4,
+      "actions": [
+        {
+          "type": "lunge",
+          "strength": 0.48,
+          "y_strength": 0.5
+        },
+        {
+          "type": "sound",
+          "id": "minecraft:entity.zombie.attack_wooden_door",
+          "category": "hostile",
+          "volume": 0.7,
+          "pitch": 1.35
+        },
+        {
+          "type": "particle",
+          "id": "minecraft:sweep_attack",
+          "count": 1,
+          "y_offset": 1.1,
+          "spread": 0.05,
+          "speed": 0.0
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "type": "knockback",
+      "target": "target",
+      "radius": 2.15,
+      "strength": 0.9,
+      "y_strength": 0.22
+    },
+    {
+      "type": "stun",
+      "target": "target",
+      "radius": 2.15,
+      "duration": 30,
+      "slowness_amplifier": 2,
+      "mining_fatigue_amplifier": 0
+    },
+    {
+      "type": "damage",
+      "target": "target",
+      "radius": 2.15,
+      "amount": 2.0,
+      "knockback": false
+    },
+    {
+      "type": "particle",
+      "target": "target",
+      "radius": 2.15,
+      "id": "minecraft:poof",
+      "count": 10,
+      "y_offset": 1.0,
+      "spread": 0.25,
+      "speed": 0.04
+    },
+    {
+      "type": "sound",
+      "target": "target",
+      "radius": 2.15,
+      "id": "minecraft:entity.player.attack.knockback",
+      "category": "hostile",
+      "volume": 0.8,
+      "pitch": 0.85
+    }
+  ]
+}

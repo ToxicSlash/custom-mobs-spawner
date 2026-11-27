@@ -1,0 +1,64 @@
+{
+  "entity": "minecraft:piglin",
+  "custom_name": "Piglin Botanist",
+  "custom_name_visible": false,
+  "tags": [
+    "checked",
+    "piglin",
+    "piglin_botanist",
+    "passive_skill",
+    "inflicts_effect"
+  ],
+  "skills": [
+    "cmobs:piglin/botanist_player_debuff",
+    "cmobs:piglin/botanist_ailment"
+  ],
+  "team": "custom_piglin",
+  "attributes": [
+    {
+      "id": "minecraft:generic.movement_speed",
+      "base": 0.29
+    },
+    {
+      "id": "minecraft:generic.max_health",
+      "base": 40.0
+    },
+    {
+      "id": "minecraft:generic.knockback_resistance",
+      "base": 0.2
+    },
+    {
+      "id": "minecraft:generic.attack_damage",
+      "base": 16.0
+    },
+    {
+      "id": "minecraft:generic.armor",
+      "base": 3.0
+    }
+  ],
+  "health": 40.0,
+  "equipment": {
+    "head": {
+      "id": "knightquest:husk_helmet2",
+      "count": 1
+    },
+    "chest": {
+      "id": "endermanoverhaul:savanna_hood",
+      "count": 1
+    },
+    "legs": {
+      "id": "knightquest:husk_leggings",
+      "count": 1
+    },
+    "feet": {
+      "id": "knightquest:blaze_boots",
+      "count": 1
+    },
+    "mainhand": {
+      "id": "minecraft:torchflower",
+      "count": 1
+    }
+  },
+  "loot_table": "minecraft:entities/piglin",
+  "nbt": "{ArmorDropChances:[0.0f,0.0f,0.0f,0.0f],HandDropChances:[0.0f,0.0f],PersistenceRequired:0b}"
+}

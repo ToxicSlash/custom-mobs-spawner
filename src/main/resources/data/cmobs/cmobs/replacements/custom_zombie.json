@@ -1,0 +1,50 @@
+{
+  "source": "#cmobs:replaceable",
+  "chance": 0.05,
+  "dimensions": [
+    "minecraft:overworld",
+    "cmobs:raidworld"
+  ],
+  "replacements": [
+    {
+      "custom_mob": "cmobs:overworld/zombie/infected_miner",
+      "weight": 15,
+      "min_y": -70,
+      "max_y": 30
+    },
+    {
+      "custom_mob": "cmobs:overworld/zombie/zombie_miner",
+      "weight": 50,
+      "min_y": -70,
+      "max_y": 30
+    },
+    {
+      "custom_mob": "cmobs:overworld/lost/lost_adventurer",
+      "weight": 3
+    },
+    {
+      "custom_mob": "cmobs:overworld/zombie/zombie_warrior",
+      "weight": 50
+    },
+    {
+      "custom_mob": "cmobs:overworld/zombie/zombie_berserker",
+      "weight": 50
+    },
+    {
+      "custom_mob": "cmobs:overworld/zombie/zombie_bandit",
+      "weight": 50
+    },
+    {
+      "custom_mob": "cmobs:overworld/zombie/zombie_alchemist",
+      "weight": 40
+    },
+    {
+      "custom_mob": "cmobs:overworld/zombie/zombie_knight",
+      "weight": 40
+    },
+    {
+      "custom_mob": "cmobs:overworld/zombie/zombie_captain",
+      "weight": 25
+    }
+  ]
+}

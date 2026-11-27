@@ -1,0 +1,34 @@
+{
+  "trigger": "timed",
+  "interval_ticks": 20,
+  "chance": 0.2,
+  "requires_living_target": true,
+  "target_range": 24.0,
+  "cooldown_ticks": 320,
+  "actions": [
+    {
+      "type": "summon_custom_mob",
+      "custom_mob": "cmobs:nether/charred/lava_plume",
+      "selector": {
+        "type": "players",
+        "distance": {
+          "max": 25.0
+        },
+        "sort": "random",
+        "limit": 1
+      }
+    },
+    {
+      "type": "summon_custom_mob",
+      "custom_mob": "cmobs:nether/charred/lava_plume",
+      "selector": {
+        "type": "players",
+        "distance": {
+          "max": 25.0
+        },
+        "sort": "random",
+        "limit": 1
+      }
+    }
+  ]
+}

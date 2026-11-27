@@ -1,0 +1,62 @@
+{
+  "entity": "minecraft:skeleton",
+  "custom_name": "Decoy",
+  "custom_name_visible": false,
+  "tags": [
+    "checked",
+    "hasskill",
+    "death_anim",
+    "skeleton_decoy"
+  ],
+  "attributes": [
+    {
+      "id": "minecraft:generic.movement_speed",
+      "base": 0.28
+    },
+    {
+      "id": "minecraft:generic.max_health",
+      "base": 5.0
+    },
+    {
+      "id": "minecraft:generic.knockback_resistance",
+      "base": 0.5
+    },
+    {
+      "id": "minecraft:generic.attack_damage",
+      "base": 10.0
+    },
+    {
+      "id": "minecraft:generic.armor",
+      "base": 2.0
+    }
+  ],
+  "health": 5.0,
+  "equipment": {
+    "head": {
+      "id": "knightquest:wither_helmet",
+      "count": 1
+    },
+    "chest": {
+      "id": "minecraft:air",
+      "count": 1
+    },
+    "legs": {
+      "id": "knightquest:shinobi_leggings",
+      "count": 1
+    },
+    "feet": {
+      "id": "minecraft:air",
+      "count": 1
+    },
+    "mainhand": {
+      "id": "minecraft:air",
+      "count": 1
+    },
+    "offhand": {
+      "id": "minecraft:air",
+      "count": 1
+    }
+  },
+  "loot_table": "",
+  "nbt": "{ArmorDropChances:[0.0f,0.0f,0.0f,0.0f]}"
+}

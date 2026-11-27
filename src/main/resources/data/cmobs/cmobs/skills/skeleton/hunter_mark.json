@@ -1,0 +1,47 @@
+{
+  "trigger": "when_attacks",
+  "chance": 0.2,
+  "requires_living_target": true,
+  "target_range": 5.0,
+  "actions": [
+    {
+      "type": "effect",
+      "id": "aquamirae:armor_decrease",
+      "target": "target",
+      "duration": 200,
+      "amplifier": 2
+    },
+    {
+      "type": "effect",
+      "id": "archers:hunters_mark",
+      "target": "target",
+      "duration": 120,
+      "amplifier": 2
+    },
+    {
+      "type": "particle",
+      "id": "bosses_of_mass_destruction:disappearing_swirl",
+      "origin": "target",
+      "count": 10,
+      "y_offset": 1.5,
+      "spread": 0.2,
+      "speed": 0.05
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:entity.wither.hurt",
+      "origin": "target",
+      "category": "hostile",
+      "volume": 0.5,
+      "pitch": 2.0
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:item.axe.scrape",
+      "origin": "target",
+      "category": "hostile",
+      "volume": 2.0,
+      "pitch": 1.2
+    }
+  ]
+}

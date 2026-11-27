@@ -1,0 +1,9 @@
+{
+  "entity": "minecraft:vindicator",
+  "tags": [
+    "checked",
+    "pirate_bandit",
+    "pirate"
+  ],
+  "nbt": "{ArmorItems:[{id:\"knightquest:pirate_boots\",Count:1b},{id:\"knightquest:bow_leggings\",Count:1b},{id:\"knightquest:bow_chestplate\",Count:1b},{id:\"ad_astra:space_helmet\",Count:1b}],HandItems:[{id:\"rogues:netherite_dagger\",Count:1b},{}],Attributes:[{Name:\"porting_lib:entity_gravity\",Base:0.09f},{Name:\"generic.movement_speed\",Base:0.33f},{Name:\"generic.max_health\",Base:20.0f},{Name:\"generic.knockback_resistance\",Base:0.2f},{Name:\"generic.attack_damage\",Base:2.0f},{Name:\"generic.armor\",Base:0.0f}],Tags:[\"checked\",\"pirate_bandit\",\"pirate\"],Health:30.0f,CustomName:\"{\\\"text\\\":\\\"Pirate Bandit\\\"}\",ArmorDropChances:[0.0f,0.0f,0.0f,0.0f],HandDropChances:[0.0f,0.0f],PersistenceRequired:1b}"
+}

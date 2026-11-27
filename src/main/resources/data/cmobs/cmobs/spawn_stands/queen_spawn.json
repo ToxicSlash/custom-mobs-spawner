@@ -1,0 +1,9 @@
+{
+  "tags": [
+    "spawnpoint_stand",
+    "queen_spawn"
+  ],
+  "group": "cmobs:raptor_queen_spawn",
+  "discard_stand": true,
+  "max_player_distance": 80
+}

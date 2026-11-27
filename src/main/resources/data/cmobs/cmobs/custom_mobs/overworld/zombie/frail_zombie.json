@@ -1,0 +1,14 @@
+{
+  "entity": "minecraft:zombie",
+  "custom_name": "Frail Zombie",
+  "tags": [
+    "frail_zombie"
+  ],
+  "skills": [
+    "cmobs:zombie/feint",
+    "cmobs:zombie/frail_attack_speed",
+    "cmobs:zombie/unarmed_close_range",
+    "cmobs:zombie/unarmed_kick"
+  ],
+  "loot_table": "minecraft:entities/zombie"
+}

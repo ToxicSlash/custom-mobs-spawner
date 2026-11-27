@@ -1,0 +1,46 @@
+{
+  "entity": "minecraft:zoglin",
+  "custom_name": "Charred Hog",
+  "custom_name_visible": false,
+  "tags": [
+    "checked",
+    "hasskill",
+    "charred_hog",
+    "passive_sfx",
+    "hurtsfx",
+    "charred_mob",
+    "hurtfx",
+    "trailfx"
+  ],
+  "skills": [
+    "cmobs:charred/ambient_sfx",
+    "cmobs:charred/hurt_sfx",
+    "cmobs:charred/trail"
+  ],
+  "team": "charred",
+  "attributes": [
+    {
+      "id": "minecraft:generic.movement_speed",
+      "base": 0.3
+    },
+    {
+      "id": "minecraft:generic.max_health",
+      "base": 90.0
+    },
+    {
+      "id": "minecraft:generic.knockback_resistance",
+      "base": 0.5
+    },
+    {
+      "id": "minecraft:generic.attack_damage",
+      "base": 35.0
+    },
+    {
+      "id": "minecraft:generic.armor",
+      "base": 6.0
+    }
+  ],
+  "health": 80.0,
+  "loot_table": "minecraft:entities/zoglin",
+  "nbt": "{ArmorDropChances:[0.0f,0.0f,0.0f,0.0f],HandDropChances:[0.0f,0.0f],PersistenceRequired:0b}"
+}

@@ -1,0 +1,45 @@
+{
+  "trigger": "timed",
+  "interval_ticks": 20,
+  "chance": 0.2,
+  "cooldown_ticks": 160,
+  "conditions": [
+    {
+      "type": "nearby_entity",
+      "entity_type": "minecraft:player",
+      "radius": 8
+    }
+  ],
+  "actions": [
+    {
+      "type": "sound",
+      "id": "minecraft:entity.generic.explode",
+      "category": "hostile",
+      "volume": 0.7,
+      "pitch": 0.5
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:cloud",
+      "count": 30,
+      "spread_x": 2,
+      "spread_y": 0.1,
+      "spread_z": 2,
+      "speed": 0.15
+    },
+    {
+      "type": "damage",
+      "target": "players",
+      "radius": 5,
+      "amount": 8,
+      "damage_type": "minecraft:mob_attack"
+    },
+    {
+      "type": "knockback",
+      "target": "players",
+      "radius": 5,
+      "strength": 0.9,
+      "y_strength": 0.25
+    }
+  ]
+}

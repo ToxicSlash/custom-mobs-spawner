@@ -1,0 +1,46 @@
+{
+  "trigger": "when_hurt",
+  "chance": 0.5,
+  "cooldown_ticks": 80,
+  "target_attacker": true,
+  "actions": [
+    {
+      "type": "effect",
+      "id": "rogues:stealth",
+      "duration": 60,
+      "amplifier": 2
+    },
+    {
+      "type": "effect",
+      "id": "minecraft:speed",
+      "duration": 160,
+      "amplifier": 0
+    },
+    {
+      "type": "heal",
+      "amount": 12.0
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:campfire_signal_smoke",
+      "count": 60,
+      "y_offset": 1.0,
+      "spread": 1.0,
+      "speed": 0.0
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:entity.witch.throw",
+      "category": "hostile",
+      "volume": 1.0,
+      "pitch": 1.2
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:entity.splash_potion.break",
+      "category": "hostile",
+      "volume": 1.0,
+      "pitch": 1.2
+    }
+  ]
+}

@@ -1,0 +1,93 @@
+{
+  "description": "Example: teleport actions. Not attached to any mob.",
+  "trigger": "timed",
+  "interval_ticks": 20,
+  "chance": 1.0,
+  "requires_living_target": true,
+  "trigger_range": 12.0,
+  "cooldown_ticks": 120,
+  "actions": [
+    {
+      "type": "teleport",
+      "selector": "self",
+      "destination": {
+        "relative_to": "target",
+        "relative": true,
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "forward_offset": -2.0
+      }
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:portal",
+      "count": 28,
+      "spread": 0.4,
+      "speed": 0.08
+    },
+    {
+      "type": "teleport",
+      "selector": {
+        "type": "minecraft:zombie",
+        "distance": {
+          "min": 1.0,
+          "max": 8.0
+        },
+        "sort": "random",
+        "limit": 1
+      },
+      "destination": {
+        "relative_to": "selected",
+        "relative": true,
+        "x": 0.0,
+        "y": 1.0,
+        "z": 0.0
+      }
+    },
+    {
+      "type": "teleport",
+      "selector": {
+        "type": "target",
+        "distance": {
+          "max": 12.0
+        },
+        "limit": 1
+      },
+      "destination": {
+        "relative_to": "self",
+        "relative": true,
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "side_offset": 2.0
+      }
+    },
+    {
+      "type": "teleport",
+      "selector": {
+        "type": "minecraft:zombie",
+        "distance": {
+          "max": 16.0
+        },
+        "sort": "nearest",
+        "limit": 1
+      },
+      "destination": {
+        "relative_to": "selector",
+        "selector": {
+          "type": "players",
+          "distance": {
+            "max": 32.0
+          },
+          "sort": "nearest",
+          "limit": 1
+        },
+        "relative": true,
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      }
+    }
+  ]
+}

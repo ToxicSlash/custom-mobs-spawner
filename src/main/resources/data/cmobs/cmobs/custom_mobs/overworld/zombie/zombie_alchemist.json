@@ -1,0 +1,66 @@
+{
+  "entity": "minecraft:zombie",
+  "custom_name": "Zombie Alchemist",
+  "custom_name_visible": false,
+  "tags": [
+    "checked",
+    "hasskill",
+    "zombie_alchemist",
+    "passive_skill"
+  ],
+  "skills": [
+    "cmobs:zombie/alchemist_harming_cloud"
+  ],
+  "attributes": [
+    {
+      "id": "minecraft:generic.movement_speed",
+      "base": 0.3
+    },
+    {
+      "id": "minecraft:generic.max_health",
+      "base": 30.0
+    },
+    {
+      "id": "minecraft:generic.knockback_resistance",
+      "base": 0.2
+    },
+    {
+      "id": "minecraft:generic.attack_damage",
+      "base": 3.0
+    },
+    {
+      "id": "minecraft:generic.armor",
+      "base": 2.0
+    }
+  ],
+  "health": 30.0,
+  "equipment": {
+    "head": {
+      "id": "knightquest:zombie_helmet2",
+      "count": 1
+    },
+    "chest": {
+      "id": "knightquest:creeper_chestplate",
+      "count": 1
+    },
+    "legs": {
+      "id": "knightquest:zombie_leggings",
+      "count": 1
+    },
+    "feet": {
+      "id": "knightquest:zombie_boots",
+      "count": 1
+    },
+    "mainhand": {
+      "id": "minecraft:lingering_potion",
+      "count": 1,
+      "nbt": "{Potion:\"minecraft:harming\"}"
+    },
+    "offhand": {
+      "id": "natures_spirit:black_iris",
+      "count": 1
+    }
+  },
+  "loot_table": "minecraft:entities/zombie",
+  "nbt": "{ArmorDropChances:[0.0f,0.0f,0.0f,0.0f]}"
+}

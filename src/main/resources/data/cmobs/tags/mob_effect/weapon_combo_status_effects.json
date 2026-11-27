@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "cmobs:flow",
+    "cmobs:momentum",
+    "cmobs:precision",
+    "cmobs:elusion"
+  ]
+}

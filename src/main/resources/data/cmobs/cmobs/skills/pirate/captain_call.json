@@ -1,0 +1,25 @@
+{
+  "trigger": "timed",
+  "interval_ticks": 20,
+  "chance": 0.08,
+  "cooldown_ticks": 600,
+  "conditions": [
+    {
+      "type": "nearby_entity",
+      "entity_type": "minecraft:player",
+      "radius": 32
+    }
+  ],
+  "actions": [
+    {
+      "type": "summon_custom_mob",
+      "custom_mob": "cmobs:pirate/support/teleporter_beam",
+      "side_offset": 2.5
+    },
+    {
+      "type": "summon_custom_mob",
+      "custom_mob": "cmobs:pirate/support/teleporter_beam",
+      "side_offset": -2.5
+    }
+  ]
+}

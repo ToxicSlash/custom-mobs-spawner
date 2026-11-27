@@ -1,0 +1,26 @@
+{
+  "trigger": "timed",
+  "interval_ticks": 20,
+  "chance": 0.2,
+  "requires_living_target": true,
+  "target_range": 6.0,
+  "cooldown_ticks": 600,
+  "actions": [
+    {
+      "type": "equip",
+      "slot": "mainhand",
+      "item": {
+        "id": "mcdw:sickle_sickle",
+        "count": 1,
+        "nbt": "{Enchantments:[{id:\"mcdw:poison_cloud\",lvl:2s}]}"
+      }
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:item.armor.equip_iron",
+      "category": "hostile",
+      "volume": 1.0,
+      "pitch": 1.4
+    }
+  ]
+}

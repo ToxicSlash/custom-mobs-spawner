@@ -1,0 +1,227 @@
+{
+  "trigger": "when_attacks",
+  "chance": 1,
+  "requires_living_target": true,
+  "require_mainhand": "#cmobs:swords",
+  "trigger_range": 8,
+  "cooldown_on_start": false,
+  "global_cooldown_ticks": 0,
+  "cooldown_ticks": 2,
+  "actions": [
+    {
+      "type": "effect",
+      "id": "cmobs:flow",
+      "target": "self",
+      "duration": 60,
+      "amplifier": 0,
+      "stack": true,
+      "amplifier_increment": 1,
+      "max_amplifier": 9,
+      "stack_duration": true,
+      "duration_increment": 40,
+      "max_duration": 80
+    },
+    {
+      "type": "sound",
+      "id": "bettercombat:glaive_slash_quick",
+      "category": "players",
+      "volume": 1.4,
+      "pitch": 1.2,
+      "conditions": [
+        {
+          "type": "effect",
+          "id": "cmobs:flow",
+          "min_level": 3,
+          "max_level": 4
+        }
+      ]
+    },
+    {
+      "type": "sound",
+      "id": "bettercombat:glaive_slash_quick",
+      "category": "players",
+      "volume": 1.5,
+      "pitch": 1.4,
+      "conditions": [
+        {
+          "type": "effect",
+          "id": "cmobs:flow",
+          "min_level": 5,
+          "max_level": 6
+        }
+      ]
+    },
+    {
+      "type": "sound",
+      "id": "bettercombat:glaive_slash_quick",
+      "category": "players",
+      "volume": 1.6,
+      "pitch": 1.6,
+      "conditions": [
+        {
+          "type": "effect",
+          "id": "cmobs:flow",
+          "min_level": 7,
+          "max_level": 8
+        }
+      ]
+    },
+    {
+      "type": "sound",
+      "id": "bettercombat:glaive_slash_quick",
+      "category": "players",
+      "volume": 1.8,
+      "pitch": 1.9,
+      "conditions": [
+        {
+          "type": "effect",
+          "id": "cmobs:flow",
+          "min_level": 9,
+          "max_level": 10
+        }
+      ]
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:sweep_attack",
+      "count": 1,
+      "y_offset": 0.95,
+      "spread": 0.02,
+      "speed": 0,
+      "forward_offset": 1,
+      "conditions": [
+        {
+          "type": "effect",
+          "id": "cmobs:flow",
+          "min_level": 3,
+          "max_level": 5
+        }
+      ]
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:sweep_attack",
+      "count": 1,
+      "y_offset": 1.1,
+      "spread": 0.02,
+      "speed": 0,
+      "forward_offset": 1,
+      "conditions": [
+        {
+          "type": "effect",
+          "id": "cmobs:flow",
+          "min_level": 6,
+          "max_level": 10
+        }
+      ],
+      "arc": {
+        "points": 2,
+        "count_per_point": 1,
+        "radius": 1.2,
+        "start_degrees": -30,
+        "end_degrees": 30,
+        "y_offset": 0.7,
+        "end_y_offset": 1.1,
+        "spread": 0.02,
+        "speed": 0
+      }
+    },
+    {
+      "type": "random",
+      "conditions": [
+        {
+          "type": "effect",
+          "id": "cmobs:flow",
+          "min_level": 9,
+          "max_level": 10
+        }
+      ],
+      "actions": [
+        {
+          "weight": 1,
+          "type": "particle",
+          "id": "minecraft:scrape",
+          "count": 1,
+          "y_offset": 1.1,
+          "spread": 0.015,
+          "speed": 0,
+          "forward_offset": 1,
+          "arc": {
+            "points": 5,
+            "count_per_point": 1,
+            "radius": 0.9,
+            "start_degrees": 55,
+            "end_degrees": -55,
+            "y_offset": 1.45,
+            "end_y_offset": 0.45,
+            "spread": 0.015,
+            "speed": 0
+          }
+        },
+        {
+          "weight": 1,
+          "type": "particle",
+          "id": "minecraft:scrape",
+          "count": 1,
+          "y_offset": 1.1,
+          "spread": 0.015,
+          "speed": 0,
+          "forward_offset": 1,
+          "arc": {
+            "points": 5,
+            "count_per_point": 1,
+            "radius": 0.9,
+            "start_degrees": -55,
+            "end_degrees": 55,
+            "y_offset": 1.45,
+            "end_y_offset": 0.45,
+            "spread": 0.015,
+            "speed": 0
+          }
+        },
+        {
+          "weight": 1,
+          "type": "particle",
+          "id": "minecraft:scrape",
+          "count": 1,
+          "y_offset": 1.1,
+          "spread": 0.012,
+          "speed": 0,
+          "forward_offset": 1,
+          "arc": {
+            "points": 5,
+            "count_per_point": 1,
+            "radius": 0.9,
+            "start_degrees": -25,
+            "end_degrees": 25,
+            "y_offset": 1.75,
+            "end_y_offset": 0.25,
+            "spread": 0.012,
+            "speed": 0
+          }
+        },
+        {
+          "weight": 1,
+          "type": "particle",
+          "id": "minecraft:scrape",
+          "count": 1,
+          "y_offset": 1.1,
+          "spread": 0.012,
+          "speed": 0,
+          "forward_offset": 1,
+          "arc": {
+            "points": 5,
+            "count_per_point": 1,
+            "radius": 0.9,
+            "start_degrees": 25,
+            "end_degrees": -25,
+            "y_offset": 1.75,
+            "end_y_offset": 0.25,
+            "spread": 0.012,
+            "speed": 0
+          }
+        }
+      ]
+    }
+  ]
+}

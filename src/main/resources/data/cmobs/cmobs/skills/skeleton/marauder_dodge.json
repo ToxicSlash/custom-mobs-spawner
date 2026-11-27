@@ -1,0 +1,91 @@
+{
+  "trigger": "when_hurt",
+  "chance": 0.4,
+  "cooldown_ticks": 120,
+  "target_attacker": true,
+  "actions": [
+    {
+      "type": "heal",
+      "amount": 12.0
+    },
+    {
+      "type": "effect",
+      "id": "minecraft:blindness",
+      "target": "players",
+      "radius": 3.0,
+      "duration": 20,
+      "amplifier": 0
+    },
+    {
+      "type": "effect",
+      "id": "minecraft:slowness",
+      "target": "players",
+      "radius": 3.0,
+      "duration": 20,
+      "amplifier": 1
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:campfire_signal_smoke",
+      "count": 60,
+      "y_offset": 1.0,
+      "spread": 1.0,
+      "speed": 0.0
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:entity.witch.throw",
+      "category": "hostile",
+      "volume": 1.0,
+      "pitch": 1.2
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:entity.splash_potion.break",
+      "category": "hostile",
+      "volume": 1.0,
+      "pitch": 1.2
+    },
+    {
+      "type": "summon_custom_mob",
+      "custom_mob": "cmobs:overworld/skeleton/skeleton_decoy",
+      "origin": "target",
+      "side_offset": 1.0,
+      "target_owner_target": true
+    },
+    {
+      "type": "summon_custom_mob",
+      "custom_mob": "cmobs:overworld/skeleton/skeleton_decoy",
+      "origin": "target",
+      "side_offset": -1.0,
+      "target_owner_target": true
+    },
+    {
+      "type": "summon_custom_mob",
+      "custom_mob": "cmobs:overworld/skeleton/skeleton_decoy",
+      "origin": "target",
+      "forward_offset": 1.0,
+      "target_owner_target": true
+    },
+    {
+      "type": "summon_custom_mob",
+      "custom_mob": "cmobs:overworld/skeleton/skeleton_decoy",
+      "origin": "target",
+      "forward_offset": -1.0,
+      "target_owner_target": true
+    },
+    {
+      "type": "teleport",
+      "selector": "self",
+      "destination": {
+        "relative_to": "target",
+        "relative": true,
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "forward_offset": -1.0,
+        "offset_relative_to": "target"
+      }
+    }
+  ]
+}

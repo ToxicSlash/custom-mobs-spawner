@@ -1,0 +1,36 @@
+{
+  "members": [
+    {
+      "entity": "pillagervehicles:pillager_tank"
+    }
+  ],
+  "pools": [
+    {
+      "chance": 0.5,
+      "entries": [
+        {
+          "entity": "pillagervehicles:pillager_tank",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "chance": 0.5,
+      "entries": [
+        {
+          "entity": "pillagervehicles:pillager_ifv",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "chance": 0.2,
+      "entries": [
+        {
+          "entity": "pillagervehicles:pillager_ifv",
+          "weight": 1
+        }
+      ]
+    }
+  ]
+}

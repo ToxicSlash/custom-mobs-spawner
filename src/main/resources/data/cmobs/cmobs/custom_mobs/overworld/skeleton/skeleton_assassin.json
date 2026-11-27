@@ -1,0 +1,62 @@
+{
+  "entity": "minecraft:skeleton",
+  "custom_name": "Skeleton Assassin",
+  "custom_name_visible": false,
+  "tags": [
+    "checked",
+    "hasskill",
+    "skeleton_assassin",
+    "assassin_dodge",
+    "hurtfx"
+  ],
+  "skills": [
+    "cmobs:skeleton/assassin_dodge"
+  ],
+  "attributes": [
+    {
+      "id": "minecraft:generic.movement_speed",
+      "base": 0.36
+    },
+    {
+      "id": "minecraft:generic.max_health",
+      "base": 25.0
+    },
+    {
+      "id": "minecraft:generic.knockback_resistance",
+      "base": 0.2
+    },
+    {
+      "id": "minecraft:generic.attack_damage",
+      "base": 18.0
+    },
+    {
+      "id": "minecraft:generic.armor",
+      "base": 2.0
+    }
+  ],
+  "health": 25.0,
+  "equipment": {
+    "head": {
+      "id": "knightquest:shinobi_helmet",
+      "count": 1
+    },
+    "chest": {
+      "id": "knightquest:shinobi_chestplate",
+      "count": 1
+    },
+    "legs": {
+      "id": "knightquest:tunic_red_leggings",
+      "count": 1
+    },
+    "feet": {
+      "id": "knightquest:shinobi_boots",
+      "count": 1
+    },
+    "mainhand": {
+      "id": "mcdw:dagger_dagger",
+      "count": 1
+    }
+  },
+  "loot_table": "minecraft:entities/skeleton",
+  "nbt": "{ArmorDropChances:[0.0f,0.0f,0.0f,0.0f]}"
+}

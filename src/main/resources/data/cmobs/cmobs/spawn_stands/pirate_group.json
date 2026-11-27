@@ -1,0 +1,9 @@
+{
+  "tags": [
+    "spawnpoint_stand",
+    "pirate_group"
+  ],
+  "group": "cmobs:moon_pirate_group",
+  "discard_stand": true,
+  "max_player_distance": 80
+}

@@ -1,0 +1,9 @@
+{
+  "entity": "ad_astra:martian_raptor",
+  "tags": [
+    "checked",
+    "setMob",
+    "raptorling"
+  ],
+  "nbt": "{ArmorItems:[],HandItems:[],Attributes:[{Name:\"generic.max_health\",Base:20.0f},{Name:\"generic.movement_speed\",Base:0.33f},{Name:\"generic.attack_damage\",Base:8.0f},{Name:\"generic.armor\",Base:5.0f}],Tags:[\"checked\",\"setMob\",\"raptorling\"],Health:400.0f,CustomName:\"{\\\"text\\\":\\\"Raptorling\\\",\\\"color\\\":\\\"white\\\"}\",ArmorDropChances:[0.0f,0.0f,0.0f,0.0f],HandDropChances:[0.0f,0.0f],PersistenceRequired:0b,Silent:0b,DeathLootTable:\"\",NoAI:0b}"
+}

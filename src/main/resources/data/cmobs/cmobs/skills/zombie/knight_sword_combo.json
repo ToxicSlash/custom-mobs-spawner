@@ -1,0 +1,266 @@
+{
+  "trigger": "timed",
+  "interval_ticks": 10,
+  "chance": 0.42,
+  "requires_living_target": true,
+  "require_mainhand": "minecraft:iron_sword",
+  "trigger_range": 3.4,
+  "cooldown_on_start": true,
+  "global_cooldown_ticks": 30,
+  "cooldown_ticks": 150,
+  "lock_telegraph_direction": false,
+  "telegraph": [
+    {
+      "delay_ticks": 0,
+      "actions": [
+        {
+          "type": "sound",
+          "id": "minecraft:entity.zombie.ambient",
+          "category": "hostile",
+          "volume": 0.75,
+          "pitch": 0.62
+        },
+        {
+          "type": "particle",
+          "id": "minecraft:scrape",
+          "count": 8,
+          "y_offset": 1.15,
+          "spread": 0.32,
+          "speed": 0.025
+        }
+      ]
+    },
+    {
+      "delay_ticks": 6,
+      "actions": [
+        {
+          "type": "particle",
+          "id": "minecraft:instant_effect",
+          "count": 6,
+          "y_offset": 1.2,
+          "spread": 0.26,
+          "speed": 0.015
+        },
+        {
+          "type": "sound",
+          "id": "minecraft:item.armor.equip_iron",
+          "category": "hostile",
+          "volume": 0.55,
+          "pitch": 0.8
+        }
+      ]
+    },
+    {
+      "delay_ticks": 5,
+      "actions": [
+        {
+          "type": "lunge",
+          "fixed_direction": false,
+          "strength": 0.4,
+          "y_strength": 0.02
+        },
+        {
+          "type": "sound",
+          "id": "minecraft:entity.player.attack.sweep",
+          "category": "hostile",
+          "volume": 0.9,
+          "pitch": 1.15
+        },
+        {
+          "type": "particle",
+          "id": "minecraft:crit",
+          "count": 10,
+          "y_offset": 1.0,
+          "spread": 0.06,
+          "speed": 0.07,
+          "arc": {
+            "points": 5,
+            "count_per_point": 2,
+            "radius": 1.75,
+            "start_degrees": 48.0,
+            "end_degrees": -28.0,
+            "y_offset": 1.1,
+            "end_y_offset": 0.95,
+            "spread": 0.08,
+            "speed": 0.07
+          }
+        },
+        {
+          "type": "particle",
+          "id": "minecraft:sweep_attack",
+          "count": 1,
+          "y_offset": 1.0,
+          "spread": 0.02,
+          "speed": 0.0,
+          "arc": {
+            "points": 1,
+            "count_per_point": 1,
+            "radius": 1.8,
+            "start_degrees": 10.0,
+            "end_degrees": 10.0,
+            "y_offset": 1.02,
+            "end_y_offset": 1.02,
+            "spread": 0.02,
+            "speed": 0.0
+          }
+        },
+        {
+          "type": "damage",
+          "target": "players",
+          "radius": 3.15,
+          "use_attack_damage": true,
+          "damage_scale": 0.42,
+          "bypass_invulnerability": true,
+          "knockback": false
+        }
+      ]
+    },
+    {
+      "delay_ticks": 5,
+      "actions": [
+        {
+          "type": "lunge",
+          "fixed_direction": true,
+          "strength": 0.4,
+          "y_strength": 0.02
+        },
+        {
+          "type": "sound",
+          "id": "minecraft:entity.player.attack.sweep",
+          "category": "hostile",
+          "volume": 0.85,
+          "pitch": 1.35
+        },
+        {
+          "type": "particle",
+          "id": "minecraft:enchanted_hit",
+          "count": 12,
+          "y_offset": 1.0,
+          "spread": 0.06,
+          "speed": 0.06,
+          "arc": {
+            "points": 6,
+            "count_per_point": 2,
+            "radius": 1.9,
+            "start_degrees": -42.0,
+            "end_degrees": 38.0,
+            "y_offset": 0.95,
+            "end_y_offset": 1.1,
+            "spread": 0.08,
+            "speed": 0.06
+          }
+        },
+        {
+          "type": "particle",
+          "id": "minecraft:sweep_attack",
+          "count": 1,
+          "y_offset": 1.0,
+          "spread": 0.02,
+          "speed": 0.0,
+          "arc": {
+            "points": 1,
+            "count_per_point": 1,
+            "radius": 1.92,
+            "start_degrees": -8.0,
+            "end_degrees": -8.0,
+            "y_offset": 1.0,
+            "end_y_offset": 1.0,
+            "spread": 0.02,
+            "speed": 0.0
+          }
+        },
+        {
+          "type": "damage",
+          "target": "players",
+          "radius": 3.05,
+          "use_attack_damage": true,
+          "damage_scale": 0.38,
+          "bypass_invulnerability": true,
+          "knockback": false
+        }
+      ]
+    },
+    {
+      "delay_ticks": 5,
+      "actions": [
+        {
+          "type": "lunge",
+          "fixed_direction": true,
+          "strength": 0.4,
+          "y_strength": 0.03
+        },
+        {
+          "type": "sound",
+          "id": "minecraft:entity.player.attack.strong",
+          "category": "hostile",
+          "volume": 0.95,
+          "pitch": 1.0
+        },
+        {
+          "type": "particle",
+          "id": "minecraft:sweep_attack",
+          "count": 2,
+          "y_offset": 1.0,
+          "spread": 0.02,
+          "speed": 0.0,
+          "arc": {
+            "points": 2,
+            "count_per_point": 1,
+            "radius": 2.05,
+            "start_degrees": 34.0,
+            "end_degrees": -34.0,
+            "y_offset": 1.05,
+            "end_y_offset": 0.88,
+            "spread": 0.02,
+            "speed": 0.0
+          }
+        },
+        {
+          "type": "particle",
+          "id": "minecraft:crit",
+          "count": 15,
+          "y_offset": 1.0,
+          "spread": 0.08,
+          "speed": 0.09,
+          "arc": {
+            "points": 5,
+            "count_per_point": 3,
+            "radius": 2.2,
+            "start_degrees": 44.0,
+            "end_degrees": -48.0,
+            "y_offset": 1.1,
+            "end_y_offset": 0.82,
+            "spread": 0.1,
+            "speed": 0.09
+          }
+        },
+        {
+          "type": "damage",
+          "target": "players",
+          "radius": 3.35,
+          "use_attack_damage": true,
+          "damage_scale": 0.55,
+          "bypass_invulnerability": true,
+          "knockback": false
+        },
+        {
+          "type": "knockback",
+          "target": "players",
+          "radius": 2.35,
+          "strength": 0.45,
+          "y_strength": 0.08
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "type": "particle",
+      "id": "minecraft:smoke",
+      "count": 5,
+      "y_offset": 0.35,
+      "spread": 0.22,
+      "speed": 0.02
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "trigger": "when_hurt",
+  "cooldown_ticks": 20,
+  "actions": [
+    {
+      "type": "sound",
+      "id": "minecraft:entity.warden.hurt",
+      "category": "hostile",
+      "volume": 0.7,
+      "pitch": 0.8
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:sculk_soul",
+      "count": 8,
+      "y_offset": 1,
+      "spread": 0.4
+    }
+  ]
+}

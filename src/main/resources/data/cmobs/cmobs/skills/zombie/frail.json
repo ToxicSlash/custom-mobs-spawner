@@ -1,0 +1,33 @@
+{
+  "trigger": "when_hurt",
+  "chance": 1.0,
+  "global_cooldown_ticks": 80,
+  "cooldown_ticks": 600,
+  "actions": [
+    {
+      "type": "effect",
+      "id": "minecraft:slowness",
+      "duration": 80,
+      "amplifier": 1
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:crit",
+      "count": 20,
+      "y_offset": 1.0,
+      "spread": 0.45,
+      "speed": 0.08
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:entity.zombie.hurt",
+      "category": "hostile",
+      "volume": 1.0,
+      "pitch": 0.65
+    },
+    {
+      "type": "command",
+      "command": "tellraw @a[tag=custom_spawn_debug] {\"text\":\"Frail skill triggered\",\"color\":\"yellow\"}"
+    }
+  ]
+}

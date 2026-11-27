@@ -1,0 +1,35 @@
+{
+  "trigger": "failed_attack",
+  "require_mainhand": "#cmobs:swords",
+  "conditions": [
+    {
+      "type": "effect",
+      "id": "cmobs:flow",
+      "min_level": 1,
+      "max_level": 10
+    }
+  ],
+  "actions": [
+    {
+      "type": "effect_clear",
+      "id": "cmobs:flow",
+      "target": "self"
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:ash",
+      "anchor": "eyes",
+      "forward_offset": 1.0,
+      "count": 10,
+      "spread": 0.18,
+      "speed": 0.5
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:entity.player.attack.weak",
+      "category": "hostile",
+      "volume": 0.9,
+      "pitch": 2
+    }
+  ]
+}

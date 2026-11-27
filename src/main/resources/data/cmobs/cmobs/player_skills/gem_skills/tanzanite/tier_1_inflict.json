@@ -1,0 +1,58 @@
+{
+    "trigger":  "when_attacks",
+    "chance":  0.03,
+    "proc_coefficient":  {
+                             "type":  "attack_speed",
+                             "baseline_attack_speed":  1.6,
+                             "min":  0.75,
+                             "max":  2.0,
+                             "spell_min_interval_ticks":  20,
+                             "spell_coef":  3.0
+                         },
+    "combo_increase_proc%":  0.05,
+    "combo_minimum":  3,
+    "conditions":  [
+                       {
+                           "type":  "weapon_gem",
+                           "gem_type":  "tanzanite",
+                           "gem_tier":  1
+                       }
+                   ],
+    "requires_living_target":  true,
+    "require_mainhand":  "#cmobs:usable_weapons",
+    "trigger_range":  20.0,
+    "cooldown_on_start":  false,
+    "global_cooldown_ticks":  0,
+    "cooldown_ticks":  2,
+    "actions":  [
+                    {
+                        "type":  "effect",
+                        "id":  "cmobs:soulchill",
+                        "target":  "target",
+                        "duration":  60,
+                        "amplifier":  0,
+                        "stack":  true,
+                        "amplifier_increment":  1,
+                        "max_amplifier":  2,
+                        "stack_duration":  true,
+                        "duration_increment":  60,
+                        "max_duration":  100
+                    },
+                    {
+                        "type":  "effect",
+                        "id":  "more_rpg_classes:frozen_solid",
+                        "target":  "target",
+                        "duration":  60,
+                        "amplifier":  0,
+                        "conditions":  [
+                                           {
+                                               "type":  "effect",
+                                               "id":  "cmobs:soulchill",
+                                               "target":  "target",
+                                               "min_level":  3,
+                                               "max_level":  10
+                                           }
+                                       ]
+                    }
+                ]
+}

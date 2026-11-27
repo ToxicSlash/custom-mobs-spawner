@@ -1,0 +1,13 @@
+{
+  "entity": "arachnids:arkellian",
+  "tags": [
+    "checked",
+    "setMob",
+    "arachnids_tick",
+    "death_anim"
+  ],
+  "skills": [
+    "cmobs:mars/arachnids/tick_explode"
+  ],
+  "nbt": "{Tags:[\"checked\",\"setMob\",\"arachnids_tick\",\"death_anim\"]}"
+}

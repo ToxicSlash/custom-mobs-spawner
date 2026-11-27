@@ -1,0 +1,69 @@
+{
+  "entity": "repurposedend:cryingskeleton",
+  "custom_name": "Lost Knight",
+  "custom_name_visible": true,
+  "team": "lost_faction",
+  "tags": [
+    "lost_faction",
+    "lost_knight"
+  ],
+  "skills": [
+    "cmobs:lost/knight_advancing_shield",
+    "cmobs:lost/knight_overhead_strike"
+  ],
+  "attributes": [
+    {
+      "id": "minecraft:generic.max_health",
+      "base": 75.0
+    },
+    {
+      "id": "minecraft:generic.attack_damage",
+      "base": 25.0
+    },
+    {
+      "id": "minecraft:generic.movement_speed",
+      "base": 0.21
+    },
+    {
+      "id": "minecraft:generic.knockback_resistance",
+      "base": 0.7
+    },
+    {
+      "id": "minecraft:generic.armor",
+      "base": 6.0
+    },
+    {
+      "id": "minecraft:generic.follow_range",
+      "base": 60.0
+    }
+  ],
+  "health": 75.0,
+  "equipment": {
+    "head": {
+      "id": "rogues:netherite_berserker_armor_head",
+      "count": 1
+    },
+    "chest": {
+      "id": "rogues:netherite_berserker_armor_chest",
+      "count": 1
+    },
+    "legs": {
+      "id": "knightquest:deepslate_leggings",
+      "count": 1
+    },
+    "feet": {
+      "id": "knightquest:deepslate_boots",
+      "count": 1
+    },
+    "mainhand": {
+      "id": "rogues:stone_double_axe",
+      "count": 1
+    },
+    "offhand": {
+      "id": "paladins:iron_kite_shield",
+      "count": 1
+    }
+  },
+  "loot_table": "repurposedend:entities/cryingskeleton",
+  "nbt": "{CanPickUpLoot:0b,PersistenceRequired:1b,ArmorDropChances:[0.0f,0.0f,0.0f,0.0f]}"
+}

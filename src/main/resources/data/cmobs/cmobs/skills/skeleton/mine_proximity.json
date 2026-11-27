@@ -1,0 +1,30 @@
+{
+  "trigger": "timed",
+  "interval_ticks": 2,
+  "conditions": [
+    {
+      "type": "nearby_entity",
+      "entity_type": "minecraft:player",
+      "radius": 1.0
+    }
+  ],
+  "actions": [
+    {
+      "type": "explosion",
+      "power": 1.0,
+      "create_fire": false,
+      "source_type": "mob"
+    },
+    {
+      "type": "damage",
+      "target": "living",
+      "radius": 3.0,
+      "amount": 16.0,
+      "knockback": false,
+      "bypass_invulnerability": true
+    },
+    {
+      "type": "discard"
+    }
+  ]
+}

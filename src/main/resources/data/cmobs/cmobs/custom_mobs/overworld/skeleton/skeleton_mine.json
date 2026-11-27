@@ -1,0 +1,14 @@
+{
+  "entity": "minecraft:armor_stand",
+  "tags": [
+    "anim_stand",
+    "skeleton_mine",
+    "passive_anim"
+  ],
+  "skills": [
+    "cmobs:skeleton/mine_flame",
+    "cmobs:skeleton/mine_proximity",
+    "cmobs:skeleton/mine_timeout"
+  ],
+  "nbt": "{Invulnerable:1b,NoGravity:0b,Invisible:1b,DisabledSlots:2039583,Small:1b,Silent:1b}"
+}

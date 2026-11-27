@@ -1,0 +1,40 @@
+{
+  "trigger": "when_killed",
+  "actions": [
+    {
+      "type": "sound",
+      "id": "minecraft:entity.slime.squish",
+      "category": "hostile",
+      "volume": 1,
+      "pitch": 1.8
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:entity.slime.attack",
+      "category": "hostile",
+      "volume": 1,
+      "pitch": 0.8
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:sonic_boom",
+      "count": 1,
+      "y_offset": 0.25
+    },
+    {
+      "type": "damage",
+      "target": "players",
+      "radius": 3,
+      "amount": 3,
+      "damage_type": "cmobs:instant"
+    },
+    {
+      "type": "effect",
+      "id": "minecraft:wither",
+      "target": "players",
+      "radius": 6,
+      "duration": 80,
+      "amplifier": 1
+    }
+  ]
+}

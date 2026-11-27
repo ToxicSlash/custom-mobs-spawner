@@ -1,0 +1,20 @@
+{
+  "entity": "ad_astra:martian_raptor",
+  "tags": [
+    "checked",
+    "setMob",
+    "raptor_queen",
+    "death_anim",
+    "hurtsfx",
+    "passive_skill"
+  ],
+  "skills": [
+    "cmobs:mars/raptor/queen_hurt_sfx",
+    "cmobs:mars/raptor/queen_death",
+    "cmobs:mars/raptor/queen_tail_sweep",
+    "cmobs:mars/raptor/queen_screech",
+    "cmobs:mars/raptor/queen_needle_barrage",
+    "cmobs:mars/raptor/queen_poison_plume"
+  ],
+  "nbt": "{ArmorItems:[],HandItems:[],Attributes:[{Name:\"generic.knockback_resistance\",Base:0.8f},{Name:\"generic.max_health\",Base:200.0f},{Name:\"generic.movement_speed\",Base:0.29f},{Name:\"generic.attack_damage\",Base:20.0f},{Name:\"generic.armor\",Base:12.0f}],Tags:[\"checked\",\"setMob\",\"raptor_queen\",\"death_anim\",\"hurtsfx\",\"passive_skill\"],Health:200.0f,CustomName:\"{\\\"text\\\":\\\"Martian Queen\\\",\\\"color\\\":\\\"green\\\"}\",ArmorDropChances:[0.0f,0.0f,0.0f,0.0f],HandDropChances:[0.0f,0.0f],PersistenceRequired:1b,Silent:0b,DeathLootTable:\"cmobs:entities/mars/raptor_queen\",NoAI:0b}"
+}

@@ -1,0 +1,66 @@
+{
+  "entity": "minecraft:skeleton",
+  "custom_name": "Skeleton Marauder",
+  "custom_name_visible": false,
+  "tags": [
+    "checked",
+    "hasskill",
+    "skeleton_marauder",
+    "passive_skill",
+    "assassin_dodge",
+    "hurtfx"
+  ],
+  "skills": [
+    "cmobs:skeleton/marauder_dodge",
+    "cmobs:skeleton/marauder_aura",
+    "cmobs:skeleton/marauder_sword_switch",
+    "cmobs:skeleton/marauder_bow_switch"
+  ],
+  "attributes": [
+    {
+      "id": "minecraft:generic.movement_speed",
+      "base": 0.28
+    },
+    {
+      "id": "minecraft:generic.max_health",
+      "base": 85.0
+    },
+    {
+      "id": "minecraft:generic.knockback_resistance",
+      "base": 0.5
+    },
+    {
+      "id": "minecraft:generic.attack_damage",
+      "base": 38.0
+    },
+    {
+      "id": "minecraft:generic.armor",
+      "base": 6.0
+    }
+  ],
+  "health": 85.0,
+  "equipment": {
+    "head": {
+      "id": "knightquest:wither_helmet",
+      "count": 1
+    },
+    "chest": {
+      "id": "artificers:artillerist_netherite_chest",
+      "count": 1
+    },
+    "legs": {
+      "id": "knightquest:shinobi_leggings",
+      "count": 1
+    },
+    "feet": {
+      "id": "knightquest:dragon_boots",
+      "count": 1
+    },
+    "mainhand": {
+      "id": "minecraft:bow",
+      "count": 1
+    }
+  },
+  "loot_table": "minecraft:entities/skeleton",
+  "nbt": "{ArmorDropChances:[0.0f,0.0f,0.0f,0.0f]}"
+}

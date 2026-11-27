@@ -1,0 +1,36 @@
+{
+  "description": "Example: when_killed trigger. Fires when the mob dies.",
+  "trigger": "when_killed",
+  "chance": 1.0,
+  "actions": [
+    {
+      "type": "particle",
+      "id": "minecraft:smoke",
+      "count": 30,
+      "y_offset": 1.0,
+      "spread": 0.7,
+      "speed": 0.04
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:entity.generic.explode",
+      "category": "hostile",
+      "volume": 0.8,
+      "pitch": 1.3
+    },
+    {
+      "type": "explosion",
+      "power": 1.5,
+      "create_fire": false,
+      "source_type": "none"
+    },
+    {
+      "type": "function",
+      "id": "cmobs:example/on_death"
+    },
+    {
+      "type": "command",
+      "command": "say Example when_killed command"
+    }
+  ]
+}

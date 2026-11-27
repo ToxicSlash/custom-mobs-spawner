@@ -1,0 +1,19 @@
+{
+  "trigger": "when_killed",
+  "actions": [
+    {
+      "type": "summon_custom_mob",
+      "custom_mob": "cmobs:mars/arachnids/arachnids_tick"
+    },
+    {
+      "type": "summon_custom_mob",
+      "custom_mob": "cmobs:mars/arachnids/arachnids_tick",
+      "side_offset": 0.4
+    },
+    {
+      "type": "summon_custom_mob",
+      "custom_mob": "cmobs:mars/arachnids/arachnids_tick",
+      "side_offset": -0.4
+    }
+  ]
+}

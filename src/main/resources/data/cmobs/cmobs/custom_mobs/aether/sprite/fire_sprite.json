@@ -1,0 +1,9 @@
+{
+  "entity": "aether:fire_minion",
+  "tags": [
+    "checked",
+    "setMob",
+    "fire_sprite"
+  ],
+  "nbt": "{Attributes:[{Name:\"generic.max_health\",Base:20.0f},{Name:\"generic.movement_speed\",Base:0.27f},{Name:\"generic.attack_damage\",Base:-50.0f}],Tags:[\"checked\",\"setMob\",\"fire_sprite\"],CustomName:\"{\\\"text\\\":\\\"Fire Sprite\\\"}\",Silent:0b,ArmorDropChances:[0.0f,0.0f,0.0f,0.0f]}"
+}

@@ -1,0 +1,12 @@
+{
+  "entity": "ad_astra:martian_raptor",
+  "tags": [
+    "checked",
+    "raptor_sentry",
+    "passive_skill"
+  ],
+  "skills": [
+    "cmobs:mars/raptor/sentry_needle_shot"
+  ],
+  "nbt": "{ArmorItems:[],HandItems:[],Attributes:[{Name:\"generic.max_health\",Base:60.0f},{Name:\"generic.movement_speed\",Base:0.18f},{Name:\"generic.attack_damage\",Base:6.0f},{Name:\"generic.armor\",Base:14.0f}],Tags:[\"checked\",\"raptor_sentry\",\"passive_skill\"],Health:60.0f,CustomName:\"{\\\"text\\\":\\\"Raptor Sentry\\\",\\\"color\\\":\\\"green\\\"}\",ArmorDropChances:[0.0f,0.0f,0.0f,0.0f],HandDropChances:[0.0f,0.0f],PersistenceRequired:0b,Silent:0b,DeathLootTable:\"\",NoAI:0b}"
+}

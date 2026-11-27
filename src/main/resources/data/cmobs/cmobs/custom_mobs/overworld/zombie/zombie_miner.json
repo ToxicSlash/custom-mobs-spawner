@@ -1,0 +1,59 @@
+{
+  "entity": "minecraft:zombie",
+  "custom_name": "Zombie Miner",
+  "custom_name_visible": false,
+  "tags": [
+    "checked",
+    "zombie_miner"
+  ],
+  "skills": [
+    "cmobs:zombie/hurt_sfx_shield"
+  ],
+  "attributes": [
+    {
+      "id": "minecraft:generic.movement_speed",
+      "base": 0.26
+    },
+    {
+      "id": "minecraft:generic.max_health",
+      "base": 40.0
+    },
+    {
+      "id": "minecraft:generic.knockback_resistance",
+      "base": 0.5
+    },
+    {
+      "id": "minecraft:generic.attack_damage",
+      "base": 18.0
+    },
+    {
+      "id": "minecraft:generic.armor",
+      "base": 6.0
+    }
+  ],
+  "health": 40.0,
+  "equipment": {
+    "head": {
+      "id": "minecraft:golden_helmet",
+      "count": 1
+    },
+    "chest": {
+      "id": "minecraft:iron_chestplate",
+      "count": 1
+    },
+    "feet": {
+      "id": "minecraft:leather_boots",
+      "count": 1
+    },
+    "mainhand": {
+      "id": "minecraft:diamond_pickaxe",
+      "count": 1
+    },
+    "offhand": {
+      "id": "minecraft:lantern",
+      "count": 1
+    }
+  },
+  "loot_table": "minecraft:entities/zombie",
+  "nbt": "{ArmorDropChances:[0.0f,0.0f,0.0f,0.0f]}"
+}

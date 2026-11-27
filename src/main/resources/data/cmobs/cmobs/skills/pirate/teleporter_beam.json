@@ -1,0 +1,160 @@
+{
+  "trigger": "timed",
+  "interval_ticks": 1,
+  "cooldown_on_start": true,
+  "cooldown_ticks": 100000,
+  "actions": [
+    {
+      "type": "particle",
+      "id": "minecraft:end_rod",
+      "count": 10,
+      "y_offset": 1.2,
+      "spread_x": 0.2,
+      "spread_y": 0.6,
+      "spread_z": 0.2,
+      "speed": 0.03
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:block.beacon.ambient",
+      "category": "hostile",
+      "volume": 1,
+      "pitch": 1.5
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:block.portal.ambient",
+      "category": "hostile",
+      "volume": 0.3,
+      "pitch": 0.8
+    },
+    {
+      "type": "delay",
+      "ticks": 20
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:end_rod",
+      "count": 10,
+      "y_offset": 1.2,
+      "spread_x": 0.2,
+      "spread_y": 0.6,
+      "spread_z": 0.2,
+      "speed": 0.03
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:block.beacon.ambient",
+      "category": "hostile",
+      "volume": 1,
+      "pitch": 1.5
+    },
+    {
+      "type": "delay",
+      "ticks": 20
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:end_rod",
+      "count": 10,
+      "y_offset": 1.2,
+      "spread_x": 0.2,
+      "spread_y": 0.6,
+      "spread_z": 0.2,
+      "speed": 0.03
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:block.beacon.ambient",
+      "category": "hostile",
+      "volume": 1,
+      "pitch": 1.5
+    },
+    {
+      "type": "delay",
+      "ticks": 20
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:end_rod",
+      "count": 10,
+      "y_offset": 1.2,
+      "spread_x": 0.2,
+      "spread_y": 0.6,
+      "spread_z": 0.2,
+      "speed": 0.03
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:block.beacon.ambient",
+      "category": "hostile",
+      "volume": 1,
+      "pitch": 1.5
+    },
+    {
+      "type": "delay",
+      "ticks": 60
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:flash",
+      "count": 1,
+      "y_offset": 1.2
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:firework",
+      "count": 15,
+      "y_offset": 1.2,
+      "spread": 0.3,
+      "speed": 0.06
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:entity.enderman.teleport",
+      "category": "hostile",
+      "volume": 0.5,
+      "pitch": 0.8
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:block.beacon.power_select",
+      "category": "hostile",
+      "volume": 0.5,
+      "pitch": 2
+    },
+    {
+      "type": "random",
+      "actions": [
+        {
+          "type": "summon_custom_mob",
+          "custom_mob": "cmobs:pirate/crew/pirate_bandit",
+          "weight": 30
+        },
+        {
+          "type": "summon_custom_mob",
+          "custom_mob": "cmobs:pirate/crew/pirate_crossbowman",
+          "weight": 50
+        },
+        {
+          "type": "summon_custom_mob",
+          "custom_mob": "cmobs:pirate/crew/pirate_bladesman",
+          "weight": 40
+        },
+        {
+          "type": "summon_custom_mob",
+          "custom_mob": "cmobs:pirate/crew/pirate_pikeman",
+          "weight": 40
+        },
+        {
+          "type": "summon_custom_mob",
+          "custom_mob": "cmobs:pirate/crew/pirate_lieutenant",
+          "weight": 20
+        }
+      ]
+    },
+    {
+      "type": "discard"
+    }
+  ]
+}

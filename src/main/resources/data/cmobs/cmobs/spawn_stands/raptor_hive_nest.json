@@ -1,0 +1,12 @@
+{
+  "tags": [
+    "spawnpoint_stand",
+    "raptor_hive_nest"
+  ],
+  "group": "cmobs:raptor_hive_nest",
+  "required_block": "minecraft:turtle_egg",
+  "repeatable": true,
+  "cooldown_ticks": 100,
+  "discard_stand": false,
+  "max_player_distance": 12
+}

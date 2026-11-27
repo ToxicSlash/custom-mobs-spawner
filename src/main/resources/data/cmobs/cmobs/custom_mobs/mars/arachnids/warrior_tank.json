@@ -1,0 +1,14 @@
+{
+  "entity": "arachnids:warrior",
+  "tags": [
+    "checked",
+    "warrior_tank",
+    "setMob",
+    "hurtfx",
+    "hasskill"
+  ],
+  "skills": [
+    "cmobs:mars/arachnids/stomp"
+  ],
+  "nbt": "{ArmorItems:[],HandItems:[],Attributes:[{Name:\"generic.max_health\",Base:65.0f},{Name:\"generic.movement_speed\",Base:0.21f},{Name:\"generic.attack_damage\",Base:17.0f},{Name:\"generic.armor\",Base:25.0f}],Tags:[\"checked\",\"warrior_tank\",\"setMob\",\"hurtfx\",\"hasskill\"],Health:65.0f,CustomName:\"{\\\"text\\\":\\\"Warrior Tank\\\",\\\"color\\\":\\\"green\\\"}\",ArmorDropChances:[0.0f,0.0f,0.0f,0.0f],HandDropChances:[0.0f,0.0f],PersistenceRequired:0b,Silent:0b,NoAI:0b}"
+}

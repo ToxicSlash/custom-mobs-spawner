@@ -1,0 +1,93 @@
+{
+  "trigger": "failed_attack",
+  "require_mainhand": "#cmobs:knives",
+  "conditions": [
+    {
+      "type": "effect",
+      "id": "cmobs:precision",
+      "min_level": 1,
+      "max_level": 10
+    }
+  ],
+  "actions": [
+    {
+      "type": "effect",
+      "id": "cmobs:precision",
+      "target": "self",
+      "duration": 100,
+      "amplifier": 0,
+      "stack": true,
+      "amplifier_increment": -1,
+      "max_amplifier": 9,
+      "stack_duration": true,
+      "duration_increment": 0,
+      "max_duration": 100,
+      "conditions": [
+        {
+          "type": "effect",
+          "id": "cmobs:precision",
+          "min_level": 1,
+          "max_level": 3
+        }
+      ]
+    },
+    {
+      "type": "effect",
+      "id": "cmobs:precision",
+      "target": "self",
+      "duration": 100,
+      "amplifier": 0,
+      "stack": true,
+      "amplifier_increment": -2,
+      "max_amplifier": 9,
+      "stack_duration": true,
+      "duration_increment": 0,
+      "max_duration": 100,
+      "conditions": [
+        {
+          "type": "effect",
+          "id": "cmobs:precision",
+          "min_level": 4,
+          "max_level": 6
+        }
+      ]
+    },
+    {
+      "type": "effect",
+      "id": "cmobs:precision",
+      "target": "self",
+      "duration": 100,
+      "amplifier": 0,
+      "stack": true,
+      "amplifier_increment": -4,
+      "max_amplifier": 9,
+      "stack_duration": true,
+      "duration_increment": 0,
+      "max_duration": 100,
+      "conditions": [
+        {
+          "type": "effect",
+          "id": "cmobs:precision",
+          "min_level": 7,
+          "max_level": 10
+        }
+      ]
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:ash",
+      "anchor": "eyes",
+      "forward_offset": 1.0,
+      "count": 12,
+      "spread": 0.18,
+      "speed": 0.05
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:entity.player.attack.weak",
+      "category": "players",
+      "volume": 0.8,
+      "pitch": 1.6
+    }
+  ]
+}

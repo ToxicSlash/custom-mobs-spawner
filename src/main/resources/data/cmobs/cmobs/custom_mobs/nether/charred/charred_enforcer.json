@@ -1,0 +1,67 @@
+{
+  "entity": "minecraft:wither_skeleton",
+  "custom_name": "Charred Enforcer",
+  "custom_name_visible": false,
+  "tags": [
+    "checked",
+    "charred_enforcer",
+    "passive_sfx",
+    "hurtsfx",
+    "charred_mob",
+    "hurtfx",
+    "trailfx"
+  ],
+  "skills": [
+    "cmobs:charred/ambient_sfx",
+    "cmobs:charred/hurt_sfx",
+    "cmobs:charred/trail"
+  ],
+  "team": "charred",
+  "attributes": [
+    {
+      "id": "minecraft:generic.movement_speed",
+      "base": 0.255
+    },
+    {
+      "id": "minecraft:generic.max_health",
+      "base": 90.0
+    },
+    {
+      "id": "minecraft:generic.knockback_resistance",
+      "base": 0.5
+    },
+    {
+      "id": "minecraft:generic.attack_damage",
+      "base": 55.0
+    },
+    {
+      "id": "minecraft:generic.armor",
+      "base": 3.0
+    }
+  ],
+  "health": 65.0,
+  "equipment": {
+    "head": {
+      "id": "knightquest:bat_helmet",
+      "count": 1
+    },
+    "chest": {
+      "id": "knightquest:bat_chestplate",
+      "count": 1
+    },
+    "legs": {
+      "id": "knightquest:blaze_leggings",
+      "count": 1
+    },
+    "feet": {
+      "id": "knightquest:wither_boots",
+      "count": 1
+    },
+    "mainhand": {
+      "id": "mythicmetals:steel_sword",
+      "count": 1
+    }
+  },
+  "loot_table": "minecraft:entities/wither_skeleton",
+  "nbt": "{ArmorDropChances:[0.0f,0.0f,0.0f,0.0f],HandDropChances:[0.0f,0.0f],PersistenceRequired:0b}"
+}

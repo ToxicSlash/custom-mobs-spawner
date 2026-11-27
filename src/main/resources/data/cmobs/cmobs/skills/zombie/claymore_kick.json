@@ -1,0 +1,91 @@
+{
+  "trigger": "timed",
+  "interval_ticks": 10,
+  "chance": 0.35,
+  "requires_living_target": true,
+  "require_mainhand": "paladins:iron_claymore",
+  "trigger_range": 1.9,
+  "cooldown_on_start": true,
+  "global_cooldown_ticks": 26,
+  "cooldown_ticks": 150,
+  "telegraph": [
+    {
+      "delay_ticks": 0,
+      "actions": [
+        {
+          "type": "sound",
+          "id": "minecraft:entity.zombie.step",
+          "category": "hostile",
+          "volume": 0.75,
+          "pitch": 0.5
+        },
+        {
+          "type": "particle",
+          "id": "minecraft:cloud",
+          "count": 7,
+          "y_offset": 0.15,
+          "spread": 0.18,
+          "speed": 0.015
+        }
+      ]
+    },
+    {
+      "delay_ticks": 5,
+      "actions": [
+        {
+          "type": "lunge",
+          "strength": 0.2,
+          "y_strength": 0.03
+        },
+        {
+          "type": "sound",
+          "id": "minecraft:block.gravel.break",
+          "category": "hostile",
+          "volume": 0.8,
+          "pitch": 0.7
+        },
+        {
+          "type": "particle",
+          "id": "minecraft:ash",
+          "count": 12,
+          "y_offset": 0.35,
+          "spread": 0.25,
+          "speed": 0.05
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "type": "knockback",
+      "target": "target",
+      "radius": 1.9,
+      "strength": 1.15,
+      "y_strength": 0.24
+    },
+    {
+      "type": "stun",
+      "target": "target",
+      "radius": 1.9,
+      "duration": 34,
+      "slowness_amplifier": 3,
+      "mining_fatigue_amplifier": 1
+    },
+    {
+      "type": "damage",
+      "target": "target",
+      "radius": 1.9,
+      "amount": 1.0,
+      "knockback": false
+    },
+    {
+      "type": "sound",
+      "target": "target",
+      "radius": 1.9,
+      "id": "minecraft:entity.generic.big_fall",
+      "category": "hostile",
+      "volume": 0.65,
+      "pitch": 1.25
+    }
+  ]
+}

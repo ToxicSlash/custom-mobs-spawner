@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "mcdw:sword_beestinger",
+      "required": false
+    },
+    {
+      "id": "mcdw:dagger_fangs_of_frost",
+      "required": false
+    },
+    {
+      "id": "rogues:netherite_dagger",
+      "required": false
+    }
+  ]
+}

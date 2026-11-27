@@ -1,0 +1,14 @@
+{
+  "entity": "minecraft:vindicator",
+  "tags": [
+    "checked",
+    "hasskill",
+    "pirate_pikeman",
+    "inflicts_effect",
+    "pirate"
+  ],
+  "skills": [
+    "cmobs:pirate/pikeman_slow"
+  ],
+  "nbt": "{ArmorItems:[{id:\"knightquest:pirate_boots\",Count:1b},{id:\"knightquest:silver_leggings\",Count:1b},{id:\"knightquest:bow_chestplate\",Count:1b},{id:\"knightquest:silver_helmet\",Count:1b}],HandItems:[{id:\"archers:netherite_spear\",Count:1b},{}],Attributes:[{Name:\"porting_lib:entity_gravity\",Base:0.09f},{Name:\"generic.movement_speed\",Base:0.31f},{Name:\"generic.max_health\",Base:40.0f},{Name:\"generic.knockback_resistance\",Base:0.7f},{Name:\"generic.attack_damage\",Base:2.0f},{Name:\"generic.armor\",Base:3.0f}],Tags:[\"checked\",\"hasskill\",\"pirate_pikeman\",\"inflicts_effect\",\"pirate\"],Health:40.0f,CustomName:\"{\\\"text\\\":\\\"Pirate Pikeman\\\"}\",ArmorDropChances:[0.0f,0.0f,0.0f,0.0f],HandDropChances:[0.0f,0.0f],PersistenceRequired:1b}"
+}

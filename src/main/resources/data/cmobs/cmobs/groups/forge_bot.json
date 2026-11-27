@@ -1,0 +1,58 @@
+{
+  "pools": [
+    {
+      "chance": 0.5,
+      "entries": [
+        {
+          "entity": "kubejs:titan",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "chance": 0.3,
+      "entries": [
+        {
+          "entity": "kubejs:titan",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "chance": 0.6,
+      "x": 1,
+      "y": 0,
+      "z": 0,
+      "entries": [
+        {
+          "custom_mob": "cmobs:mars/forge/forge_sentry",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "chance": 0.3,
+      "x": -1,
+      "y": 0,
+      "z": 0,
+      "entries": [
+        {
+          "custom_mob": "cmobs:mars/forge/forge_sentry",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "chance": 0.3,
+      "x": 0,
+      "y": 0,
+      "z": 1,
+      "entries": [
+        {
+          "custom_mob": "cmobs:mars/forge/forge_sentry",
+          "weight": 1
+        }
+      ]
+    }
+  ]
+}

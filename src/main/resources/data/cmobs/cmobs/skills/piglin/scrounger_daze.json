@@ -1,0 +1,57 @@
+{
+  "trigger": "when_attacks",
+  "chance": 0.6,
+  "cooldown_ticks": 100,
+  "actions": [
+    {
+      "type": "sound",
+      "id": "minecraft:block.bell.use",
+      "target": "target",
+      "radius": 5.0,
+      "category": "players",
+      "volume": 0.5,
+      "pitch": 0.7
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:flash",
+      "target": "target",
+      "radius": 5.0,
+      "count": 10,
+      "y_offset": 1.7,
+      "spread": 0.3,
+      "speed": 0.01
+    },
+    {
+      "type": "particle",
+      "id": "more_rpg_classes:stun_particle",
+      "target": "target",
+      "radius": 5.0,
+      "count": 10,
+      "y_offset": 1.7,
+      "spread": 0.25,
+      "speed": 0.0
+    },
+    {
+      "type": "effect",
+      "id": "rogues:shock",
+      "target": "target",
+      "duration": 20,
+      "amplifier": 0
+    },
+    {
+      "type": "effect",
+      "id": "minecraft:slowness",
+      "target": "target",
+      "duration": 100,
+      "amplifier": 0
+    },
+    {
+      "type": "effect",
+      "id": "minecraft:mining_fatigue",
+      "target": "target",
+      "duration": 100,
+      "amplifier": 2
+    }
+  ]
+}

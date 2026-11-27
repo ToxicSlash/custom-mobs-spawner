@@ -1,0 +1,13 @@
+{
+  "entity": "minecraft:zombie",
+  "tags": [
+    "death_anim",
+    "forge_sentry",
+    "checked",
+    "hurtsfx"
+  ],
+  "skills": [
+    "cmobs:mars/forge/sentry_death"
+  ],
+  "nbt": "{ArmorItems:[{id:\"knightquest:silverfish_boots\",Count:1b},{id:\"knightquest:wither_leggings\",Count:1b},{id:\"knightquest:wither_chestplate\",Count:1b},{id:\"knightquest:spider_helmet\",Count:1b}],HandItems:[{id:\"immersive_weathering:ice_sickle\",Count:1b,tag:{Enchantments:[{id:\"mcdw:stunning\",lvl:1}]}},{}],Attributes:[{Name:\"porting_lib:entity_gravity\",Base:0.09f},{Name:\"generic.movement_speed\",Base:0.3f},{Name:\"generic.max_health\",Base:40.0f},{Name:\"generic.attack_damage\",Base:6.0f},{Name:\"generic.armor\",Base:3.0f}],Tags:[\"death_anim\",\"forge_sentry\",\"checked\",\"hurtsfx\"],Health:40.0f,CustomName:\"{\\\"text\\\":\\\"Forge Sentry\\\"}\",ArmorDropChances:[0.0f,0.0f,0.0f,0.0f],HandDropChances:[0.0f,0.0f],PersistenceRequired:1b,Silent:1b}"
+}

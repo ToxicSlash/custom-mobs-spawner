@@ -1,0 +1,88 @@
+{
+  "trigger": "timed",
+  "interval_ticks": 1,
+  "cooldown_on_start": true,
+  "cooldown_ticks": 100000,
+  "actions": [
+    {
+      "type": "particle",
+      "id": "netherexp:soul_ember",
+      "count": 60,
+      "spread_x": 3,
+      "spread_y": 2,
+      "spread_z": 3,
+      "speed": 0.02
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:entity.warden.emerge",
+      "category": "hostile",
+      "volume": 0.4,
+      "pitch": 0.1
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:entity.warden.tendril_clicks",
+      "category": "hostile",
+      "volume": 0.4,
+      "pitch": 0.4
+    },
+    {
+      "type": "delay",
+      "ticks": 80
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:entity.warden.tendril_clicks",
+      "category": "hostile",
+      "volume": 0.4,
+      "pitch": 0.4
+    },
+    {
+      "type": "particle",
+      "id": "netherexp:soul_ember",
+      "count": 60,
+      "spread_x": 3,
+      "spread_y": 2,
+      "spread_z": 3,
+      "speed": 0.02
+    },
+    {
+      "type": "delay",
+      "ticks": 80
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:entity.warden.listening_angry",
+      "category": "hostile",
+      "volume": 0.2,
+      "pitch": 0.5
+    },
+    {
+      "type": "delay",
+      "ticks": 40
+    },
+    {
+      "type": "particle",
+      "id": "netherexp:soul_ember",
+      "count": 160,
+      "y_offset": 1,
+      "spread": 1,
+      "speed": 0.4
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:entity.warden.sonic_boom",
+      "category": "hostile",
+      "volume": 1.5,
+      "pitch": 0.6
+    },
+    {
+      "type": "summon_custom_mob",
+      "custom_mob": "cmobs:nether/boss/nether_affliction"
+    },
+    {
+      "type": "discard"
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "entity": "minecraft:wither_skeleton",
+  "custom_name": "Wither Skeleton Rogue",
+  "custom_name_visible": false,
+  "tags": [
+    "checked",
+    "hurtfx",
+    "hasskill",
+    "wither_skeleton_rogue",
+    "smoke_bomb"
+  ],
+  "skills": [
+    "cmobs:wither_skeleton/smoke_bomb"
+  ],
+  "attributes": [
+    {
+      "id": "minecraft:generic.movement_speed",
+      "base": 0.3
+    },
+    {
+      "id": "minecraft:generic.max_health",
+      "base": 30.0
+    },
+    {
+      "id": "minecraft:generic.attack_damage",
+      "base": 18.0
+    }
+  ],
+  "health": 30.0,
+  "equipment": {
+    "head": {
+      "id": "minecraft:chainmail_helmet",
+      "count": 1
+    },
+    "chest": {
+      "id": "minecraft:chainmail_chestplate",
+      "count": 1
+    },
+    "legs": {
+      "id": "minecraft:air",
+      "count": 1
+    },
+    "feet": {
+      "id": "minecraft:golden_boots",
+      "count": 1
+    },
+    "mainhand": {
+      "id": "rogues:golden_dagger",
+      "count": 1
+    }
+  },
+  "loot_table": "minecraft:entities/wither_skeleton"
+}

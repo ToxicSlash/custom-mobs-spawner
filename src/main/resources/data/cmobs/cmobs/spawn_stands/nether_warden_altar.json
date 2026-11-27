@@ -1,0 +1,22 @@
+{
+  "tags": [
+    "boss_altar",
+    "nether_warden_altar"
+  ],
+  "custom_mob": "cmobs:nether/boss/nether_warden_spawn",
+  "offset": [
+    0,
+    1,
+    0
+  ],
+  "discard_stand": true,
+  "max_player_distance": 80,
+  "required_items": [
+    {
+      "item": "deeperdarker:soul_crystal",
+      "count": 1,
+      "distance": 0.5,
+      "consume": true
+    }
+  ]
+}

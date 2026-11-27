@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "paladins:iron_claymore",
+      "required": false
+    },
+    {
+      "id": "paladins:diamond_claymore",
+      "required": false
+    },
+    {
+      "id": "paladins:netherite_claymore",
+      "required": false
+    }
+  ]
+}

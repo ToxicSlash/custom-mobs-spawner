@@ -1,0 +1,66 @@
+{
+  "trigger": "timed",
+  "interval_ticks": 20,
+  "conditions": [
+    {
+      "type": "health",
+      "max": 160.0
+    }
+  ],
+  "actions": [
+    {
+      "type": "particle",
+      "id": "minecraft:flame",
+      "count": 7,
+      "y_offset": 1.0,
+      "spread": 0.6,
+      "speed": 0.03
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:smoke",
+      "count": 5,
+      "y_offset": 1.0,
+      "spread": 0.5,
+      "speed": 0.01,
+      "conditions": [
+        {
+          "type": "nearby_entity",
+          "entity_type": "minecraft:player",
+          "radius": 64.0
+        }
+      ]
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:large_smoke",
+      "count": 3,
+      "y_offset": 1.0,
+      "spread": 0.5,
+      "speed": 0.01
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:lava",
+      "count": 4,
+      "y_offset": 1.0,
+      "spread": 0.6,
+      "speed": 0.0
+    },
+    {
+      "type": "damage",
+      "target": "players",
+      "radius": 4.0,
+      "amount": 10.0,
+      "damage_type": "minecraft:on_fire",
+      "knockback": false
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:block.fire.ambient",
+      "category": "hostile",
+      "volume": 1.0,
+      "pitch": 2.0
+    }
+  ]
+}

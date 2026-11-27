@@ -1,0 +1,10 @@
+{
+  "entity": "ad_astra:corrupted_lunarian",
+  "tags": [
+    "checked",
+    "lunarian_catalyst",
+    "setMob",
+    "trailfx"
+  ],
+  "nbt": "{ArmorItems:[{},{},{},{}],HandItems:[{},{}],Attributes:[{Name:\"generic.movement_speed\",Base:0.33f},{Name:\"generic.max_health\",Base:60.0f},{Name:\"generic.knockback_resistance\",Base:0.3f},{Name:\"generic.armor\",Base:15.0f}],Tags:[\"checked\",\"lunarian_catalyst\",\"setMob\",\"trailfx\"],Health:60.0f,CustomName:\"{\\\"text\\\":\\\"Lunarian Catalyst\\\",\\\"color\\\":\\\"light_purple\\\"}\",ArmorDropChances:[0.0f,0.0f,0.0f,0.0f],HandDropChances:[0.0f,0.0f]}"
+}

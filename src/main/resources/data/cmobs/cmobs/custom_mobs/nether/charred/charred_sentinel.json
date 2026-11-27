@@ -1,0 +1,76 @@
+{
+  "entity": "minecraft:zombified_piglin",
+  "custom_name": "Charred Sentinel",
+  "custom_name_visible": false,
+  "tags": [
+    "checked",
+    "passive_skill",
+    "blaze_defense",
+    "hasskill",
+    "charred_sentinel",
+    "passive_sfx",
+    "hurtsfx",
+    "charred_mob",
+    "hurtfx",
+    "trailfx",
+    "make_angry"
+  ],
+  "skills": [
+    "cmobs:charred/ambient_sfx",
+    "cmobs:charred/hurt_sfx",
+    "cmobs:charred/trail",
+    "cmobs:charred/blaze_defense"
+  ],
+  "team": "charred",
+  "attributes": [
+    {
+      "id": "minecraft:generic.movement_speed",
+      "base": 0.23
+    },
+    {
+      "id": "minecraft:generic.max_health",
+      "base": 180.0
+    },
+    {
+      "id": "minecraft:generic.knockback_resistance",
+      "base": 0.5
+    },
+    {
+      "id": "minecraft:generic.attack_damage",
+      "base": 100.0
+    },
+    {
+      "id": "minecraft:generic.armor",
+      "base": 5.0
+    }
+  ],
+  "health": 85.0,
+  "equipment": {
+    "head": {
+      "id": "knightquest:wither_helmet",
+      "count": 1
+    },
+    "chest": {
+      "id": "knightquest:wither_chestplate",
+      "count": 1
+    },
+    "legs": {
+      "id": "knightquest:blaze_leggings",
+      "count": 1
+    },
+    "feet": {
+      "id": "knightquest:wither_boots",
+      "count": 1
+    },
+    "mainhand": {
+      "id": "mythicmetals:legendary_banglum_axe",
+      "count": 1
+    },
+    "offhand": {
+      "id": "paladins:golden_kite_shield",
+      "count": 1
+    }
+  },
+  "loot_table": "minecraft:entities/zombified_piglin",
+  "nbt": "{ArmorDropChances:[0.0f,0.0f,0.0f,0.0f],HandDropChances:[0.0f,0.0f],PersistenceRequired:0b}"
+}

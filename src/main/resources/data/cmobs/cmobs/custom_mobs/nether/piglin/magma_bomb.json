@@ -1,0 +1,43 @@
+{
+  "entity": "minecraft:magma_cube",
+  "custom_name": "Magma Bomb",
+  "custom_name_visible": false,
+  "tags": [
+    "checked",
+    "magma_bomb",
+    "hurtsfx",
+    "hasskill",
+    "death_anim"
+  ],
+  "skills": [
+    "cmobs:piglin/magma_bomb_hurt_sfx",
+    "cmobs:piglin/magma_bomb_explode",
+    "cmobs:piglin/magma_bomb_death"
+  ],
+  "team": "custom_piglin",
+  "attributes": [
+    {
+      "id": "minecraft:generic.movement_speed",
+      "base": 0.4
+    },
+    {
+      "id": "minecraft:generic.max_health",
+      "base": 5.0
+    },
+    {
+      "id": "minecraft:generic.knockback_resistance",
+      "base": 1.0
+    },
+    {
+      "id": "minecraft:generic.attack_damage",
+      "base": 3.0
+    },
+    {
+      "id": "minecraft:generic.armor",
+      "base": 7.0
+    }
+  ],
+  "health": 5.0,
+  "loot_table": "minecraft:empty",
+  "nbt": "{Size:0,ArmorDropChances:[0.0f,0.0f,0.0f,0.0f],HandDropChances:[0.0f,0.0f],PersistenceRequired:0b,Motion:[0.0d,0.8d,0.0d]}"
+}

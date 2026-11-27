@@ -1,0 +1,89 @@
+{
+  "trigger": "when_killed",
+  "actions": [
+    {
+      "type": "sound",
+      "id": "minecraft:entity.bee.death",
+      "category": "hostile",
+      "volume": 1,
+      "pitch": 0.8
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:entity.blaze.death",
+      "category": "hostile",
+      "volume": 1,
+      "pitch": 1.5
+    },
+    {
+      "type": "sound",
+      "id": "archers_expansion:poison_cloud",
+      "category": "hostile",
+      "volume": 0.7,
+      "pitch": 1
+    },
+    {
+      "type": "sound",
+      "id": "ad_astra:oxygen_intake",
+      "category": "hostile",
+      "volume": 0.7,
+      "pitch": 0.3
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:soul",
+      "count": 10,
+      "y_offset": 1,
+      "spread": 1
+    },
+    {
+      "type": "particle",
+      "id": "netherexp:soul_ember",
+      "count": 40,
+      "y_offset": 1,
+      "spread": 1
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:sculk_soul",
+      "count": 45,
+      "y_offset": 1,
+      "spread_x": 2,
+      "spread_y": 1,
+      "spread_z": 2,
+      "speed": 0.02
+    },
+    {
+      "type": "particle",
+      "id": "netherexp:warped_smog",
+      "count": 60,
+      "y_offset": 1,
+      "spread": 2,
+      "speed": 0.02
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:sonic_boom",
+      "count": 4,
+      "y_offset": 1,
+      "spread": 1,
+      "speed": 0.05
+    },
+    {
+      "type": "effect",
+      "id": "minecraft:wither",
+      "target": "players",
+      "radius": 6,
+      "duration": 180,
+      "amplifier": 2
+    },
+    {
+      "type": "effect",
+      "id": "minecraft:blindness",
+      "target": "players",
+      "radius": 6,
+      "duration": 80,
+      "amplifier": 0
+    }
+  ]
+}

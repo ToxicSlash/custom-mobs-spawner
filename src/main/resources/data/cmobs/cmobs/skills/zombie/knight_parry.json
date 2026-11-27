@@ -1,0 +1,235 @@
+{
+  "trigger": "when_hurt",
+  "chance": 0.5,
+  "cooldown_ticks": 360,
+  "stance": {
+    "parry": true,
+    "target_range": 4.0,
+    "duration_ticks": 40,
+    "tick_interval_ticks": 10,
+    "enter_stance": [
+      {
+        "type": "sound",
+        "id": "minecraft:entity.zombie.ambient",
+        "category": "hostile",
+        "volume": 1.0,
+        "pitch": 1.1
+      },
+      {
+        "type": "sound",
+        "id": "minecraft:block.grindstone.use",
+        "category": "hostile",
+        "volume": 1.0,
+        "pitch": 1.5
+      },
+      {
+        "type": "sound",
+        "id": "minecraft:item.shield.block",
+        "category": "hostile",
+        "volume": 0.5,
+        "pitch": 0.8
+      },
+      {
+        "type": "particle",
+        "id": "minecraft:scrape",
+        "count": 10,
+        "y_offset": 1.2,
+        "spread": 0.5,
+        "speed": 0.05
+      },
+      {
+        "type": "particle",
+        "id": "minecraft:instant_effect",
+        "count": 10,
+        "y_offset": 1.2,
+        "spread": 0.5,
+        "speed": 0.02
+      },
+      {
+        "type": "effect",
+        "id": "minecraft:resistance",
+        "duration": 40,
+        "amplifier": 3
+      },
+      {
+        "type": "effect",
+        "id": "minecraft:glowing",
+        "duration": 40,
+        "amplifier": 2
+      },
+      {
+        "type": "effect",
+        "id": "minecraft:slowness",
+        "duration": 40,
+        "amplifier": 1
+      }
+    ],
+    "on_parry": [
+      {
+        "type": "sound",
+        "id": "minecraft:entity.zombie.attack_iron_door",
+        "category": "hostile",
+        "volume": 0.5,
+        "pitch": 1.4
+      },
+      {
+        "type": "sound",
+        "id": "minecraft:entity.zombie.ambient",
+        "category": "hostile",
+        "volume": 1.0,
+        "pitch": 1.5
+      },
+      {
+        "type": "sound",
+        "id": "minecraft:item.shield.block",
+        "category": "hostile",
+        "volume": 0.5,
+        "pitch": 0.8
+      },
+      {
+        "type": "sound",
+        "id": "minecraft:entity.player.levelup",
+        "category": "hostile",
+        "volume": 0.6,
+        "pitch": 1.8
+      },
+      {
+        "type": "particle",
+        "id": "minecraft:instant_effect",
+        "count": 5,
+        "y_offset": 1.2,
+        "spread": 0.5,
+        "speed": 0.02
+      },
+      {
+        "type": "particle",
+        "id": "minecraft:crit",
+        "count": 25,
+        "y_offset": 1.2,
+        "spread_x": 1.5,
+        "spread_y": 0.1,
+        "spread_z": 1.5,
+        "speed": 0.02
+      },
+      {
+        "type": "effect",
+        "id": "minecraft:weakness",
+        "target": "players",
+        "radius": 4.0,
+        "duration": 80,
+        "amplifier": 1
+      },
+      {
+        "type": "effect",
+        "id": "minecraft:slowness",
+        "target": "players",
+        "radius": 4.0,
+        "duration": 80,
+        "amplifier": 1
+      },
+      {
+        "type": "effect",
+        "id": "minecraft:mining_fatigue",
+        "target": "players",
+        "radius": 4.0,
+        "duration": 80,
+        "amplifier": 2
+      },
+      {
+        "type": "damage",
+        "target": "players",
+        "radius": 4.0,
+        "amount": 2.0,
+        "knockback": true
+      },
+      {
+        "type": "effect",
+        "id": "minecraft:speed",
+        "duration": 80,
+        "amplifier": 0
+      },
+      {
+        "type": "effect",
+        "id": "minecraft:strength",
+        "duration": 80,
+        "amplifier": 0
+      },
+      {
+        "type": "effect_clear",
+        "id": "minecraft:slowness"
+      },
+      {
+        "type": "effect_clear",
+        "id": "minecraft:resistance"
+      },
+      {
+        "type": "effect_clear",
+        "id": "minecraft:glowing"
+      }
+    ],
+    "stance_end": [
+      {
+        "type": "sound",
+        "id": "minecraft:item.shield.break",
+        "category": "hostile",
+        "volume": 0.7,
+        "pitch": 0.7
+      },
+      {
+        "type": "sound",
+        "id": "minecraft:entity.zombie.death",
+        "category": "hostile",
+        "volume": 1.0,
+        "pitch": 0.2
+      },
+      {
+        "type": "sound",
+        "id": "minecraft:entity.item.break",
+        "category": "hostile",
+        "volume": 1.0,
+        "pitch": 0.55
+      },
+      {
+        "type": "sound",
+        "id": "minecraft:item.shield.block",
+        "category": "hostile",
+        "volume": 0.5,
+        "pitch": 0.8
+      },
+      {
+        "type": "effect",
+        "id": "minecraft:slowness",
+        "duration": 100,
+        "amplifier": 1
+      },
+      {
+        "type": "effect",
+        "id": "minecraft:weakness",
+        "duration": 100,
+        "amplifier": 0
+      },
+      {
+        "type": "effect",
+        "id": "tgacmod:paper_skin",
+        "duration": 100,
+        "amplifier": 3
+      },
+      {
+        "type": "particle",
+        "id": "minecraft:angry_villager",
+        "count": 10,
+        "y_offset": 1.5,
+        "spread": 0.5,
+        "speed": 0.0
+      },
+      {
+        "type": "particle",
+        "id": "minecraft:smoke",
+        "count": 10,
+        "y_offset": 1.5,
+        "spread": 0.5,
+        "speed": 0.0
+      }
+    ]
+  }
+}

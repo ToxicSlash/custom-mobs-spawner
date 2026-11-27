@@ -1,0 +1,62 @@
+{
+  "trigger": "timed",
+  "interval_ticks": 40,
+  "chance": 0.35,
+  "requires_living_target": true,
+  "trigger_range": 4.0,
+  "cooldown_on_start": true,
+  "global_cooldown_ticks": 40,
+  "cooldown_ticks": 100,
+  "actions": [
+    {
+      "type": "sound",
+      "id": "minecraft:entity.enderman.teleport",
+      "category": "hostile",
+      "volume": 0.6,
+      "pitch": 1.5
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:end_rod",
+      "count": 5,
+      "y_offset": 0.9,
+      "spread": 0.25,
+      "speed": 0.09
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:flash",
+      "count": 1,
+      "y_offset": 0.5,
+      "spread": 0.0,
+      "speed": 0.0
+    },
+    {
+      "type": "dodge",
+      "distance": 2.5,
+      "forward_distance": 1.5,
+      "pathfind_speed": 1.45,
+      "fallback_velocity": true,
+      "fallback_strength": 0.35
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:crit",
+      "count": 12,
+      "y_offset": 0.9,
+      "spread": 0.35,
+      "speed": 0.08
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:entity.player.attack.sweep",
+      "category": "hostile",
+      "volume": 0.8,
+      "pitch": 1.35
+    },
+    {
+      "type": "command",
+      "command": "tellraw @a[tag=custom_spawn_debug] {\"text\":\"Duelist feint skill triggered\",\"color\":\"aqua\"}"
+    }
+  ]
+}

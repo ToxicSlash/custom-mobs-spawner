@@ -1,0 +1,14 @@
+{
+  "trigger": "timed",
+  "interval_ticks": 20,
+  "chance": 0.2,
+  "actions": [
+    {
+      "type": "particle",
+      "id": "netherexp:warped_smog",
+      "count": 1,
+      "spread": 0.6,
+      "speed": 0
+    }
+  ]
+}

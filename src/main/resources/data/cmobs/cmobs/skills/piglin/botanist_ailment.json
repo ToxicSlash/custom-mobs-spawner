@@ -1,0 +1,54 @@
+{
+  "trigger": "when_attacks",
+  "chance": 1.0,
+  "cooldown_ticks": 80,
+  "actions": [
+    {
+      "type": "sound",
+      "id": "minecraft:entity.zombie.infect",
+      "target": "target",
+      "radius": 5.0,
+      "category": "hostile",
+      "volume": 1.0,
+      "pitch": 1.8
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:scrape",
+      "target": "target",
+      "radius": 5.0,
+      "count": 20,
+      "y_offset": 1.5,
+      "spread": 0.3,
+      "speed": 1.0
+    },
+    {
+      "type": "effect",
+      "id": "minecraft:nausea",
+      "target": "target",
+      "duration": 140,
+      "amplifier": 0
+    },
+    {
+      "type": "effect",
+      "id": "minecraft:poison",
+      "target": "target",
+      "duration": 100,
+      "amplifier": 6
+    },
+    {
+      "type": "effect",
+      "id": "minecraft:wither",
+      "target": "target",
+      "duration": 100,
+      "amplifier": 6
+    },
+    {
+      "type": "effect",
+      "id": "minecraft:darkness",
+      "target": "target",
+      "duration": 20,
+      "amplifier": 1
+    }
+  ]
+}

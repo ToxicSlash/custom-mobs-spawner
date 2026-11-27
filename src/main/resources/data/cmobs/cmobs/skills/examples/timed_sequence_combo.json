@@ -1,0 +1,85 @@
+{
+  "description": "Example: timed trigger with a flat mcfunction-like delayed action list. Not attached to any mob.",
+  "trigger": "timed",
+  "interval_ticks": 20,
+  "chance": 1.0,
+  "requires_living_target": true,
+  "trigger_range": 4.0,
+  "cooldown_on_start": true,
+  "global_cooldown_ticks": 20,
+  "cooldown_ticks": 120,
+  "lock_telegraph_direction": true,
+  "actions": [
+    {
+      "type": "sound",
+      "id": "minecraft:block.grindstone.use",
+      "category": "hostile",
+      "volume": 0.7,
+      "pitch": 0.8
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:scrape",
+      "count": 8,
+      "y_offset": 1.0,
+      "spread": 0.3,
+      "speed": 0.03
+    },
+    {
+      "delay_ticks": 8
+    },
+    {
+      "type": "lunge",
+      "fixed_direction": true,
+      "strength": 0.3,
+      "y_strength": 0.02
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:crit",
+      "count": 16,
+      "y_offset": 1.0,
+      "spread": 0.08,
+      "speed": 0.08,
+      "arc": {
+        "points": 6,
+        "count_per_point": 2,
+        "radius": 2.0,
+        "start_degrees": 55.0,
+        "end_degrees": -55.0,
+        "y_offset": 1.1,
+        "end_y_offset": 0.85,
+        "spread": 0.1,
+        "speed": 0.08
+      }
+    },
+    {
+      "type": "damage",
+      "target": "players",
+      "radius": 2.2,
+      "use_attack_damage": true,
+      "damage_scale": 0.75,
+      "bypass_invulnerability": false,
+      "knockback": false
+    },
+    {
+      "type": "knockback",
+      "target": "players",
+      "radius": 2.2,
+      "strength": 0.55,
+      "y_strength": 0.12
+    },
+    {
+      "type": "delay",
+      "ticks": 6
+    },
+    {
+      "type": "stun",
+      "target": "players",
+      "radius": 2.0,
+      "duration": 30,
+      "slowness_amplifier": 2,
+      "mining_fatigue_amplifier": 0
+    }
+  ]
+}

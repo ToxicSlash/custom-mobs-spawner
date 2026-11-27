@@ -1,0 +1,9 @@
+{
+  "tags": [
+    "spawnpoint_stand",
+    "forge_bot"
+  ],
+  "group": "cmobs:forge_bot",
+  "discard_stand": true,
+  "max_player_distance": 15
+}

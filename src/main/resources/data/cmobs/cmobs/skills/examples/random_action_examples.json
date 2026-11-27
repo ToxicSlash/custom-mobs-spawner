@@ -1,0 +1,56 @@
+{
+  "description": "Example: random action wrapper. One weighted choice is selected, then its normal action or grouped actions are executed.",
+  "trigger": "timed",
+  "interval_ticks": 20,
+  "chance": 1.0,
+  "requires_living_target": true,
+  "trigger_range": 10.0,
+  "cooldown_ticks": 20,
+  "actions": [
+    {
+      "type": "random",
+      "actions": [
+        {
+          "weight": 2.0,
+          "type": "particle",
+          "id": "minecraft:end_rod",
+          "count": 1,
+          "forward_offset": 1.0,
+          "arc": {
+            "points": 7,
+            "count_per_point": 1,
+            "radius": 1.25,
+            "start_degrees": 55.0,
+            "end_degrees": -55.0,
+            "y_offset": 1.45,
+            "end_y_offset": 0.45,
+            "spread": 0.015,
+            "speed": 0.0
+          }
+        },
+        {
+          "weight": 1.0,
+          "actions": [
+            {
+              "type": "sound",
+              "id": "minecraft:entity.player.attack.strong",
+              "category": "hostile",
+              "volume": 0.8,
+              "pitch": 1.3
+            },
+            {
+              "delay_ticks": 2,
+              "type": "particle",
+              "id": "minecraft:crit",
+              "count": 12,
+              "forward_offset": 1.0,
+              "y_offset": 1.0,
+              "spread": 0.08,
+              "speed": 0.05
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

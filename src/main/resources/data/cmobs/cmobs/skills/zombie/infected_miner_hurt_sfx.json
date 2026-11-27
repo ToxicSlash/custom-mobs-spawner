@@ -1,0 +1,42 @@
+{
+  "trigger": "when_hurt",
+  "cooldown_ticks": 10,
+  "actions": [
+    {
+      "type": "sound",
+      "id": "minecraft:block.bone_block.break",
+      "category": "hostile",
+      "volume": 1.0,
+      "pitch": 1.0
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:block.sculk_sensor.clicking",
+      "category": "hostile",
+      "volume": 1.0,
+      "pitch": 1.2
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:block.sculk.spread",
+      "category": "hostile",
+      "volume": 1.0,
+      "pitch": 0.7
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:entity.warden.hurt",
+      "category": "hostile",
+      "volume": 1.0,
+      "pitch": 1.2
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:sculk_soul",
+      "count": 3,
+      "y_offset": 1.0,
+      "spread": 0.5,
+      "speed": 0.0
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "trigger": "timed",
+  "interval_ticks": 40,
+  "chance": 0.4,
+  "cooldown_ticks": 100,
+  "conditions": [
+    {
+      "type": "nearby_entity",
+      "entity_type": "minecraft:player",
+      "radius": 50
+    },
+    {
+      "type": "nearby_entity",
+      "required_tags": [
+        "pirate"
+      ],
+      "min_distance": 25,
+      "max_distance": 50
+    }
+  ],
+  "actions": [
+    {
+      "type": "sound",
+      "id": "minecraft:entity.enderman.teleport",
+      "category": "hostile",
+      "volume": 0.7,
+      "pitch": 1.2
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:portal",
+      "count": 80,
+      "spread": 1,
+      "speed": 0
+    },
+    {
+      "type": "teleport",
+      "selector": "self",
+      "destination": {
+        "selector": {
+          "type": "mobs",
+          "required_tags": [
+            "pirate"
+          ],
+          "distance": {
+            "max": 50
+          },
+          "sort": "nearest",
+          "limit": 1
+        },
+        "forward_offset": 1,
+        "relative_to": "selector",
+        "offset_relative_to": "selector"
+      }
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:block.beacon.power_select",
+      "category": "hostile",
+      "volume": 0.3,
+      "pitch": 2
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "trigger": "when_attacks",
+  "chance": 0.3,
+  "cooldown_ticks": 40,
+  "actions": [
+    {
+      "type": "effect",
+      "id": "minecraft:instant_damage",
+      "duration": 1,
+      "amplifier": 0
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:sculk_soul",
+      "count": 3,
+      "y_offset": 1.0,
+      "spread_x": 0.3,
+      "spread_y": 0.4,
+      "spread_z": 0.3,
+      "speed": 0.0
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:happy_villager",
+      "count": 5,
+      "y_offset": 1.0,
+      "spread_x": 0.3,
+      "spread_y": 0.4,
+      "spread_z": 0.3,
+      "speed": 0.0
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:block.sculk.spread",
+      "category": "hostile",
+      "volume": 1.0,
+      "pitch": 1.0
+    }
+  ]
+}

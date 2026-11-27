@@ -1,0 +1,66 @@
+{
+  "entity": "minecraft:zombie",
+  "custom_name": "Zombie Knight",
+  "custom_name_visible": false,
+  "tags": [
+    "checked",
+    "hasskill",
+    "zombie_knight",
+    "stepsfx",
+    "hurtsfx",
+    "stepsfx_armour_clink",
+    "parry_skill",
+    "hurtfx"
+  ],
+  "skills": [
+    "cmobs:zombie/hurt_sfx_iron",
+    "cmobs:zombie/knight_parry"
+  ],
+  "attributes": [
+    {
+      "id": "minecraft:generic.movement_speed",
+      "base": 0.28
+    },
+    {
+      "id": "minecraft:generic.max_health",
+      "base": 45.0
+    },
+    {
+      "id": "minecraft:generic.knockback_resistance",
+      "base": 0.5
+    },
+    {
+      "id": "minecraft:generic.attack_damage",
+      "base": 24.0
+    },
+    {
+      "id": "minecraft:generic.armor",
+      "base": 2.0
+    }
+  ],
+  "health": 45.0,
+  "equipment": {
+    "head": {
+      "id": "knightquest:squire_helmet",
+      "count": 1
+    },
+    "chest": {
+      "id": "knightquest:silver_chestplate",
+      "count": 1
+    },
+    "legs": {
+      "id": "minecraft:chainmail_leggings",
+      "count": 1
+    },
+    "feet": {
+      "id": "minecraft:chainmail_boots",
+      "count": 1
+    },
+    "mainhand": {
+      "id": "minecraft:iron_sword",
+      "count": 1
+    }
+  },
+  "loot_table": "minecraft:entities/zombie",
+  "nbt": "{Silent:0b,ArmorDropChances:[0.0f,0.0f,0.0f,0.0f]}"
+}

@@ -1,0 +1,56 @@
+{
+  "entity": "minecraft:wither_skeleton",
+  "custom_name": "Wither Skeleton Soldier",
+  "custom_name_visible": false,
+  "tags": [
+    "checked",
+    "hasskill",
+    "wither_skeleton_soldier"
+  ],
+  "attributes": [
+    {
+      "id": "minecraft:generic.movement_speed",
+      "base": 0.3
+    },
+    {
+      "id": "minecraft:generic.max_health",
+      "base": 45.0
+    },
+    {
+      "id": "minecraft:generic.knockback_resistance",
+      "base": 0.2
+    },
+    {
+      "id": "minecraft:generic.attack_damage",
+      "base": 24.0
+    },
+    {
+      "id": "minecraft:generic.armor",
+      "base": 4.0
+    }
+  ],
+  "health": 45.0,
+  "equipment": {
+    "head": {
+      "id": "minecraft:chainmail_helmet",
+      "count": 1
+    },
+    "chest": {
+      "id": "minecraft:iron_chestplate",
+      "count": 1
+    },
+    "legs": {
+      "id": "minecraft:chainmail_leggings",
+      "count": 1
+    },
+    "feet": {
+      "id": "minecraft:chainmail_boots",
+      "count": 1
+    },
+    "mainhand": {
+      "id": "rogues:iron_double_axe",
+      "count": 1
+    }
+  },
+  "loot_table": "minecraft:entities/wither_skeleton"
+}

@@ -1,0 +1,4 @@
+{
+  "entity": "minecraft:zombie",
+  "nbt": "{IsBaby:1,Silent:1b,ArmorItems:[{},{},{},{id:\"k_turrets:gauss_turret_item\",Count:1}],Attributes:[{Name:\"generic.knockback_resistance\",Base:1f},{Name:\"generic.follow_range\",Base:64f},{Name:\"generic.movement_speed\",Base:-317.4f}],ArmorDropChances:[0f,0f,0f,0f],PersistenceRequired:1b,DeathLootTable:\"\",ActiveEffects:[{Id:14,ShowParticles:0b,Duration:-1,Amplifier:0b}]}"
+}

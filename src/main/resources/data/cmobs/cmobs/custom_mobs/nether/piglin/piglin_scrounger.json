@@ -1,0 +1,63 @@
+{
+  "entity": "minecraft:piglin",
+  "custom_name": "Piglin Scrounger",
+  "custom_name_visible": false,
+  "tags": [
+    "checked",
+    "piglin",
+    "piglin_scrounger",
+    "hurtfx",
+    "inflicts_effect"
+  ],
+  "skills": [
+    "cmobs:piglin/scrounger_daze"
+  ],
+  "team": "custom_piglin",
+  "attributes": [
+    {
+      "id": "minecraft:generic.movement_speed",
+      "base": 0.27
+    },
+    {
+      "id": "minecraft:generic.max_health",
+      "base": 50.0
+    },
+    {
+      "id": "minecraft:generic.knockback_resistance",
+      "base": 0.5
+    },
+    {
+      "id": "minecraft:generic.attack_damage",
+      "base": 36.0
+    },
+    {
+      "id": "minecraft:generic.armor",
+      "base": 4.0
+    }
+  ],
+  "health": 50.0,
+  "equipment": {
+    "head": {
+      "id": "knightquest:husk_helmet3",
+      "count": 1
+    },
+    "chest": {
+      "id": "endermanoverhaul:savanna_hood",
+      "count": 1
+    },
+    "legs": {
+      "id": "knightquest:blaze_leggings",
+      "count": 1
+    },
+    "feet": {
+      "id": "knightquest:apple_boots",
+      "count": 1
+    },
+    "mainhand": {
+      "id": "paladins:golden_mace",
+      "count": 1
+    }
+  },
+  "loot_table": "minecraft:entities/piglin",
+  "nbt": "{ArmorDropChances:[0.0f,0.0f,0.0f,0.0f],HandDropChances:[0.0f,0.0f],PersistenceRequired:0b}"
+}

@@ -1,0 +1,26 @@
+{
+  "trigger": "when_hurt",
+  "chance": 1.0,
+  "actions": [
+    {
+      "type": "reflect_damage",
+      "multiplier": 0.5,
+      "knockback": false
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:flame",
+      "count": 8,
+      "y_offset": 1.0,
+      "spread": 0.25,
+      "speed": 0.04
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:block.fire.extinguish",
+      "category": "hostile",
+      "volume": 0.35,
+      "pitch": 1.6
+    }
+  ]
+}

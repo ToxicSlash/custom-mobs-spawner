@@ -1,0 +1,12 @@
+{
+  "entity": "minecraft:armor_stand",
+  "tags": [
+    "anim_stand",
+    "t1_teleporter_beam_stand",
+    "passive_anim"
+  ],
+  "skills": [
+    "cmobs:pirate/teleporter_beam"
+  ],
+  "nbt": "{Tags:[\"anim_stand\",\"t1_teleporter_beam_stand\",\"passive_anim\"],Invulnerable:1b,NoGravity:1b,Invisible:1b,DisabledSlots:2039583,Small:1b}"
+}

@@ -1,0 +1,59 @@
+{
+  "entity": "minecraft:zombie",
+  "custom_name": "Claymore Zombie Knight",
+  "custom_name_visible": true,
+  "tags": [
+    "zombie_claymore_knight"
+  ],
+  "skills": [
+    "cmobs:zombie/claymore_sweep",
+    "cmobs:zombie/claymore_kick"
+  ],
+  "attributes": [
+    {
+      "id": "minecraft:generic.max_health",
+      "base": 42.0
+    },
+    {
+      "id": "minecraft:generic.attack_damage",
+      "base": 22.0
+    },
+    {
+      "id": "minecraft:generic.movement_speed",
+      "base": 0.21
+    },
+    {
+      "id": "minecraft:generic.armor",
+      "base": 8.0
+    },
+    {
+      "id": "minecraft:generic.knockback_resistance",
+      "base": 0.2
+    }
+  ],
+  "health": 42.0,
+  "equipment": {
+    "head": {
+      "id": "knightquest:squire_helmet",
+      "count": 1
+    },
+    "chest": {
+      "id": "knightquest:silver_chestplate",
+      "count": 1
+    },
+    "legs": {
+      "id": "minecraft:chainmail_leggings",
+      "count": 1
+    },
+    "feet": {
+      "id": "minecraft:chainmail_boots",
+      "count": 1
+    },
+    "mainhand": {
+      "id": "paladins:iron_claymore",
+      "count": 1
+    }
+  },
+  "loot_table": "minecraft:entities/zombie",
+  "nbt": "{CanPickUpLoot:0b,PersistenceRequired:1b}"
+}

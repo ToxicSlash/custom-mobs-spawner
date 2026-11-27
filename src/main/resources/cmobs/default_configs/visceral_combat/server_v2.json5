@@ -1,0 +1,34 @@
+{
+	// Forward Lunge on attack
+	"moveAttack": true,
+	// Lunge mode: ARCADE (move in input direction), DUELING (always lunge forward), HYBRID (forward + configurable side influence)
+	"lungeMode": "ARCADE",
+	// HYBRID mode only: how much left/right movement input is blended into the forward lunge (0 = pure forward, 1 = full sideways influence)
+	"hybridSideCoeff": 0.4000000059604645,
+	// ARCADE mode only: coefficient applied to lunge when moving more than 90 degrees away from look direction (0 = no backwards lunge, 1 = full)
+	"backwardsLungeCoeff": 0.05000000074505806,
+	// Forward Lunge speed coeff
+	"lungeSpeed": 1.2000000476837158,
+	// Forward Lunge speed cap
+	"lungeSpeedCap": 2.0,
+	// Impulse decay coefficient
+	"impulseCoeff": 0.20000000298023224,
+	// Impulse speed coefficient
+	"maxImpulse": 1.2000000476837158,
+	// Impact recoil on attacker when hitting enemy
+	"impactRecoil": true,
+	// Enemy Directional Impact Move
+	"impactEnemy": true,
+	// Enemy directional coefficient
+	"dirCoeff": 1.0,
+	// Attack Particles
+	"particles": false,
+	// Hitstop on Self
+	"hitstopSelf": false,
+	// Hitstop on Enemies
+	"hitstopEnemies": false,
+	// Enable Holster Mode (H key)
+	"holster": false,
+	// Holster Sprint Speed Boost multiplier
+	"holsterBoost": 1.2000000476837158
+}

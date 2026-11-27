@@ -1,0 +1,43 @@
+{
+  "trigger": "timed",
+  "interval_ticks": 20,
+  "conditions": [
+    {
+      "type": "nearby_entity",
+      "entity_type": "minecraft:player",
+      "radius": 40.0
+    }
+  ],
+  "actions": [
+    {
+      "type": "effect",
+      "id": "minecraft:speed",
+      "duration": 40,
+      "amplifier": 1
+    },
+    {
+      "type": "effect",
+      "id": "archers_expansion:fast_shot",
+      "duration": 80,
+      "amplifier": 4
+    },
+    {
+      "type": "effect",
+      "id": "minecraft:speed",
+      "target": "mobs",
+      "entity_type": "minecraft:skeleton",
+      "radius": 16.0,
+      "duration": 40,
+      "amplifier": 1
+    },
+    {
+      "type": "effect",
+      "id": "archers_expansion:fast_shot",
+      "target": "mobs",
+      "entity_type": "minecraft:skeleton",
+      "radius": 16.0,
+      "duration": 80,
+      "amplifier": 4
+    }
+  ]
+}

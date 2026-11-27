@@ -1,0 +1,54 @@
+{
+  "trigger": "timed",
+  "interval_ticks": 20,
+  "chance": 0.12,
+  "cooldown_ticks": 40,
+  "conditions": [
+    {
+      "type": "nearby_entity",
+      "entity_type": "minecraft:player",
+      "radius": 25
+    }
+  ],
+  "actions": [
+    {
+      "type": "sound",
+      "id": "minecraft:entity.player.attack.knockback",
+      "category": "hostile",
+      "volume": 1.4,
+      "pitch": 0
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:entity.player.attack.sweep",
+      "category": "hostile",
+      "volume": 1.4,
+      "pitch": 0
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:sweep_attack",
+      "count": 35,
+      "y_offset": 0.5,
+      "forward_offset": 3,
+      "spread_x": 2,
+      "spread_y": 0.5,
+      "spread_z": 2,
+      "speed": 0.05
+    },
+    {
+      "type": "damage",
+      "target": "players",
+      "radius": 8,
+      "amount": 12,
+      "damage_type": "minecraft:mob_attack"
+    },
+    {
+      "type": "knockback",
+      "target": "players",
+      "radius": 8,
+      "strength": 1.1,
+      "y_strength": 0.15
+    }
+  ]
+}

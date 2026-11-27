@@ -1,0 +1,43 @@
+{
+  "trigger": "when_killed",
+  "actions": [
+    {
+      "type": "sound",
+      "id": "minecraft:entity.creeper.primed",
+      "category": "hostile",
+      "volume": 0.5,
+      "pitch": 2.0
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:entity.generic.explode",
+      "category": "hostile",
+      "volume": 0.5,
+      "pitch": 2.0
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:flash",
+      "count": 1,
+      "y_offset": 1.5,
+      "spread": 0.0,
+      "speed": 0.0
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:poof",
+      "count": 5,
+      "y_offset": 1.5,
+      "spread": 0.0,
+      "speed": 0.01
+    },
+    {
+      "type": "damage",
+      "target": "living",
+      "radius": 2.0,
+      "amount": 4.0,
+      "damage_type": "minecraft:explosion",
+      "knockback": true
+    }
+  ]
+}

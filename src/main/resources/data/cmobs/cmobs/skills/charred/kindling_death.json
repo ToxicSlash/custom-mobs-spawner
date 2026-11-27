@@ -1,0 +1,9 @@
+{
+  "trigger": "when_killed",
+  "actions": [
+    {
+      "type": "summon_custom_mob",
+      "custom_mob": "cmobs:nether/charred/lava_plume"
+    }
+  ]
+}

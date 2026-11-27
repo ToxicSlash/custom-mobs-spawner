@@ -1,0 +1,26 @@
+{
+  "source": "minecraft:skeleton",
+  "chance": 0.05,
+  "dimensions": [
+    "minecraft:overworld",
+    "cmobs:raidworld"
+  ],
+  "replacements": [
+    {
+      "custom_mob": "cmobs:overworld/skeleton/skeleton_assassin",
+      "weight": 50
+    },
+    {
+      "custom_mob": "cmobs:overworld/skeleton/skeleton_hunter",
+      "weight": 50
+    },
+    {
+      "custom_mob": "cmobs:overworld/skeleton/skeleton_artificer",
+      "weight": 40
+    },
+    {
+      "custom_mob": "cmobs:overworld/skeleton/skeleton_marauder",
+      "weight": 20
+    }
+  ]
+}

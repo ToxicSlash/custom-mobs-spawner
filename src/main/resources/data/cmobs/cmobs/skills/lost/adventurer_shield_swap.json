@@ -1,0 +1,166 @@
+{
+  "trigger": "timed",
+  "interval_ticks": 20,
+  "chance": 0.2,
+  "cooldown_ticks": 160,
+  "conditions": [
+    {
+      "type": "health",
+      "max": 100.0
+    },
+    {
+      "type": "nearby_entity",
+      "entity_type": "minecraft:player",
+      "radius": 30.0
+    }
+  ],
+  "actions": [
+    {
+      "type": "equip",
+      "slot": "mainhand",
+      "item": {
+        "id": "minecraft:shield",
+        "count": 1
+      },
+      "delay_ticks": 0
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:item.armor.equip_iron",
+      "category": "hostile",
+      "volume": 1.0,
+      "pitch": 1.4,
+      "delay_ticks": 0
+    },
+    {
+      "type": "effect",
+      "id": "minecraft:resistance",
+      "duration": 40,
+      "amplifier": 3,
+      "delay_ticks": 0
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:entity.generic.drink",
+      "category": "hostile",
+      "volume": 1.0,
+      "pitch": 1.0,
+      "delay_ticks": 6
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:entity.generic.drink",
+      "category": "hostile",
+      "volume": 1.0,
+      "pitch": 1.0,
+      "delay_ticks": 8
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:entity.generic.drink",
+      "category": "hostile",
+      "volume": 1.0,
+      "pitch": 1.0,
+      "delay_ticks": 8
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:entity.generic.drink",
+      "category": "hostile",
+      "volume": 1.0,
+      "pitch": 1.0,
+      "delay_ticks": 8
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:block.brewing_stand.brew",
+      "category": "hostile",
+      "volume": 1.0,
+      "pitch": 0.8,
+      "delay_ticks": 8
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:entity.witch.drink",
+      "category": "hostile",
+      "volume": 1.0,
+      "pitch": 1.2,
+      "delay_ticks": 0
+    },
+    {
+      "type": "heal",
+      "amount": 24.0,
+      "delay_ticks": 0
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:entity.generic.drink",
+      "category": "hostile",
+      "volume": 1.0,
+      "pitch": 1.0,
+      "delay_ticks": 5
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:entity.generic.drink",
+      "category": "hostile",
+      "volume": 1.0,
+      "pitch": 1.0,
+      "delay_ticks": 8
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:entity.generic.drink",
+      "category": "hostile",
+      "volume": 1.0,
+      "pitch": 1.0,
+      "delay_ticks": 8
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:entity.generic.drink",
+      "category": "hostile",
+      "volume": 1.0,
+      "pitch": 1.0,
+      "delay_ticks": 8
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:block.brewing_stand.brew",
+      "category": "hostile",
+      "volume": 1.0,
+      "pitch": 0.8,
+      "delay_ticks": 8
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:entity.witch.drink",
+      "category": "hostile",
+      "volume": 1.0,
+      "pitch": 1.2,
+      "delay_ticks": 0
+    },
+    {
+      "type": "heal",
+      "amount": 24.0,
+      "delay_ticks": 0
+    },
+    {
+      "type": "equip",
+      "slot": "mainhand",
+      "item": {
+        "id": "paladins:netherite_claymore",
+        "count": 1
+      },
+      "delay_ticks": 5
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:item.armor.equip_iron",
+      "category": "hostile",
+      "volume": 1.0,
+      "pitch": 1.0,
+      "delay_ticks": 0
+    }
+  ]
+}

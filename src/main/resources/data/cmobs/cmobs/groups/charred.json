@@ -1,0 +1,132 @@
+{
+  "pools": [
+    {
+      "chance": 1.0,
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0,
+      "entries": [
+        {
+          "custom_mob": "cmobs:nether/charred/charred_hog",
+          "weight": 100
+        },
+        {
+          "custom_mob": "cmobs:nether/charred/charred_enforcer",
+          "weight": 80
+        },
+        {
+          "custom_mob": "cmobs:nether/charred/kindling",
+          "weight": 100
+        },
+        {
+          "custom_mob": "cmobs:nether/charred/charred_hog_rider",
+          "weight": 70
+        },
+        {
+          "custom_mob": "cmobs:nether/charred/charred_sentinel",
+          "weight": 30
+        },
+        {
+          "custom_mob": "cmobs:nether/charred/inferno",
+          "weight": 5
+        }
+      ]
+    },
+    {
+      "chance": 0.4,
+      "x": 1.4,
+      "y": 0.0,
+      "z": 0.4,
+      "entries": [
+        {
+          "custom_mob": "cmobs:nether/charred/charred_hog",
+          "weight": 100
+        },
+        {
+          "custom_mob": "cmobs:nether/charred/charred_enforcer",
+          "weight": 80
+        },
+        {
+          "custom_mob": "cmobs:nether/charred/kindling",
+          "weight": 100
+        },
+        {
+          "custom_mob": "cmobs:nether/charred/charred_hog_rider",
+          "weight": 70
+        },
+        {
+          "custom_mob": "cmobs:nether/charred/charred_sentinel",
+          "weight": 30
+        },
+        {
+          "custom_mob": "cmobs:nether/charred/inferno",
+          "weight": 5
+        }
+      ]
+    },
+    {
+      "chance": 0.2,
+      "x": -1.4,
+      "y": 0.0,
+      "z": 0.4,
+      "entries": [
+        {
+          "custom_mob": "cmobs:nether/charred/charred_hog",
+          "weight": 100
+        },
+        {
+          "custom_mob": "cmobs:nether/charred/charred_enforcer",
+          "weight": 80
+        },
+        {
+          "custom_mob": "cmobs:nether/charred/kindling",
+          "weight": 100
+        },
+        {
+          "custom_mob": "cmobs:nether/charred/charred_hog_rider",
+          "weight": 70
+        },
+        {
+          "custom_mob": "cmobs:nether/charred/charred_sentinel",
+          "weight": 30
+        },
+        {
+          "custom_mob": "cmobs:nether/charred/inferno",
+          "weight": 5
+        }
+      ]
+    },
+    {
+      "chance": 0.05,
+      "x": 0.0,
+      "y": 0.0,
+      "z": -1.4,
+      "entries": [
+        {
+          "custom_mob": "cmobs:nether/charred/charred_hog",
+          "weight": 100
+        },
+        {
+          "custom_mob": "cmobs:nether/charred/charred_enforcer",
+          "weight": 80
+        },
+        {
+          "custom_mob": "cmobs:nether/charred/kindling",
+          "weight": 100
+        },
+        {
+          "custom_mob": "cmobs:nether/charred/charred_hog_rider",
+          "weight": 70
+        },
+        {
+          "custom_mob": "cmobs:nether/charred/charred_sentinel",
+          "weight": 30
+        },
+        {
+          "custom_mob": "cmobs:nether/charred/inferno",
+          "weight": 5
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "trigger": "timed",
+  "interval_ticks": 20,
+  "cooldown_ticks": 40,
+  "conditions": [
+    {
+      "type": "nearby_entity",
+      "entity_type": "minecraft:player",
+      "radius": 24
+    }
+  ],
+  "actions": [
+    {
+      "type": "effect",
+      "id": "minecraft:resistance",
+      "target": "mobs",
+      "radius": 12,
+      "duration": 40,
+      "amplifier": 1,
+      "entity_types": [
+        "aether:valkyrie_queen",
+        "aether:valkyrie"
+      ]
+    },
+    {
+      "type": "effect",
+      "id": "minecraft:regeneration",
+      "target": "mobs",
+      "radius": 12,
+      "duration": 40,
+      "amplifier": 4,
+      "entity_types": [
+        "aether:valkyrie_queen",
+        "aether:valkyrie"
+      ]
+    },
+    {
+      "type": "particle",
+      "id": "aether:zephyr_snowflake",
+      "count": 2,
+      "y_offset": 0.2,
+      "spread": 0.2,
+      "speed": 0.01
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:happy_villager",
+      "count": 6,
+      "target": "mobs",
+      "radius": 12,
+      "entity_types": [
+        "aether:valkyrie_queen",
+        "aether:valkyrie"
+      ],
+      "y_offset": 1.5,
+      "spread": 0.5
+    }
+  ]
+}

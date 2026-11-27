@@ -1,0 +1,21 @@
+{
+  "source": "minecraft:wither_skeleton",
+  "chance": 0.15,
+  "dimensions": [
+    "minecraft:the_nether"
+  ],
+  "replacements": [
+    {
+      "custom_mob": "cmobs:nether/wither_skeleton/wither_skeleton_soldier",
+      "weight": 40
+    },
+    {
+      "custom_mob": "cmobs:nether/wither_skeleton/wither_skeleton_rogue",
+      "weight": 40
+    },
+    {
+      "custom_mob": "cmobs:nether/wither_skeleton/wither_skeleton_champion",
+      "weight": 10
+    }
+  ]
+}

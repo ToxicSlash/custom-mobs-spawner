@@ -1,0 +1,164 @@
+{
+  "pools": [
+    {
+      "chance": 1,
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "entries": [
+        {
+          "custom_mob": "cmobs:pirate/crew/pirate_captain",
+          "weight": 8
+        },
+        {
+          "custom_mob": "cmobs:pirate/crew/pirate_bandit",
+          "weight": 50
+        },
+        {
+          "custom_mob": "cmobs:pirate/crew/pirate_crossbowman",
+          "weight": 50
+        },
+        {
+          "custom_mob": "cmobs:pirate/crew/pirate_bladesman",
+          "weight": 40
+        },
+        {
+          "custom_mob": "cmobs:pirate/crew/pirate_pikeman",
+          "weight": 40
+        },
+        {
+          "custom_mob": "cmobs:pirate/crew/pirate_lieutenant",
+          "weight": 15
+        },
+        {
+          "custom_mob": "cmobs:pirate/crew/pirate_rifleman",
+          "weight": 20
+        },
+        {
+          "custom_mob": "cmobs:pirate/crew/pirate_gunman",
+          "weight": 20
+        }
+      ]
+    },
+    {
+      "chance": 0.7,
+      "x": 1,
+      "y": 0,
+      "z": 0,
+      "entries": [
+        {
+          "custom_mob": "cmobs:pirate/crew/pirate_bandit",
+          "weight": 80
+        },
+        {
+          "custom_mob": "cmobs:pirate/crew/pirate_crossbowman",
+          "weight": 80
+        },
+        {
+          "custom_mob": "cmobs:pirate/crew/pirate_bladesman",
+          "weight": 60
+        },
+        {
+          "custom_mob": "cmobs:pirate/crew/pirate_pikeman",
+          "weight": 60
+        },
+        {
+          "custom_mob": "cmobs:pirate/crew/pirate_lieutenant",
+          "weight": 25
+        },
+        {
+          "custom_mob": "cmobs:pirate/crew/pirate_rifleman",
+          "weight": 35
+        },
+        {
+          "custom_mob": "cmobs:pirate/crew/pirate_gunman",
+          "weight": 35
+        }
+      ]
+    },
+    {
+      "chance": 0.4,
+      "x": 0,
+      "y": 0,
+      "z": 1,
+      "entries": [
+        {
+          "custom_mob": "cmobs:pirate/crew/pirate_bandit",
+          "weight": 80
+        },
+        {
+          "custom_mob": "cmobs:pirate/crew/pirate_crossbowman",
+          "weight": 80
+        },
+        {
+          "custom_mob": "cmobs:pirate/crew/pirate_bladesman",
+          "weight": 60
+        },
+        {
+          "custom_mob": "cmobs:pirate/crew/pirate_pikeman",
+          "weight": 60
+        },
+        {
+          "custom_mob": "cmobs:pirate/crew/pirate_lieutenant",
+          "weight": 25
+        },
+        {
+          "custom_mob": "cmobs:pirate/crew/pirate_rifleman",
+          "weight": 35
+        },
+        {
+          "custom_mob": "cmobs:pirate/crew/pirate_gunman",
+          "weight": 35
+        }
+      ]
+    },
+    {
+      "chance": 0.1,
+      "x": -1,
+      "y": 0,
+      "z": 0,
+      "entries": [
+        {
+          "custom_mob": "cmobs:pirate/crew/pirate_bandit",
+          "weight": 80
+        },
+        {
+          "custom_mob": "cmobs:pirate/crew/pirate_crossbowman",
+          "weight": 80
+        },
+        {
+          "custom_mob": "cmobs:pirate/crew/pirate_bladesman",
+          "weight": 60
+        },
+        {
+          "custom_mob": "cmobs:pirate/crew/pirate_pikeman",
+          "weight": 60
+        },
+        {
+          "custom_mob": "cmobs:pirate/crew/pirate_lieutenant",
+          "weight": 25
+        },
+        {
+          "custom_mob": "cmobs:pirate/crew/pirate_rifleman",
+          "weight": 35
+        },
+        {
+          "custom_mob": "cmobs:pirate/crew/pirate_gunman",
+          "weight": 35
+        }
+      ]
+    },
+    {
+      "chance": 0.2,
+      "x": 0,
+      "y": 0,
+      "z": -1,
+      "entries": [
+        {
+          "custom_mob": "cmobs:pirate/support/shield_generator",
+          "weight": 1
+        }
+      ]
+    }
+  ]
+}

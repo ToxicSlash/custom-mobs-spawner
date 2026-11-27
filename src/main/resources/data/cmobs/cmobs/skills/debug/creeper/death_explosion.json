@@ -1,0 +1,12 @@
+{
+  "trigger": "when_killed",
+  "chance": 1.0,
+  "actions": [
+    {
+      "type": "explosion",
+      "power": 2.0,
+      "create_fire": false,
+      "source_type": "mob"
+    }
+  ]
+}

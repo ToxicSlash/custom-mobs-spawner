@@ -1,0 +1,64 @@
+{
+  "entity": "repurposedend:enderskeleton",
+  "custom_name": "Lost Archer",
+  "custom_name_visible": true,
+  "team": "lost_faction",
+  "tags": [
+    "lost_faction",
+    "lost_archer"
+  ],
+  "skills": [
+    "cmobs:lost/archer_barrage"
+  ],
+  "attributes": [
+    {
+      "id": "minecraft:generic.max_health",
+      "base": 35.0
+    },
+    {
+      "id": "minecraft:generic.attack_damage",
+      "base": 9.0
+    },
+    {
+      "id": "minecraft:generic.movement_speed",
+      "base": 0.31
+    },
+    {
+      "id": "minecraft:generic.knockback_resistance",
+      "base": 0.2
+    },
+    {
+      "id": "minecraft:generic.armor",
+      "base": 2.0
+    },
+    {
+      "id": "minecraft:generic.follow_range",
+      "base": 60.0
+    }
+  ],
+  "health": 25.0,
+  "equipment": {
+    "head": {
+      "id": "archers:netherite_ranger_armor_head",
+      "count": 1
+    },
+    "chest": {
+      "id": "knightquest:shinobi_chestplate",
+      "count": 1
+    },
+    "legs": {
+      "id": "knightquest:shinobi_leggings",
+      "count": 1
+    },
+    "feet": {
+      "id": "knightquest:enderman_boots",
+      "count": 1
+    },
+    "offhand": {
+      "id": "minecraft:bow",
+      "count": 1
+    }
+  },
+  "loot_table": "repurposedend:entities/cryingskeleton",
+  "nbt": "{CanPickUpLoot:0b,PersistenceRequired:1b,ArmorDropChances:[0.0f,0.0f,0.0f,0.0f]}"
+}

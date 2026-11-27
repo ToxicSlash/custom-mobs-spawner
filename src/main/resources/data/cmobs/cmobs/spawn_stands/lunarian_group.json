@@ -1,0 +1,9 @@
+{
+  "tags": [
+    "spawnpoint_stand",
+    "lunarian_group"
+  ],
+  "group": "cmobs:lunarian_group",
+  "discard_stand": true,
+  "max_player_distance": 80
+}

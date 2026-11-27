@@ -1,0 +1,63 @@
+{
+  "entity": "minecraft:piglin",
+  "custom_name": "Piglin Grenader",
+  "custom_name_visible": false,
+  "tags": [
+    "checked",
+    "piglin",
+    "piglin_grenader",
+    "passive_skill"
+  ],
+  "skills": [
+    "cmobs:piglin/grenader_bombs"
+  ],
+  "team": "custom_piglin",
+  "attributes": [
+    {
+      "id": "minecraft:generic.movement_speed",
+      "base": 0.26
+    },
+    {
+      "id": "minecraft:generic.max_health",
+      "base": 40.0
+    },
+    {
+      "id": "minecraft:generic.knockback_resistance",
+      "base": 0.4
+    },
+    {
+      "id": "minecraft:generic.attack_damage",
+      "base": 7.0
+    },
+    {
+      "id": "minecraft:generic.armor",
+      "base": 3.0
+    }
+  ],
+  "health": 40.0,
+  "equipment": {
+    "head": {
+      "id": "knightquest:shield_helmet",
+      "count": 1
+    },
+    "chest": {
+      "id": "endermanoverhaul:badlands_hood",
+      "count": 1
+    },
+    "legs": {
+      "id": "knightquest:blaze_leggings",
+      "count": 1
+    },
+    "feet": {
+      "id": "knightquest:apple_boots",
+      "count": 1
+    },
+    "mainhand": {
+      "id": "minecraft:crossbow",
+      "count": 1,
+      "nbt": "{Enchantments:[{id:\"minecraft:multishot\",lvl:1s}]}"
+    }
+  },
+  "loot_table": "minecraft:entities/piglin",
+  "nbt": "{ArmorDropChances:[0.0f,0.0f,0.0f,0.0f],HandDropChances:[0.0f,0.0f],PersistenceRequired:0b}"
+}

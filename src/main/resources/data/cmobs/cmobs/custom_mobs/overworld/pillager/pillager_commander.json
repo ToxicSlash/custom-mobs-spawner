@@ -1,0 +1,12 @@
+{
+  "entity": "illagerinvasion:inquisitor",
+  "tags": [
+    "checked",
+    "hasskill",
+    "pillager_commander",
+    "hurtfx",
+    "passive_skill",
+    "setMob"
+  ],
+  "nbt": "{HandItems:[{id:\"mythicmetals:steel_axe\",Count:1b},{id:\"paladins:iron_kite_shield\",Count:1b}],Attributes:[{Name:\"generic.movement_speed\",Base:0.26f},{Name:\"generic.max_health\",Base:120.0f},{Name:\"generic.knockback_resistance\",Base:1.0f},{Name:\"generic.attack_damage\",Base:16.0f},{Name:\"generic.armor\",Base:2.0f}],Tags:[\"checked\",\"hasskill\",\"pillager_commander\",\"hurtfx\",\"passive_skill\",\"setMob\"],Health:120.0f,CustomName:\"{\\\"text\\\":\\\"Pillager Commander\\\"}\",Silent:0b,ArmorDropChances:[0.0f,0.0f,0.0f,0.0f],HandDropChances:[0.0f,0.0f],PersistenceRequired:0b}"
+}

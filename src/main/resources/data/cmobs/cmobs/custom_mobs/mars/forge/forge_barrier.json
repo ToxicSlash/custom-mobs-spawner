@@ -1,0 +1,11 @@
+{
+  "entity": "minecraft:armor_stand",
+  "tags": [
+    "passive_skill",
+    "forge_barrier"
+  ],
+  "skills": [
+    "cmobs:mars/forge/barrier"
+  ],
+  "nbt": "{Tags:[\"passive_skill\",\"forge_barrier\"],Invulnerable:1b,NoGravity:1b,Invisible:1b,DisabledSlots:2039583,Small:1b}"
+}

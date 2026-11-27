@@ -1,0 +1,57 @@
+{
+  "trigger": "timed",
+  "interval_ticks": 10,
+  "chance": 0.1,
+  "actions": [
+    {
+      "type": "particle",
+      "id": "minecraft:flame",
+      "count": 7,
+      "y_offset": 1.0,
+      "spread": 0.3,
+      "speed": 0.03
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:smoke",
+      "count": 5,
+      "y_offset": 1.0,
+      "spread": 0.5,
+      "speed": 0.01
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:large_smoke",
+      "count": 3,
+      "y_offset": 1.0,
+      "spread": 0.5,
+      "speed": 0.01
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:lava",
+      "count": 4,
+      "y_offset": 1.0,
+      "spread": 0.3,
+      "speed": 0.0
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:soul_fire_flame",
+      "count": 4,
+      "y_offset": 1.0,
+      "spread": 0.3,
+      "speed": 0.03,
+      "conditions": [
+        {
+          "type": "nearby_entity",
+          "tags": [
+            "inferno"
+          ],
+          "include_self": true,
+          "radius": 0.1
+        }
+      ]
+    }
+  ]
+}

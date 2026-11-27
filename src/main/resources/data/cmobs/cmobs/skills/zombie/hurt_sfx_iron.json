@@ -1,0 +1,27 @@
+{
+  "trigger": "when_hurt",
+  "cooldown_ticks": 10,
+  "actions": [
+    {
+      "type": "sound",
+      "id": "minecraft:entity.zombie.hurt",
+      "category": "hostile",
+      "volume": 0.7,
+      "pitch": 0.8
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:entity.iron_golem.repair",
+      "category": "hostile",
+      "volume": 0.7,
+      "pitch": 0.9
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:item.shield.block",
+      "category": "hostile",
+      "volume": 0.5,
+      "pitch": 0.8
+    }
+  ]
+}

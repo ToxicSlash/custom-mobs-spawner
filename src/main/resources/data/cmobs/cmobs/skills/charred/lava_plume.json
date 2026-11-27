@@ -1,0 +1,194 @@
+{
+  "trigger": "timed",
+  "interval_ticks": 1,
+  "cooldown_on_start": true,
+  "cooldown_ticks": 100000,
+  "actions": [
+    {
+      "type": "particle",
+      "id": "minecraft:flame",
+      "count": 30,
+      "spread_x": 0.5,
+      "spread_y": 0.1,
+      "spread_z": 0.5,
+      "speed": 0.1
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:item.firecharge.use",
+      "category": "hostile",
+      "volume": 0.6,
+      "pitch": 0.35
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:block.lava.ambient",
+      "category": "hostile",
+      "volume": 0.6,
+      "pitch": 1.5
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:block.lava.pop",
+      "category": "hostile",
+      "volume": 0.6,
+      "pitch": 0.35
+    },
+    {
+      "type": "damage",
+      "target": "players",
+      "radius": 7.0,
+      "amount": 4.0,
+      "damage_type": "minecraft:on_fire",
+      "knockback": false
+    },
+    {
+      "type": "delay",
+      "ticks": 20
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:flame",
+      "count": 1,
+      "spread_x": 0.2,
+      "spread_y": 0.1,
+      "spread_z": 0.2,
+      "speed": 0.03
+    },
+    {
+      "type": "delay",
+      "ticks": 20
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:block.lava.ambient",
+      "category": "hostile",
+      "volume": 0.6,
+      "pitch": 1.5
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:block.lava.pop",
+      "category": "hostile",
+      "volume": 0.6,
+      "pitch": 0.6
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:lava",
+      "count": 1,
+      "spread_x": 0.5,
+      "spread_y": 0.1,
+      "spread_z": 0.5,
+      "speed": 0.03
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:flame",
+      "count": 2,
+      "spread_x": 0.5,
+      "spread_y": 0.1,
+      "spread_z": 0.5,
+      "speed": 0.03
+    },
+    {
+      "type": "damage",
+      "target": "players",
+      "radius": 7.0,
+      "amount": 4.0,
+      "damage_type": "minecraft:on_fire",
+      "knockback": false
+    },
+    {
+      "type": "delay",
+      "ticks": 40
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:block.lava.ambient",
+      "category": "hostile",
+      "volume": 0.6,
+      "pitch": 1.5
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:block.lava.pop",
+      "category": "hostile",
+      "volume": 0.6,
+      "pitch": 0.85
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:lava",
+      "count": 1,
+      "spread_x": 0.5,
+      "spread_y": 0.1,
+      "spread_z": 0.5,
+      "speed": 0.03
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:flame",
+      "count": 2,
+      "spread_x": 0.5,
+      "spread_y": 0.1,
+      "spread_z": 0.5,
+      "speed": 0.03
+    },
+    {
+      "type": "damage",
+      "target": "players",
+      "radius": 7.0,
+      "amount": 4.0,
+      "damage_type": "minecraft:on_fire",
+      "knockback": false
+    },
+    {
+      "type": "delay",
+      "ticks": 40
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:block.lava.ambient",
+      "category": "hostile",
+      "volume": 0.6,
+      "pitch": 1.5
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:block.lava.pop",
+      "category": "hostile",
+      "volume": 0.6,
+      "pitch": 1.2
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:lava",
+      "count": 1,
+      "spread_x": 0.5,
+      "spread_y": 0.1,
+      "spread_z": 0.5,
+      "speed": 0.03
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:flame",
+      "count": 2,
+      "spread_x": 0.5,
+      "spread_y": 0.1,
+      "spread_z": 0.5,
+      "speed": 0.03
+    },
+    {
+      "type": "damage",
+      "target": "players",
+      "radius": 7.0,
+      "amount": 4.0,
+      "damage_type": "minecraft:on_fire",
+      "knockback": false
+    },
+    {
+      "type": "discard"
+    }
+  ]
+}

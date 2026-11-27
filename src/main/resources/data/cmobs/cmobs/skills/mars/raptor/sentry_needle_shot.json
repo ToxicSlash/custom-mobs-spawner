@@ -1,0 +1,25 @@
+{
+  "trigger": "timed",
+  "interval_ticks": 20,
+  "chance": 0.4,
+  "cooldown_ticks": 120,
+  "target_range": 12,
+  "actions": [
+    {
+      "type": "sound",
+      "id": "minecraft:entity.skeleton.shoot",
+      "category": "hostile",
+      "volume": 0.8,
+      "pitch": 1.8
+    },
+    {
+      "type": "projectile",
+      "projectile_type": "minecraft:arrow",
+      "target": "target",
+      "calc_traj": true,
+      "damage": 5,
+      "speed": 1.9,
+      "divergence": 2
+    }
+  ]
+}

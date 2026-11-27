@@ -1,0 +1,13 @@
+{
+  "entity": "arachnids:warrior",
+  "tags": [
+    "checked",
+    "infested_warrior",
+    "death_anim",
+    "hasskill"
+  ],
+  "skills": [
+    "cmobs:mars/arachnids/infested_warrior_death"
+  ],
+  "nbt": "{ArmorItems:[],HandItems:[],Attributes:[{Name:\"generic.max_health\",Base:45.0f},{Name:\"generic.movement_speed\",Base:0.23f},{Name:\"generic.attack_damage\",Base:6.0f},{Name:\"generic.armor\",Base:34.0f}],Tags:[\"checked\",\"infested_warrior\",\"death_anim\",\"hasskill\"],Health:45.0f,CustomName:\"{\\\"text\\\":\\\"Infested Warrior\\\",\\\"color\\\":\\\"green\\\"}\",ArmorDropChances:[0.0f,0.0f,0.0f,0.0f],HandDropChances:[0.0f,0.0f],PersistenceRequired:0b,Silent:0b,NoAI:0b}"
+}

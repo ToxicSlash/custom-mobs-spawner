@@ -1,0 +1,15 @@
+{
+  "trigger": "timed",
+  "interval_ticks": 1,
+  "cooldown_on_start": true,
+  "cooldown_ticks": 100000,
+  "actions": [
+    {
+      "type": "delay",
+      "ticks": 200
+    },
+    {
+      "type": "discard"
+    }
+  ]
+}

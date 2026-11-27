@@ -1,0 +1,74 @@
+{
+  "trigger": "when_hurt",
+  "chance": 0.3,
+  "cooldown_ticks": 500,
+  "target_attacker": true,
+  "actions": [
+    {
+      "type": "damage",
+      "target": "players",
+      "radius": 4.0,
+      "amount": 8.0,
+      "knockback": false
+    },
+    {
+      "type": "effect",
+      "id": "more_rpg_classes:stun",
+      "target": "players",
+      "radius": 4.0,
+      "duration": 20,
+      "amplifier": 1
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:crit",
+      "count": 30,
+      "y_offset": 0.1,
+      "spread_x": 2.0,
+      "spread_y": 0.0,
+      "spread_z": 2.0,
+      "speed": 0.05
+    },
+    {
+      "type": "particle",
+      "id": "immersive_weathering:scrape_rust",
+      "count": 30,
+      "y_offset": 0.1,
+      "spread_x": 2.0,
+      "spread_y": 0.0,
+      "spread_z": 2.0,
+      "speed": 0.05
+    },
+    {
+      "type": "particle",
+      "id": "netherexp:fire_spark",
+      "count": 50,
+      "y_offset": 0.1,
+      "spread_x": 2.0,
+      "spread_y": 0.0,
+      "spread_z": 2.0,
+      "speed": 0.05
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:block.iron_trapdoor.close",
+      "category": "hostile",
+      "volume": 2.0,
+      "pitch": 0.0
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:block.iron_door.close",
+      "category": "hostile",
+      "volume": 2.0,
+      "pitch": 0.0
+    },
+    {
+      "type": "sound",
+      "id": "archers:entangling_roots",
+      "category": "hostile",
+      "volume": 2.0,
+      "pitch": 2.0
+    }
+  ]
+}

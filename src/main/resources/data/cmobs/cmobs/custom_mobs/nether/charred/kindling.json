@@ -1,0 +1,68 @@
+{
+  "entity": "minecraft:zombified_piglin",
+  "custom_name": "Kindling",
+  "custom_name_visible": false,
+  "tags": [
+    "checked",
+    "hurtsfx",
+    "charred_mob",
+    "hurtfx",
+    "trailfx",
+    "make_angry",
+    "death_anim",
+    "kindling"
+  ],
+  "skills": [
+    "cmobs:charred/hurt_sfx",
+    "cmobs:charred/trail",
+    "cmobs:charred/kindling_death"
+  ],
+  "team": "charred",
+  "attributes": [
+    {
+      "id": "minecraft:generic.movement_speed",
+      "base": 0.27
+    },
+    {
+      "id": "minecraft:generic.max_health",
+      "base": 70.0
+    },
+    {
+      "id": "minecraft:generic.knockback_resistance",
+      "base": 0.3
+    },
+    {
+      "id": "minecraft:generic.attack_damage",
+      "base": 28.0
+    },
+    {
+      "id": "minecraft:generic.armor",
+      "base": 2.0
+    }
+  ],
+  "health": 45.0,
+  "equipment": {
+    "head": {
+      "id": "knightquest:bat_helmet",
+      "count": 1
+    },
+    "chest": {
+      "id": "knightquest:bat_chestplate",
+      "count": 1
+    },
+    "legs": {
+      "id": "knightquest:blaze_leggings",
+      "count": 1
+    },
+    "feet": {
+      "id": "knightquest:bat_boots",
+      "count": 1
+    },
+    "mainhand": {
+      "id": "rogues:netherite_dagger",
+      "count": 1
+    }
+  },
+  "loot_table": "minecraft:entities/zombified_piglin",
+  "nbt": "{IsBaby:1b,ArmorDropChances:[0.0f,0.0f,0.0f,0.0f],HandDropChances:[0.0f,0.0f],PersistenceRequired:0b}"
+}

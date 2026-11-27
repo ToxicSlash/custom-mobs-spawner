@@ -1,0 +1,25 @@
+{
+  "trigger": "timed",
+  "interval_ticks": 40,
+  "conditions": [
+    {
+      "type": "nearby_entity",
+      "entity_type": "minecraft:player",
+      "radius": 80
+    }
+  ],
+  "actions": [
+    {
+      "type": "command",
+      "command": "execute as @a[distance=..80] unless entity @s[nbt={Inventory:[{id:\"kubejs:barrier_decoder\"}]}] run effect give @s minecraft:mining_fatigue 3 9"
+    },
+    {
+      "type": "command",
+      "command": "execute as @a[distance=..80] unless entity @s[nbt={Inventory:[{id:\"kubejs:barrier_decoder\"}]}] run title @s actionbar {\"text\":\"-Barrier Detected-\",\"color\":\"red\"}"
+    },
+    {
+      "type": "command",
+      "command": "execute if block ~ ~ ~ air run kill @s"
+    }
+  ]
+}

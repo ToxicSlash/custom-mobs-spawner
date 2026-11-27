@@ -1,0 +1,35 @@
+{
+  "trigger": "when_hurt",
+  "chance": 0.35,
+  "cancel_damage": true,
+  "target_attacker": true,
+  "global_cooldown_ticks": 40,
+  "cooldown_ticks": 100,
+  "actions": [
+    {
+      "type": "dodge",
+      "distance": 1.75,
+      "forward_distance": 1.1,
+      "pathfind_speed": 1.25
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:crit",
+      "count": 12,
+      "y_offset": 0.9,
+      "spread": 0.35,
+      "speed": 0.08
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:entity.player.attack.sweep",
+      "category": "hostile",
+      "volume": 0.8,
+      "pitch": 1.35
+    },
+    {
+      "type": "command",
+      "command": "tellraw @a[tag=custom_spawn_debug] {\"text\":\"Feint skill triggered\",\"color\":\"aqua\"}"
+    }
+  ]
+}

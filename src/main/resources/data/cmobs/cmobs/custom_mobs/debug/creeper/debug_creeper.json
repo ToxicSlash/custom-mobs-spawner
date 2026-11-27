@@ -1,0 +1,24 @@
+{
+  "entity": "minecraft:creeper",
+  "custom_name": "Debug Creeper",
+  "health": 30.0,
+  "tags": [
+    "debug_creeper"
+  ],
+  "skills": [
+    "cmobs:zombie/frail",
+    "cmobs:debug/creeper/death_explosion"
+  ],
+  "attributes": [
+    {
+      "id": "minecraft:generic.max_health",
+      "base": 30.0
+    },
+    {
+      "id": "minecraft:generic.movement_speed",
+      "base": 0.3
+    }
+  ],
+  "loot_table": "minecraft:entities/creeper",
+  "nbt": "{powered:1b}"
+}

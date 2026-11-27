@@ -1,0 +1,9 @@
+{
+  "tags": [
+    "spawnpoint_stand",
+    "enderman_totem"
+  ],
+  "group": "cmobs:enderman_totem",
+  "discard_stand": true,
+  "max_player_distance": 80
+}

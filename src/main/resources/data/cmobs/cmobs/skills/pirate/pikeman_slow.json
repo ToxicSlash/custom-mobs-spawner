@@ -1,0 +1,15 @@
+{
+  "trigger": "when_attacks",
+  "chance": 0.35,
+  "cooldown_ticks": 60,
+  "actions": [
+    {
+      "type": "effect",
+      "id": "minecraft:slowness",
+      "target": "target",
+      "radius": 2,
+      "duration": 100,
+      "amplifier": 1
+    }
+  ]
+}

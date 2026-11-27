@@ -1,0 +1,43 @@
+{
+    "entity":  "repurposedend:cryingskeleton",
+    "custom_name":  "Gravity Warden",
+    "custom_name_visible":  true,
+    "tags":  [
+                 "lost_faction",
+                 "gravity_warden"
+             ],
+    "skills":  [
+
+               ],
+    "attributes":  [
+                       {
+                           "id":  "minecraft:generic.max_health",
+                           "base":  48.0
+                       },
+                       {
+                           "id":  "minecraft:generic.attack_damage",
+                           "base":  7.0
+                       },
+                       {
+                           "id":  "minecraft:generic.movement_speed",
+                           "base":  0.2
+                       },
+                       {
+                           "id":  "minecraft:generic.armor",
+                           "base":  8.0
+                       },
+                       {
+                           "id":  "minecraft:generic.knockback_resistance",
+                           "base":  0.3
+                       }
+                   ],
+    "health":  48.0,
+    "equipment":  {
+                      "mainhand":  {
+                                       "id":  "minecraft:iron_axe",
+                                       "count":  1
+                                   }
+                  },
+    "loot_table":  "repurposedend:entities/cryingskeleton",
+    "nbt":  "{CanPickUpLoot:0b,PersistenceRequired:1b}"
+}

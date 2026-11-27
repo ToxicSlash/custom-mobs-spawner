@@ -1,0 +1,17 @@
+{
+  "entity": "minecraft:warden",
+  "tags": [
+    "sculk_anomaly",
+    "checked",
+    "passive_skill",
+    "hasskill",
+    "passive_sfx",
+    "hurtsfx",
+    "setMob"
+  ],
+  "skills": [
+    "cmobs:boss/sculk_hurt_sfx",
+    "cmobs:boss/sculk_death_sfx"
+  ],
+  "nbt": "{Attributes:[{Name:\"generic.movement_speed\",Base:0.31f},{Name:\"generic.max_health\",Base:1500.0f},{Name:\"generic.knockback_resistance\",Base:0.9f},{Name:\"generic.attack_damage\",Base:200.0f},{Name:\"generic.armor\",Base:12.0f},{Name:\"minecraft:generic.attack_knockback\",Base:4.0f},{Name:\"generic.armor\",Base:12.0f}],Tags:[\"sculk_anomaly\",\"checked\",\"passive_skill\",\"hasskill\",\"passive_sfx\",\"hurtsfx\",\"setMob\"],Health:750.0f,CustomName:\"{\\\"text\\\":\\\"Sculk Anomaly\\\",\\\"color\\\":\\\"light_purple\\\"}\",ArmorDropChances:[0.0f,0.0f,0.0f,0.0f],HandDropChances:[0.0f,0.0f],PersistenceRequired:1b,Brain:{memories:{\"minecraft:dig_cooldown\":{value:{},ttl:1000000L}}},DeathLootTable:\"cmobs:entities/bosses/sculk_anomaly\"}"
+}

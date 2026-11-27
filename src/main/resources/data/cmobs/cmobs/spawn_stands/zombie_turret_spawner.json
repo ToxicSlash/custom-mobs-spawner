@@ -1,0 +1,9 @@
+{
+  "tags": [
+    "spawnpoint_stand",
+    "zombie_turret_spawner"
+  ],
+  "custom_mob": "cmobs:pirate/support/pirate_zombie_turret",
+  "discard_stand": true,
+  "max_player_distance": 80
+}

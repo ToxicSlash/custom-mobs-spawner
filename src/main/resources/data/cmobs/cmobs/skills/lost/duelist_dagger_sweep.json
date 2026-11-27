@@ -1,0 +1,121 @@
+{
+  "trigger": "timed",
+  "interval_ticks": 50,
+  "chance": 0.35,
+  "requires_living_target": true,
+  "require_mainhand": "mcdw:sword_beestinger",
+  "trigger_range": 3.2,
+  "cooldown_on_start": true,
+  "global_cooldown_ticks": 12,
+  "cooldown_ticks": 120,
+  "actions": [
+    {
+      "type": "sound",
+      "id": "minecraft:entity.enderman.teleport",
+      "category": "hostile",
+      "volume": 0.6,
+      "pitch": 1.5
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:end_rod",
+      "count": 5,
+      "y_offset": 0.9,
+      "spread": 0.25,
+      "speed": 0.09
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:flash",
+      "count": 1,
+      "y_offset": 0.5,
+      "spread": 0.0,
+      "speed": 0.0
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:item.armor.equip_leather",
+      "category": "hostile",
+      "volume": 0.45,
+      "pitch": 1.45
+    },
+    {
+      "type": "dodge",
+      "distance": 1.5,
+      "forward_distance": 2,
+      "pathfind_speed": 1.2,
+      "fallback_velocity": true,
+      "fallback_strength": 0.25
+    },
+    {
+      "delay_ticks": 5
+    },
+    {
+      "type": "lunge",
+      "fixed_direction": false,
+      "strength": 0.32,
+      "y_strength": 0.04
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:entity.player.attack.sweep",
+      "category": "hostile",
+      "volume": 0.75,
+      "pitch": 1.65
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:sweep_attack",
+      "count": 1,
+      "y_offset": 0.95,
+      "spread": 0.02,
+      "speed": 0.0,
+      "arc": {
+        "points": 3,
+        "count_per_point": 1,
+        "radius": 1.2,
+        "start_degrees": -30.0,
+        "end_degrees": 30.0,
+        "y_offset": 0.95,
+        "end_y_offset": 0.95,
+        "spread": 0.02,
+        "speed": 0.0
+      }
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:enchanted_hit",
+      "count": 10,
+      "y_offset": 0.95,
+      "spread": 0.06,
+      "speed": 0.07,
+      "arc": {
+        "points": 5,
+        "count_per_point": 2,
+        "radius": 1.85,
+        "start_degrees": 42.0,
+        "end_degrees": -36.0,
+        "y_offset": 1.05,
+        "end_y_offset": 0.85,
+        "spread": 0.08,
+        "speed": 0.07
+      }
+    },
+    {
+      "type": "damage",
+      "target": "target",
+      "radius": 2.25,
+      "use_attack_damage": true,
+      "damage_scale": 0.85,
+      "bypass_invulnerability": true,
+      "knockback": false
+    },
+    {
+      "type": "knockback",
+      "target": "target",
+      "radius": 2.0,
+      "strength": 0.45,
+      "y_strength": 0.06
+    }
+  ]
+}

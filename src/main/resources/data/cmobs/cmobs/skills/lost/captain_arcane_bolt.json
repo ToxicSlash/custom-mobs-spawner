@@ -1,0 +1,96 @@
+{
+  "trigger": "timed",
+  "interval_ticks": 60,
+  "cooldown_ticks": 120,
+  "requires_living_target": true,
+  "target_range": 32.0,
+  "chance": 0.6,
+  "actions": [
+    {
+      "type": "spell_engine_spell",
+      "spell": "wizards:arcane_bolt",
+      "target": "target",
+      "target_range": 48.0,
+      "target_y_scale": 0.65,
+      "velocity": 0.55,
+      "power_multiplier": 0.1,
+      "damage_override": 3,
+      "impact_min_power": 0,
+      "count": 1
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:entity.bee.sting",
+      "category": "hostile",
+      "volume": 0.9,
+      "pitch": 2
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:entity.spider.hurt",
+      "category": "hostile",
+      "volume": 0.9,
+      "pitch": 2
+    },
+    {
+      "type": "delay",
+      "ticks": 2
+    },
+    {
+      "type": "spell_engine_spell",
+      "spell": "wizards:arcane_bolt",
+      "target": "target",
+      "target_range": 48.0,
+      "target_y_scale": 0.65,
+      "velocity": 0.55,
+      "power_multiplier": 0.1,
+      "damage_override": 3,
+      "impact_min_power": 0,
+      "count": 1
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:entity.bee.sting",
+      "category": "hostile",
+      "volume": 0.9,
+      "pitch": 2
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:entity.spider.hurt",
+      "category": "hostile",
+      "volume": 0.9,
+      "pitch": 2
+    },
+    {
+      "type": "delay",
+      "ticks": 2
+    },
+    {
+      "type": "spell_engine_spell",
+      "spell": "wizards:arcane_bolt",
+      "target": "target",
+      "target_range": 48.0,
+      "target_y_scale": 0.65,
+      "velocity": 0.55,
+      "power_multiplier": 0.1,
+      "damage_override": 3,
+      "impact_min_power": 0,
+      "count": 1
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:entity.bee.sting",
+      "category": "hostile",
+      "volume": 0.9,
+      "pitch": 2
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:entity.spider.hurt",
+      "category": "hostile",
+      "volume": 0.9,
+      "pitch": 2
+    }
+  ]
+}

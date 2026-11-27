@@ -1,0 +1,9 @@
+{
+  "tags": [
+    "spawnpoint_stand",
+    "pirate_rifleman_spawner"
+  ],
+  "custom_mob": "cmobs:pirate/crew/pirate_rifleman",
+  "discard_stand": true,
+  "max_player_distance": 80
+}

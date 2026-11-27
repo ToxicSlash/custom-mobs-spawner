@@ -1,0 +1,23 @@
+{
+  "members": [
+    {
+      "custom_mob": "cmobs:mars/raptor/raptor_queen"
+    },
+    {
+      "custom_mob": "cmobs:mars/raptor/raptor_royal_guard",
+      "x": 2
+    },
+    {
+      "custom_mob": "cmobs:mars/raptor/raptor_royal_guard",
+      "x": -2
+    },
+    {
+      "custom_mob": "cmobs:mars/raptor/raptor_royal_guard",
+      "z": 2
+    },
+    {
+      "custom_mob": "cmobs:mars/raptor/raptor_royal_guard",
+      "z": -2
+    }
+  ]
+}

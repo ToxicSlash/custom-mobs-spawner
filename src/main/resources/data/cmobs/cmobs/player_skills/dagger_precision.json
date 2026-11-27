@@ -1,0 +1,25 @@
+{
+    "trigger":  "when_attacks",
+    "chance":  1.0,
+    "requires_living_target":  true,
+    "require_mainhand":  "#cmobs:knives",
+    "trigger_range":  4.0,
+    "cooldown_on_start":  false,
+    "global_cooldown_ticks":  0,
+    "cooldown_ticks":  2,
+    "actions":  [
+                    {
+                        "type":  "effect",
+                        "id":  "cmobs:precision",
+                        "target":  "self",
+                        "duration":  40,
+                        "amplifier":  0,
+                        "stack":  true,
+                        "amplifier_increment":  1,
+                        "max_amplifier":  9,
+                        "stack_duration":  true,
+                        "duration_increment":  40,
+                        "max_duration":  100
+                    }
+                ]
+}

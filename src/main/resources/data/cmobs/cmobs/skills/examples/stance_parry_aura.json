@@ -1,0 +1,78 @@
+{
+  "description": "Example: stance skill. Enters a temporary stance, ticks repeated actions, and can punish on parry.",
+  "trigger": "when_hurt",
+  "chance": 1.0,
+  "cooldown_ticks": 160,
+  "cancel_damage": true,
+  "stance": {
+    "parry": true,
+    "target_range": 4.0,
+    "duration_ticks": 60,
+    "tick_interval_ticks": 10,
+    "tick_radius": 2.5,
+    "tick_target": "players",
+    "tick_nearby_damage": 1.0,
+    "tick_nearby_knockback": false,
+    "tick_nearby_fire_ticks": 20,
+    "enter_stance": [
+      {
+        "type": "effect",
+        "id": "minecraft:glowing",
+        "duration": 60,
+        "amplifier": 0
+      },
+      {
+        "type": "sound",
+        "id": "minecraft:item.shield.block",
+        "category": "hostile",
+        "volume": 0.8,
+        "pitch": 0.8
+      }
+    ],
+    "stance_tick": [
+      {
+        "type": "particle",
+        "id": "minecraft:flame",
+        "count": 6,
+        "y_offset": 0.8,
+        "spread": 0.45,
+        "speed": 0.03
+      }
+    ],
+    "on_parry": [
+      {
+        "type": "reflect_damage",
+        "multiplier": 0.5,
+        "knockback": true
+      },
+      {
+        "type": "effect",
+        "id": "minecraft:strength",
+        "duration": 80,
+        "amplifier": 0
+      }
+    ],
+    "punish": [
+      {
+        "type": "effect",
+        "id": "minecraft:weakness",
+        "duration": 80,
+        "amplifier": 0
+      }
+    ],
+    "stance_end": [
+      {
+        "type": "effect_clear",
+        "id": "minecraft:glowing"
+      },
+      {
+        "type": "particle",
+        "id": "minecraft:smoke",
+        "count": 10,
+        "y_offset": 1.0,
+        "spread": 0.4,
+        "speed": 0.02
+      }
+    ]
+  }
+}

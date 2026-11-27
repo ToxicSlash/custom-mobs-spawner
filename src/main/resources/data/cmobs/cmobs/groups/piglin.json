@@ -1,0 +1,204 @@
+{
+  "pools": [
+    {
+      "chance": 1.0,
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0,
+      "entries": [
+        {
+          "custom_mob": "cmobs:nether/piglin/piglin_botanist",
+          "weight": 40
+        },
+        {
+          "custom_mob": "cmobs:nether/piglin/piglin_gladiator",
+          "weight": 15
+        },
+        {
+          "custom_mob": "cmobs:nether/piglin/piglin_grenader",
+          "weight": 50
+        },
+        {
+          "custom_mob": "cmobs:nether/piglin/piglin_mercenary",
+          "weight": 30
+        },
+        {
+          "custom_mob": "cmobs:nether/piglin/piglin_scrapper",
+          "weight": 90
+        },
+        {
+          "custom_mob": "cmobs:nether/piglin/piglin_scrounger",
+          "weight": 80
+        },
+        {
+          "custom_mob": "cmobs:nether/piglin/piglin_spearman",
+          "weight": 100
+        },
+        {
+          "custom_mob": "cmobs:nether/piglin/piglin_thief",
+          "weight": 100
+        }
+      ]
+    },
+    {
+      "chance": 0.8,
+      "x": 1.2,
+      "y": 0.0,
+      "z": 0.0,
+      "entries": [
+        {
+          "custom_mob": "cmobs:nether/piglin/piglin_botanist",
+          "weight": 40
+        },
+        {
+          "custom_mob": "cmobs:nether/piglin/piglin_gladiator",
+          "weight": 15
+        },
+        {
+          "custom_mob": "cmobs:nether/piglin/piglin_grenader",
+          "weight": 50
+        },
+        {
+          "custom_mob": "cmobs:nether/piglin/piglin_mercenary",
+          "weight": 30
+        },
+        {
+          "custom_mob": "cmobs:nether/piglin/piglin_scrapper",
+          "weight": 90
+        },
+        {
+          "custom_mob": "cmobs:nether/piglin/piglin_scrounger",
+          "weight": 80
+        },
+        {
+          "custom_mob": "cmobs:nether/piglin/piglin_spearman",
+          "weight": 100
+        },
+        {
+          "custom_mob": "cmobs:nether/piglin/piglin_thief",
+          "weight": 100
+        }
+      ]
+    },
+    {
+      "chance": 0.6,
+      "x": -1.2,
+      "y": 0.0,
+      "z": 0.0,
+      "entries": [
+        {
+          "custom_mob": "cmobs:nether/piglin/piglin_botanist",
+          "weight": 40
+        },
+        {
+          "custom_mob": "cmobs:nether/piglin/piglin_gladiator",
+          "weight": 15
+        },
+        {
+          "custom_mob": "cmobs:nether/piglin/piglin_grenader",
+          "weight": 50
+        },
+        {
+          "custom_mob": "cmobs:nether/piglin/piglin_mercenary",
+          "weight": 30
+        },
+        {
+          "custom_mob": "cmobs:nether/piglin/piglin_scrapper",
+          "weight": 90
+        },
+        {
+          "custom_mob": "cmobs:nether/piglin/piglin_scrounger",
+          "weight": 80
+        },
+        {
+          "custom_mob": "cmobs:nether/piglin/piglin_spearman",
+          "weight": 100
+        },
+        {
+          "custom_mob": "cmobs:nether/piglin/piglin_thief",
+          "weight": 100
+        }
+      ]
+    },
+    {
+      "chance": 0.25,
+      "x": 0.0,
+      "y": 0.0,
+      "z": 1.2,
+      "entries": [
+        {
+          "custom_mob": "cmobs:nether/piglin/piglin_botanist",
+          "weight": 40
+        },
+        {
+          "custom_mob": "cmobs:nether/piglin/piglin_gladiator",
+          "weight": 15
+        },
+        {
+          "custom_mob": "cmobs:nether/piglin/piglin_grenader",
+          "weight": 50
+        },
+        {
+          "custom_mob": "cmobs:nether/piglin/piglin_mercenary",
+          "weight": 30
+        },
+        {
+          "custom_mob": "cmobs:nether/piglin/piglin_scrapper",
+          "weight": 90
+        },
+        {
+          "custom_mob": "cmobs:nether/piglin/piglin_scrounger",
+          "weight": 80
+        },
+        {
+          "custom_mob": "cmobs:nether/piglin/piglin_spearman",
+          "weight": 100
+        },
+        {
+          "custom_mob": "cmobs:nether/piglin/piglin_thief",
+          "weight": 100
+        }
+      ]
+    },
+    {
+      "chance": 0.25,
+      "x": 0.0,
+      "y": 0.0,
+      "z": -1.2,
+      "entries": [
+        {
+          "custom_mob": "cmobs:nether/piglin/piglin_botanist",
+          "weight": 40
+        },
+        {
+          "custom_mob": "cmobs:nether/piglin/piglin_gladiator",
+          "weight": 15
+        },
+        {
+          "custom_mob": "cmobs:nether/piglin/piglin_grenader",
+          "weight": 50
+        },
+        {
+          "custom_mob": "cmobs:nether/piglin/piglin_mercenary",
+          "weight": 30
+        },
+        {
+          "custom_mob": "cmobs:nether/piglin/piglin_scrapper",
+          "weight": 90
+        },
+        {
+          "custom_mob": "cmobs:nether/piglin/piglin_scrounger",
+          "weight": 80
+        },
+        {
+          "custom_mob": "cmobs:nether/piglin/piglin_spearman",
+          "weight": 100
+        },
+        {
+          "custom_mob": "cmobs:nether/piglin/piglin_thief",
+          "weight": 100
+        }
+      ]
+    }
+  ]
+}

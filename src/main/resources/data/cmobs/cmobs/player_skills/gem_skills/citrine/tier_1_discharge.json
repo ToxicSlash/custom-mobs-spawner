@@ -1,0 +1,35 @@
+{
+  "trigger": "timed",
+  "interval_ticks": 40,
+  "chance": 1.03,
+  "combo_increase_proc%": 0.03,
+  "requires_living_target": true,
+  "target_range": 10.0,
+  "cooldown_on_start": false,
+  "global_cooldown_ticks": 0,
+  "cooldown_ticks": 0,
+  "actions": [
+    {
+      "type": "static_chain",
+      "spell": "cmobs:static_beam",
+      "range": 16.0,
+      "chain_chance": 1,
+      "max_chains": 2,
+      "target_y_scale": 0.6,
+      "beam_particle": "spell_engine:electric_arc_a",
+      "impact_particle": "spell_engine:white_spark_mini",
+      "beam_points": 3,
+      "beam_point_spread": 0.25,
+      "impact_particles": 12,
+      "contribute_combo": false,
+      "conditions": [
+        {
+          "type": "effect",
+          "id": "cmobs:static",
+          "min_level": 3,
+          "max_level": 10
+        }
+      ]
+    }
+  ]
+}

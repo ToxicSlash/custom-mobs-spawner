@@ -1,0 +1,10 @@
+{
+  "tags": [
+    "spawnpoint_stand",
+    "elder_lunarian_spawner"
+  ],
+  "custom_mob": "cmobs:moon/lunarian/elder_corrupted_lunarian",
+  "chance": 0.7,
+  "discard_stand": true,
+  "max_player_distance": 80
+}

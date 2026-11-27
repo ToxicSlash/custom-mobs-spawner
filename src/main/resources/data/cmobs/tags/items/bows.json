@@ -1,0 +1,18 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:bow",
+    {
+      "id": "#c:bows",
+      "required": false
+    },
+    {
+      "id": "#fabric:bows",
+      "required": false
+    },
+    {
+      "id": "#archers:bows",
+      "required": false
+    }
+  ]
+}

@@ -1,0 +1,302 @@
+{
+  "trigger": "timed",
+  "interval_ticks": 10,
+  "chance": 0.55,
+  "requires_living_target": true,
+  "require_mainhand": "paladins:iron_claymore",
+  "trigger_range": 4.2,
+  "cooldown_on_start": true,
+  "global_cooldown_ticks": 34,
+  "cooldown_ticks": 120,
+  "telegraph": [
+    {
+      "delay_ticks": 0,
+      "actions": [
+        {
+          "type": "sound",
+          "id": "minecraft:block.grindstone.use",
+          "category": "hostile",
+          "volume": 0.65,
+          "pitch": 0.55
+        },
+        {
+          "type": "particle",
+          "id": "minecraft:scrape",
+          "count": 10,
+          "y_offset": 0.25,
+          "spread": 0.35,
+          "speed": 0.02
+        }
+      ]
+    },
+    {
+      "delay_ticks": 8,
+      "actions": [
+        {
+          "type": "sound",
+          "id": "minecraft:block.grindstone.use",
+          "category": "hostile",
+          "volume": 0.75,
+          "pitch": 0.7
+        },
+        {
+          "type": "particle",
+          "id": "minecraft:scrape",
+          "count": 16,
+          "y_offset": 0.25,
+          "spread": 0.5,
+          "speed": 0.04
+        },
+        {
+          "type": "particle",
+          "id": "minecraft:ash",
+          "count": 10,
+          "y_offset": 0.2,
+          "spread": 0.45,
+          "speed": 0.03
+        }
+      ]
+    },
+    {
+      "delay_ticks": 8,
+      "actions": [
+        {
+          "type": "lunge",
+          "strength": 0.32,
+          "y_strength": 0.03
+        },
+        {
+          "type": "sound",
+          "id": "minecraft:entity.player.attack.sweep",
+          "category": "hostile",
+          "volume": 1.15,
+          "pitch": 0.55
+        },
+        {
+          "type": "sound",
+          "id": "minecraft:item.trident.throw",
+          "category": "hostile",
+          "volume": 0.65,
+          "pitch": 0.65
+        },
+        {
+          "type": "particle",
+          "id": "minecraft:sweep_attack",
+          "count": 2,
+          "y_offset": 1.05,
+          "spread": 0.02,
+          "speed": 0.0,
+          "arc": {
+            "points": 2,
+            "count_per_point": 1,
+            "radius": 2.55,
+            "start_degrees": 74.0,
+            "end_degrees": 42.0,
+            "y_offset": 1.15,
+            "end_y_offset": 1.05,
+            "spread": 0.02,
+            "speed": 0.0
+          }
+        },
+        {
+          "type": "particle",
+          "id": "minecraft:crit",
+          "count": 12,
+          "y_offset": 1.0,
+          "spread": 0.08,
+          "speed": 0.08,
+          "arc": {
+            "points": 4,
+            "count_per_point": 3,
+            "radius": 2.85,
+            "start_degrees": 78.0,
+            "end_degrees": 32.0,
+            "y_offset": 1.2,
+            "end_y_offset": 1.05,
+            "spread": 0.12,
+            "speed": 0.08
+          }
+        },
+        {
+          "type": "particle",
+          "id": "minecraft:enchanted_hit",
+          "count": 8,
+          "y_offset": 1.0,
+          "spread": 0.08,
+          "speed": 0.06,
+          "arc": {
+            "points": 4,
+            "count_per_point": 2,
+            "radius": 3.05,
+            "start_degrees": 70.0,
+            "end_degrees": 30.0,
+            "y_offset": 1.1,
+            "end_y_offset": 1.0,
+            "spread": 0.1,
+            "speed": 0.06
+          }
+        }
+      ]
+    },
+    {
+      "delay_ticks": 1,
+      "actions": [
+        {
+          "type": "particle",
+          "id": "minecraft:sweep_attack",
+          "count": 1,
+          "y_offset": 1.0,
+          "spread": 0.02,
+          "speed": 0.0,
+          "arc": {
+            "points": 1,
+            "count_per_point": 1,
+            "radius": 2.75,
+            "start_degrees": 12.0,
+            "end_degrees": 12.0,
+            "y_offset": 1.0,
+            "end_y_offset": 1.0,
+            "spread": 0.02,
+            "speed": 0.0
+          }
+        },
+        {
+          "type": "particle",
+          "id": "minecraft:crit",
+          "count": 15,
+          "y_offset": 1.0,
+          "spread": 0.08,
+          "speed": 0.09,
+          "arc": {
+            "points": 5,
+            "count_per_point": 3,
+            "radius": 3.0,
+            "start_degrees": 30.0,
+            "end_degrees": -28.0,
+            "y_offset": 1.05,
+            "end_y_offset": 0.9,
+            "spread": 0.12,
+            "speed": 0.09
+          }
+        },
+        {
+          "type": "particle",
+          "id": "minecraft:enchanted_hit",
+          "count": 10,
+          "y_offset": 1.0,
+          "spread": 0.08,
+          "speed": 0.06,
+          "arc": {
+            "points": 5,
+            "count_per_point": 2,
+            "radius": 3.18,
+            "start_degrees": 28.0,
+            "end_degrees": -24.0,
+            "y_offset": 1.0,
+            "end_y_offset": 0.9,
+            "spread": 0.1,
+            "speed": 0.06
+          }
+        }
+      ]
+    },
+    {
+      "delay_ticks": 1,
+      "actions": [
+        {
+          "type": "particle",
+          "id": "minecraft:sweep_attack",
+          "count": 2,
+          "y_offset": 0.9,
+          "spread": 0.02,
+          "speed": 0.0,
+          "arc": {
+            "points": 2,
+            "count_per_point": 1,
+            "radius": 2.65,
+            "start_degrees": -34.0,
+            "end_degrees": -70.0,
+            "y_offset": 0.9,
+            "end_y_offset": 0.75,
+            "spread": 0.02,
+            "speed": 0.0
+          }
+        },
+        {
+          "type": "particle",
+          "id": "minecraft:crit",
+          "count": 12,
+          "y_offset": 1.0,
+          "spread": 0.08,
+          "speed": 0.1,
+          "arc": {
+            "points": 4,
+            "count_per_point": 3,
+            "radius": 2.95,
+            "start_degrees": -30.0,
+            "end_degrees": -78.0,
+            "y_offset": 0.9,
+            "end_y_offset": 0.72,
+            "spread": 0.12,
+            "speed": 0.1
+          }
+        },
+        {
+          "type": "particle",
+          "id": "minecraft:enchanted_hit",
+          "count": 8,
+          "y_offset": 1.0,
+          "spread": 0.08,
+          "speed": 0.06,
+          "arc": {
+            "points": 4,
+            "count_per_point": 2,
+            "radius": 3.08,
+            "start_degrees": -25.0,
+            "end_degrees": -66.0,
+            "y_offset": 0.88,
+            "end_y_offset": 0.76,
+            "spread": 0.1,
+            "speed": 0.06
+          }
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "type": "damage",
+      "target": "players",
+      "radius": 4.0,
+      "use_attack_damage": true,
+      "damage_scale": 1.0,
+      "knockback": false
+    },
+    {
+      "type": "knockback",
+      "target": "players",
+      "radius": 4.0,
+      "strength": 0.75,
+      "y_strength": 0.15
+    },
+    {
+      "type": "particle",
+      "target": "players",
+      "radius": 4.0,
+      "id": "minecraft:enchanted_hit",
+      "count": 24,
+      "y_offset": 1.0,
+      "spread": 0.65,
+      "speed": 0.08
+    },
+    {
+      "type": "sound",
+      "target": "players",
+      "radius": 4.0,
+      "id": "minecraft:entity.player.attack.crit",
+      "category": "hostile",
+      "volume": 0.9,
+      "pitch": 0.8
+    }
+  ]
+}

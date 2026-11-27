@@ -1,0 +1,53 @@
+{
+  "trigger": "timed",
+  "interval_ticks": 20,
+  "chance": 0.05,
+  "cooldown_ticks": 200,
+  "conditions": [
+    {
+      "type": "nearby_entity",
+      "entity_type": "minecraft:player",
+      "radius": 4
+    }
+  ],
+  "actions": [
+    {
+      "type": "effect",
+      "id": "minecraft:slowness",
+      "target": "players",
+      "radius": 4,
+      "duration": 160,
+      "amplifier": 1
+    },
+    {
+      "type": "effect",
+      "id": "minecraft:weakness",
+      "target": "players",
+      "radius": 4,
+      "duration": 160,
+      "amplifier": 0
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:entity.evoker_fangs.attack",
+      "category": "hostile",
+      "volume": 0.7,
+      "pitch": 1.5
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:crit",
+      "count": 30,
+      "y_offset": 1.5,
+      "spread": 0.5,
+      "speed": 0.02
+    },
+    {
+      "type": "damage",
+      "target": "players",
+      "radius": 4,
+      "amount": 10,
+      "damage_type": "minecraft:mob_attack"
+    }
+  ]
+}

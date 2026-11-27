@@ -1,0 +1,15 @@
+{
+  "entity": "minecraft:vindicator",
+  "tags": [
+    "checked",
+    "hasskill",
+    "pirate_bladesman",
+    "parry_skill",
+    "hurtfx",
+    "pirate"
+  ],
+  "skills": [
+    "cmobs:zombie/knight_parry"
+  ],
+  "nbt": "{ArmorItems:[{id:\"knightquest:pirate_boots\",Count:1b},{id:\"knightquest:bow_leggings\",Count:1b},{id:\"knightquest:bow_chestplate\",Count:1b},{id:\"knightquest:horn_helmet\",Count:1b}],HandItems:[{id:\"mythicmetals:durasteel_sword\",Count:1b},{}],Attributes:[{Name:\"porting_lib:entity_gravity\",Base:0.09f},{Name:\"generic.movement_speed\",Base:0.3f},{Name:\"generic.max_health\",Base:35.0f},{Name:\"generic.knockback_resistance\",Base:0.3f},{Name:\"generic.attack_damage\",Base:4.0f},{Name:\"generic.armor\",Base:2.0f}],Tags:[\"checked\",\"hasskill\",\"pirate_bladesman\",\"parry_skill\",\"hurtfx\",\"pirate\"],Health:40.0f,CustomName:\"{\\\"text\\\":\\\"Pirate Bladesman\\\"}\",ArmorDropChances:[0.0f,0.0f,0.0f,0.0f],HandDropChances:[0.0f,0.0f],PersistenceRequired:1b}"
+}

@@ -1,0 +1,197 @@
+{
+  "description": "Example: every supported projectile action field. Not attached to any mob.",
+  "trigger": "timed",
+  "interval_ticks": 20,
+  "chance": 1.0,
+  "requires_living_target": true,
+  "trigger_range": 16.0,
+  "cooldown_ticks": 100,
+  "actions": [
+    {
+      "type": "projectile",
+      "projectile_type": "minecraft:snowball",
+      "target": "target",
+      "trajectory": "linear",
+      "arc": false,
+      "arc_lift_scale": 0.12,
+      "velocity": 1.6,
+      "amount": 3,
+      "spread": 6.0,
+      "y_offset": 1.2,
+      "forward_offset": 0.4,
+      "trail": {
+        "id": "minecraft:crit",
+        "count": 2,
+        "points": 2,
+        "interval_ticks": 1,
+        "y_offset": 0.0,
+        "spread": 0.02,
+        "speed": 0.0
+      },
+      "hit_enemy": [
+        {
+          "type": "damage",
+          "amount": 2.0,
+          "use_attack_damage": false,
+          "damage_scale": 1.0,
+          "knockback": false,
+          "bypass_invulnerability": false
+        },
+        {
+          "type": "posture_damage",
+          "amount": 8.0,
+          "blockable": true,
+          "bypass_posture_invulnerability": false
+        },
+        {
+          "type": "particle",
+          "id": "minecraft:crit",
+          "count": 12,
+          "y_offset": 0.0,
+          "spread": 0.2,
+          "speed": 0.08
+        },
+        {
+          "type": "sound",
+          "id": "minecraft:entity.arrow.hit_player",
+          "category": "hostile",
+          "volume": 0.8,
+          "pitch": 1.2
+        }
+      ],
+      "hit_ground": [
+        {
+          "type": "particle",
+          "id": "minecraft:poof",
+          "count": 10,
+          "y_offset": 0.0,
+          "spread": 0.25,
+          "speed": 0.04
+        },
+        {
+          "type": "sound",
+          "id": "minecraft:entity.arrow.hit",
+          "category": "hostile",
+          "volume": 0.7,
+          "pitch": 1.0
+        },
+        {
+          "type": "explosion",
+          "power": 0.0,
+          "create_fire": false,
+          "source_type": "none"
+        }
+      ]
+    },
+    {
+      "type": "delay",
+      "ticks": 12
+    },
+    {
+      "type": "projectile",
+      "projectile_type": "minecraft:arrow",
+      "target": "target",
+      "trajectory": "arc",
+      "arc": true,
+      "arc_lift_scale": 0.16,
+      "velocity": 1.2,
+      "amount": 1,
+      "spread": 1.0,
+      "y_offset": 1.4,
+      "forward_offset": 0.6,
+      "trails": [
+        {
+          "id": "minecraft:enchanted_hit",
+          "count": 1,
+          "points": 2,
+          "interval_ticks": 1,
+          "spread": 0.01,
+          "speed": 0.0
+        },
+        {
+          "id": "minecraft:poof",
+          "count": 1,
+          "interval_ticks": 3,
+          "spread": 0.03,
+          "speed": 0.0
+        }
+      ],
+      "hit_enemy": [
+        {
+          "type": "damage",
+          "use_attack_damage": true,
+          "damage_scale": 0.5,
+          "knockback": true
+        }
+      ],
+      "hit_ground": [
+        {
+          "type": "particle",
+          "id": "minecraft:poof",
+          "count": 8,
+          "spread": 0.18,
+          "speed": 0.03
+        },
+        {
+          "type": "aura",
+          "duration_ticks": 100,
+          "tick_interval_ticks": 5,
+          "radius": 4.0,
+          "target": "players",
+          "aura_start": [
+            {
+              "type": "particle",
+              "id": "minecraft:reverse_portal",
+              "count": 24,
+              "y_offset": 0.2,
+              "spread": 0.7,
+              "speed": 0.04
+            }
+          ],
+          "aura_tick": [
+            {
+              "type": "particle",
+              "id": "minecraft:portal",
+              "count": 18,
+              "interval_ticks": 1,
+              "y_offset": 0.2,
+              "spread": 1.4,
+              "speed": 0.02
+            },
+            {
+              "type": "knockback",
+              "target": "players",
+              "strength": -0.18,
+              "y_strength": 0.02
+            }
+          ],
+          "aura_end": [
+            {
+              "type": "particle",
+              "id": "minecraft:poof",
+              "count": 24,
+              "y_offset": 0.2,
+              "spread": 0.8,
+              "speed": 0.06
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "delay",
+      "ticks": 12
+    },
+    {
+      "type": "projectile",
+      "projectile_type": "minecraft:egg",
+      "target": "forward",
+      "trajectory": "linear",
+      "velocity": 1.0,
+      "amount": 1,
+      "spread": 0.0,
+      "y_offset": 1.0,
+      "forward_offset": 0.5
+    }
+  ]
+}

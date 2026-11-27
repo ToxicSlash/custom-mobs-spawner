@@ -1,0 +1,54 @@
+{
+  "description": "Example: telegraph plus final actions. Telegraph runs first; final actions only release if skill preconditions still pass.",
+  "trigger": "timed",
+  "interval_ticks": 20,
+  "chance": 1.0,
+  "requires_living_target": true,
+  "trigger_range": 3.0,
+  "hit_range": 2.2,
+  "cooldown_on_start": true,
+  "cooldown_ticks": 100,
+  "telegraph": [
+    {
+      "delay_ticks": 0,
+      "actions": [
+        {
+          "type": "sound",
+          "id": "minecraft:block.grindstone.use",
+          "category": "hostile",
+          "volume": 0.6,
+          "pitch": 0.65
+        }
+      ]
+    },
+    {
+      "delay_ticks": 8,
+      "actions": [
+        {
+          "type": "particle",
+          "id": "minecraft:scrape",
+          "count": 12,
+          "y_offset": 1.0,
+          "spread": 0.35,
+          "speed": 0.04
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "type": "damage",
+      "target": "target",
+      "radius": 2.2,
+      "amount": 4.0,
+      "knockback": false
+    },
+    {
+      "type": "knockback",
+      "target": "target",
+      "radius": 2.2,
+      "strength": 0.8,
+      "y_strength": 0.18
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "source": "minecraft:blaze",
+  "chance": 0.02,
+  "dimensions": [
+    "minecraft:the_nether"
+  ],
+  "replacements": [
+    {
+      "custom_mob": "cmobs:nether/charred/inferno",
+      "weight": 1
+    }
+  ]
+}

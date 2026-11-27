@@ -1,0 +1,51 @@
+{
+  "entity": "minecraft:piglin",
+  "custom_name": "Piglin Thief",
+  "custom_name_visible": false,
+  "tags": [
+    "checked",
+    "hasskill",
+    "piglin",
+    "piglin_thief"
+  ],
+  "team": "custom_piglin",
+  "attributes": [
+    {
+      "id": "minecraft:generic.movement_speed",
+      "base": 0.33
+    },
+    {
+      "id": "minecraft:generic.max_health",
+      "base": 30.0
+    },
+    {
+      "id": "minecraft:generic.knockback_resistance",
+      "base": 0.1
+    },
+    {
+      "id": "minecraft:generic.attack_damage",
+      "base": 20.0
+    }
+  ],
+  "health": 30.0,
+  "equipment": {
+    "head": {
+      "id": "minecraft:chainmail_helmet",
+      "count": 1
+    },
+    "chest": {
+      "id": "endermanoverhaul:badlands_hood",
+      "count": 1
+    },
+    "feet": {
+      "id": "minecraft:golden_boots",
+      "count": 1
+    },
+    "mainhand": {
+      "id": "rogues:golden_dagger",
+      "count": 1
+    }
+  },
+  "loot_table": "minecraft:entities/piglin",
+  "nbt": "{ArmorDropChances:[0.0f,0.0f,0.0f,0.0f],HandDropChances:[0.0f,0.0f],PersistenceRequired:0b}"
+}

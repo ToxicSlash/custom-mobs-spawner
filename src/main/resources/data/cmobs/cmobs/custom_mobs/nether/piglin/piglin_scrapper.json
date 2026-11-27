@@ -1,0 +1,60 @@
+{
+  "entity": "minecraft:piglin",
+  "custom_name": "Piglin Scrapper",
+  "custom_name_visible": false,
+  "tags": [
+    "checked",
+    "hasskill",
+    "piglin",
+    "piglin_scrapper",
+    "hurtfx",
+    "piglin_rage_skill"
+  ],
+  "skills": [
+    "cmobs:piglin/rage"
+  ],
+  "team": "custom_piglin",
+  "attributes": [
+    {
+      "id": "minecraft:generic.movement_speed",
+      "base": 0.3
+    },
+    {
+      "id": "minecraft:generic.max_health",
+      "base": 40.0
+    },
+    {
+      "id": "minecraft:generic.knockback_resistance",
+      "base": 0.4
+    },
+    {
+      "id": "minecraft:generic.attack_damage",
+      "base": 30.0
+    },
+    {
+      "id": "minecraft:generic.armor",
+      "base": 2.0
+    }
+  ],
+  "health": 40.0,
+  "equipment": {
+    "chest": {
+      "id": "endermanoverhaul:savanna_hood",
+      "count": 1
+    },
+    "legs": {
+      "id": "knightquest:blaze_leggings",
+      "count": 1
+    },
+    "feet": {
+      "id": "knightquest:apple_boots",
+      "count": 1
+    },
+    "mainhand": {
+      "id": "mythicmetals:copper_sword",
+      "count": 1
+    }
+  },
+  "loot_table": "minecraft:entities/piglin",
+  "nbt": "{ArmorDropChances:[0.0f,0.0f,0.0f,0.0f],HandDropChances:[0.0f,0.0f],PersistenceRequired:0b}"
+}

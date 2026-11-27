@@ -1,0 +1,9 @@
+{
+  "tags": [
+    "passive_skill",
+    "forge_barrier"
+  ],
+  "custom_mob": "cmobs:mars/forge/forge_barrier",
+  "discard_stand": true,
+  "max_player_distance": 80
+}

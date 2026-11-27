@@ -1,0 +1,138 @@
+{
+  "trigger": "when_spell_cast",
+  "spell": "cmobs:dagger_finisher",
+  "chance": 1,
+  "require_mainhand": "#cmobs:knives",
+  "cooldown_on_start": true,
+  "global_cooldown_ticks": 0,
+  "cooldown_ticks": 0,
+  "lock_telegraph_direction": false,
+  "telegraph": [
+    {
+      "delay_ticks": 0,
+      "actions": [
+        {
+          "type": "clear_combo"
+        },
+        {
+          "type": "attack_cooldown",
+          "ticks": 6
+        },
+        {
+          "type": "sound",
+          "id": "minecraft:item.armor.equip_leather",
+          "category": "players",
+          "volume": 0.45,
+          "pitch": 1.65
+        },
+        {
+          "type": "particle",
+          "id": "minecraft:smoke",
+          "count": 8,
+          "y_offset": 0.75,
+          "spread": 0.25,
+          "speed": 0.04
+        }
+      ]
+    },
+    {
+      "delay_ticks": 1,
+      "actions": [
+        {
+          "type": "swing",
+          "hand": "mainhand",
+          "better_combat": true,
+          "animation": "bettercombat:one_handed_slash_horizontal_right",
+          "length": 12,
+          "upswing": 0.35
+        },
+        {
+          "type": "dodge",
+          "use_target": true,
+          "face_target": true,
+          "target_y_scale": 0.55,
+          "distance": 1.75,
+          "forward_distance": 2.5
+        },
+        {
+          "type": "clear_target",
+          "target": "target"
+        },
+        {
+          "type": "sound",
+          "id": "minecraft:entity.player.attack.sweep",
+          "category": "players",
+          "volume": 0.55,
+          "pitch": 1.8
+        },
+        {
+          "type": "particle",
+          "id": "minecraft:poof",
+          "count": 10,
+          "y_offset": 0.85,
+          "spread": 0.22,
+          "speed": 0.08
+        },
+        {
+          "type": "particle",
+          "id": "minecraft:end_rod",
+          "count": 1,
+          "y_offset": 1,
+          "spread": 0.02,
+          "speed": 0.04,
+          "arc": {
+            "points": 5,
+            "count_per_point": 1,
+            "radius": 1.25,
+            "forward_offset": 0.15,
+            "start_degrees": 55,
+            "end_degrees": -45,
+            "y_offset": 0.95,
+            "end_y_offset": 1.15,
+            "spread": 0.02,
+            "speed": 0.02
+          }
+        }
+      ]
+    },
+    {
+      "delay_ticks": 2,
+      "actions": [
+        {
+          "type": "effect",
+          "id": "cmobs:elusion",
+          "target": "self",
+          "duration": 60,
+          "combo_duration_ticks": 6,
+          "max_combo_duration_ticks": 80,
+          "amplifier": 0,
+          "stack": true,
+          "amplifier_increment": 1,
+          "max_level": 4
+        },
+        {
+          "type": "effect",
+          "id": "rogues:shadow_step",
+          "target": "self",
+          "duration": 10,
+          "amplifier": 0
+        },
+        {
+          "type": "particle",
+          "id": "minecraft:crit",
+          "count": 14,
+          "y_offset": 1,
+          "spread": 0.35,
+          "speed": 0.1
+        },
+        {
+          "type": "sound",
+          "id": "minecraft:block.amethyst_block.chime",
+          "category": "players",
+          "volume": 0.5,
+          "pitch": 1.75
+        }
+      ]
+    }
+  ]
+}

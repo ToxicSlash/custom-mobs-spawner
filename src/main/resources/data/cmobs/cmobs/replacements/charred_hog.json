@@ -1,0 +1,13 @@
+{
+  "source": "minecraft:hoglin",
+  "chance": 0.05,
+  "dimensions": [
+    "minecraft:the_nether"
+  ],
+  "replacements": [
+    {
+      "custom_mob": "cmobs:nether/charred/charred_hog",
+      "weight": 1
+    }
+  ]
+}

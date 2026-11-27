@@ -1,0 +1,26 @@
+{
+  "trigger": "when_killed",
+  "actions": [
+    {
+      "type": "sound",
+      "id": "minecraft:entity.zombie.death",
+      "category": "hostile",
+      "volume": 2.0,
+      "pitch": 0.8
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:entity.zombie.death",
+      "category": "hostile",
+      "volume": 2.0,
+      "pitch": 0.2
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:entity.iron_golem.death",
+      "category": "hostile",
+      "volume": 1.2,
+      "pitch": 0.8
+    }
+  ]
+}

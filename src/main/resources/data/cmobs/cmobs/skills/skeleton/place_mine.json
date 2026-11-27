@@ -1,0 +1,21 @@
+{
+  "trigger": "timed",
+  "interval_ticks": 20,
+  "chance": 0.2,
+  "requires_living_target": true,
+  "target_range": 12.0,
+  "cooldown_ticks": 40,
+  "actions": [
+    {
+      "type": "sound",
+      "id": "minecraft:block.lever.click",
+      "category": "hostile",
+      "volume": 1.0,
+      "pitch": 1.5
+    },
+    {
+      "type": "summon_custom_mob",
+      "custom_mob": "cmobs:overworld/skeleton/skeleton_mine"
+    }
+  ]
+}

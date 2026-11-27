@@ -1,0 +1,9 @@
+{
+  "tags": [
+    "spawnpoint_stand",
+    "pirate_crossbowman_spawner"
+  ],
+  "custom_mob": "cmobs:pirate/crew/pirate_crossbowman",
+  "discard_stand": true,
+  "max_player_distance": 80
+}

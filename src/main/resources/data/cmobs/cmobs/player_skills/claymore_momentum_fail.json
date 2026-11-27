@@ -1,0 +1,65 @@
+{
+  "trigger": "failed_attack",
+  "require_mainhand": "#cmobs:claymores",
+  "conditions": [
+    {
+      "type": "effect",
+      "id": "cmobs:momentum",
+      "min_level": 1,
+      "max_level": 10
+    }
+  ],
+  "actions": [
+    {
+      "type": "effect",
+      "id": "minecraft:mining_fatigue",
+      "target": "self",
+      "duration": 25,
+      "amplifier": 1,
+      "conditions": [
+        {
+          "type": "effect",
+          "id": "cmobs:momentum",
+          "min_level": 2,
+          "max_level": 10
+        }
+      ]
+    },
+    {
+      "type": "effect",
+      "id": "minecraft:slowness",
+      "target": "self",
+      "duration": 25,
+      "amplifier": 0,
+      "conditions": [
+        {
+          "type": "effect",
+          "id": "cmobs:momentum",
+          "min_level": 2,
+          "max_level": 10
+        }
+      ]
+    },
+    {
+      "type": "effect_clear",
+      "id": "cmobs:momentum",
+      "target": "self"
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:ash",
+      "anchor": "eyes",
+      "forward_offset": 1.2,
+      "count": 14,
+      "spread": 0.22,
+      "speed": 0.45
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:entity.player.attack.weak",
+      "category": "players",
+      "volume": 0.9,
+      "pitch": 0.75
+    }
+  ]
+}

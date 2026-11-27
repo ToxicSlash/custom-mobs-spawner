@@ -1,0 +1,20 @@
+{
+  "trigger": "when_hurt",
+  "cooldown_ticks": 10,
+  "actions": [
+    {
+      "type": "sound",
+      "id": "minecraft:entity.bee.hurt",
+      "category": "hostile",
+      "volume": 1,
+      "pitch": 0.5
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:entity.spider.hurt",
+      "category": "hostile",
+      "volume": 0.4,
+      "pitch": 1.5
+    }
+  ]
+}

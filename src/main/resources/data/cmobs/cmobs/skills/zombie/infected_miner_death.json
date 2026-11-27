@@ -1,0 +1,12 @@
+{
+  "trigger": "when_killed",
+  "actions": [
+    {
+      "type": "sound",
+      "id": "minecraft:entity.warden.death",
+      "category": "hostile",
+      "volume": 1.0,
+      "pitch": 1.4
+    }
+  ]
+}

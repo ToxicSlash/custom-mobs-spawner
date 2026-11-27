@@ -1,0 +1,15 @@
+{
+  "tags": [
+    "spawnpoint_stand",
+    "charred_boss_spawn"
+  ],
+  "required_block": "netherexp:brazier_chest[locked=false]",
+  "offset": [
+    0.0,
+    1.0,
+    0.0
+  ],
+  "group": "cmobs:charred",
+  "max_player_distance": 80,
+  "discard_stand": true
+}

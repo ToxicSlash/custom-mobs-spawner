@@ -1,0 +1,42 @@
+{
+  "trigger": "timed",
+  "interval_ticks": 20,
+  "chance": 0.2,
+  "cooldown_ticks": 1600,
+  "conditions": [
+    {
+      "type": "nearby_entity",
+      "entity_type": "minecraft:player",
+      "radius": 20.0
+    }
+  ],
+  "actions": [
+    {
+      "type": "sound",
+      "id": "minecraft:entity.firework_rocket.launch",
+      "category": "hostile",
+      "volume": 2.0,
+      "pitch": 1.5
+    },
+    {
+      "type": "summon_custom_mob",
+      "custom_mob": "cmobs:nether/piglin/magma_bomb",
+      "side_offset": -0.7,
+      "y_offset": 0.2,
+      "target_owner_target": true
+    },
+    {
+      "type": "summon_custom_mob",
+      "custom_mob": "cmobs:nether/piglin/magma_bomb",
+      "y_offset": 0.2,
+      "target_owner_target": true
+    },
+    {
+      "type": "summon_custom_mob",
+      "custom_mob": "cmobs:nether/piglin/magma_bomb",
+      "side_offset": 0.7,
+      "y_offset": 0.2,
+      "target_owner_target": true
+    }
+  ]
+}

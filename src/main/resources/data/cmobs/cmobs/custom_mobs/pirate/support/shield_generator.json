@@ -1,0 +1,20 @@
+{
+  "entity": "minecraft:shulker",
+  "tags": [
+    "checked",
+    "hasskill",
+    "passive_skill",
+    "shield_generator",
+    "trailfx",
+    "ambientsfx",
+    "hurtsfx",
+    "death_anim",
+    "passive_sfx"
+  ],
+  "skills": [
+    "cmobs:pirate/shield_generator",
+    "cmobs:pirate/shield_generator_find",
+    "cmobs:pirate/shield_generator_death"
+  ],
+  "nbt": "{ArmorItems:[],HandItems:[],Attributes:[{Name:\"generic.max_health\",Base:20.0f},{Name:\"generic.attack_damage\",Base:3.0f},{Name:\"generic.armor\",Base:35.0f}],Tags:[\"checked\",\"hasskill\",\"passive_skill\",\"shield_generator\",\"trailfx\",\"ambientsfx\",\"hurtsfx\",\"death_anim\",\"passive_sfx\"],Health:20.0f,CustomName:\"{\\\"text\\\":\\\"Portable Shield Generator\\\"}\",ArmorDropChances:[0.0f,0.0f,0.0f,0.0f],HandDropChances:[0.0f,0.0f],PersistenceRequired:1b,Silent:1b,DeathLootTable:\"\",NoAI:1b}"
+}

@@ -1,0 +1,9 @@
+{
+  "entity": "endermanoverhaul:ice_spikes_enderman",
+  "tags": [
+    "checked",
+    "setMob",
+    "martian_enderman_elder"
+  ],
+  "nbt": "{ArmorItems:[],HandItems:[],Attributes:[{Name:\"generic.max_health\",Base:70.0f},{Name:\"generic.movement_speed\",Base:0.23f},{Name:\"generic.attack_damage\",Base:35.0f},{Name:\"generic.armor\",Base:30.0f}],Tags:[\"checked\",\"setMob\",\"martian_enderman_elder\"],Health:70.0f,CustomName:\"{\\\"text\\\":\\\"Martian Enderman Elder\\\",\\\"color\\\":\\\"white\\\"}\",ArmorDropChances:[0.0f,0.0f,0.0f,0.0f],HandDropChances:[0.0f,0.0f],PersistenceRequired:1b,Silent:0b,DeathLootTable:\"cmobs:entities/martian_enderman_elder\",NoAI:0b}"
+}

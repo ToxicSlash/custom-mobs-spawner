@@ -1,0 +1,65 @@
+{
+  "entity": "minecraft:skeleton",
+  "custom_name": "Skeleton Hunter",
+  "custom_name_visible": false,
+  "tags": [
+    "checked",
+    "hasskill",
+    "skeleton_hunter",
+    "hurtfx",
+    "inflicts_effect",
+    "hunter_trap",
+    "hunter_mark"
+  ],
+  "skills": [
+    "cmobs:skeleton/hunter_trap",
+    "cmobs:skeleton/hunter_mark"
+  ],
+  "attributes": [
+    {
+      "id": "minecraft:generic.movement_speed",
+      "base": 0.28
+    },
+    {
+      "id": "minecraft:generic.max_health",
+      "base": 45.0
+    },
+    {
+      "id": "minecraft:generic.knockback_resistance",
+      "base": 0.5
+    },
+    {
+      "id": "minecraft:generic.attack_damage",
+      "base": 22.0
+    },
+    {
+      "id": "minecraft:generic.armor",
+      "base": 2.0
+    }
+  ],
+  "health": 45.0,
+  "equipment": {
+    "head": {
+      "id": "knightquest:chainmail_helmet2",
+      "count": 1
+    },
+    "chest": {
+      "id": "frostiful:fur_padded_chainmail_chestplate",
+      "count": 1
+    },
+    "legs": {
+      "id": "knightquest:tunic_blue_leggings",
+      "count": 1
+    },
+    "feet": {
+      "id": "knightquest:dragon_boots",
+      "count": 1
+    },
+    "mainhand": {
+      "id": "mcdw:glaive_glaive",
+      "count": 1
+    }
+  },
+  "loot_table": "minecraft:entities/skeleton",
+  "nbt": "{ArmorDropChances:[0.0f,0.0f,0.0f,0.0f]}"
+}

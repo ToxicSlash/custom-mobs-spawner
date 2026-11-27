@@ -1,0 +1,20 @@
+{
+  "members": [
+    {
+      "entity": "ad_astra:corrupted_lunarian",
+      "x": 1
+    },
+    {
+      "entity": "ad_astra:corrupted_lunarian",
+      "z": 1
+    },
+    {
+      "entity": "ad_astra:corrupted_lunarian",
+      "x": -1
+    },
+    {
+      "entity": "ad_astra:corrupted_lunarian",
+      "z": -1
+    }
+  ]
+}

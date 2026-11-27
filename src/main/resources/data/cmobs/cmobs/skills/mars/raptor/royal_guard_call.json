@@ -1,0 +1,65 @@
+{
+  "trigger": "timed",
+  "interval_ticks": 20,
+  "chance": 0.1,
+  "cooldown_ticks": 120,
+  "conditions": [
+    {
+      "type": "nearby_entity",
+      "entity_type": "minecraft:player",
+      "radius": 12
+    }
+  ],
+  "actions": [
+    {
+      "type": "effect",
+      "id": "minecraft:weakness",
+      "target": "players",
+      "radius": 12,
+      "duration": 160,
+      "amplifier": 0
+    },
+    {
+      "type": "effect",
+      "id": "minecraft:regeneration",
+      "target": "mobs",
+      "radius": 24,
+      "duration": 180,
+      "amplifier": 1,
+      "entity_type": "ad_astra:martian_raptor"
+    },
+    {
+      "type": "effect",
+      "id": "minecraft:strength",
+      "target": "mobs",
+      "radius": 24,
+      "duration": 240,
+      "amplifier": 1,
+      "entity_type": "ad_astra:martian_raptor"
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:block.sculk_shrieker.shriek",
+      "category": "hostile",
+      "volume": 1,
+      "pitch": 1.9
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:entity.warden.roar",
+      "category": "hostile",
+      "volume": 1,
+      "pitch": 2
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:sonic_boom",
+      "count": 3,
+      "y_offset": 1,
+      "spread_x": 1,
+      "spread_y": 0.5,
+      "spread_z": 1,
+      "speed": 0.05
+    }
+  ]
+}

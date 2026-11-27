@@ -1,0 +1,74 @@
+{
+  "trigger": "timed",
+  "interval_ticks": 20,
+  "conditions": [
+    {
+      "type": "health",
+      "max": 249.0
+    }
+  ],
+  "actions": [
+    {
+      "type": "particle",
+      "id": "minecraft:soul_fire_flame",
+      "count": 7,
+      "y_offset": 1.0,
+      "spread": 1.6,
+      "speed": 0.03
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:flame",
+      "count": 14,
+      "y_offset": 1.0,
+      "spread_x": 2.0,
+      "spread_y": 1.6,
+      "spread_z": 2.0,
+      "speed": 0.03
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:smoke",
+      "count": 7,
+      "y_offset": 1.0,
+      "spread_x": 1.5,
+      "spread_y": 1.0,
+      "spread_z": 1.5,
+      "speed": 0.01
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:large_smoke",
+      "count": 6,
+      "y_offset": 1.0,
+      "spread": 2.0,
+      "speed": 0.01
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:lava",
+      "count": 4,
+      "y_offset": 1.0,
+      "spread": 0.6,
+      "speed": 0.0
+    },
+    {
+      "type": "damage",
+      "target": "living",
+      "radius": 10.0,
+      "amount": 16.0,
+      "damage_type": "minecraft:cramming",
+      "exclude_tags": [
+        "charred_mob"
+      ],
+      "knockback": false
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:block.fire.ambient",
+      "category": "hostile",
+      "volume": 1.0,
+      "pitch": 2.0
+    }
+  ]
+}

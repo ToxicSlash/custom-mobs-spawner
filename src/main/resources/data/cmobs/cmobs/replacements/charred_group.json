@@ -1,0 +1,13 @@
+{
+  "source": "minecraft:zombified_piglin",
+  "chance": 0.08,
+  "dimensions": [
+    "minecraft:the_nether"
+  ],
+  "replacements": [
+    {
+      "group": "cmobs:charred",
+      "weight": 1
+    }
+  ]
+}

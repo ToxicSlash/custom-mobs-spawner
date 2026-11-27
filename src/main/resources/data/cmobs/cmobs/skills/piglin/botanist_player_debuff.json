@@ -1,0 +1,70 @@
+{
+  "trigger": "timed",
+  "interval_ticks": 20,
+  "chance": 0.3,
+  "cooldown_ticks": 240,
+  "conditions": [
+    {
+      "type": "nearby_entity",
+      "entity_type": "minecraft:player",
+      "radius": 16.0
+    },
+    {
+      "type": "nearby_entity",
+      "entity_types": [
+        "minecraft:player",
+        "minecraft:piglin"
+      ],
+      "radius": 8.0
+    }
+  ],
+  "actions": [
+    {
+      "type": "sound",
+      "id": "minecraft:item.bottle.fill_dragonbreath",
+      "category": "hostile",
+      "volume": 0.8,
+      "pitch": 1.2
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:block.brewing_stand.brew",
+      "category": "hostile",
+      "volume": 0.6,
+      "pitch": 0.8
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:entity.zombie.infect",
+      "category": "hostile",
+      "volume": 1.0,
+      "pitch": 1.5
+    },
+    {
+      "type": "effect",
+      "id": "minecraft:poison",
+      "target": "players",
+      "radius": 8.0,
+      "duration": 160,
+      "amplifier": 3
+    },
+    {
+      "type": "effect",
+      "id": "minecraft:regeneration",
+      "target": "mobs",
+      "entity_type": "minecraft:piglin",
+      "radius": 8.0,
+      "duration": 160,
+      "amplifier": 2
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:scrape",
+      "count": 80,
+      "spread_x": 3.0,
+      "spread_y": 0.5,
+      "spread_z": 3.0,
+      "speed": 1.0
+    }
+  ]
+}

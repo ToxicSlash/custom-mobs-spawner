@@ -1,0 +1,130 @@
+{
+  "trigger": "timed",
+  "interval_ticks": 10,
+  "chance": 0.45,
+  "requires_living_target": true,
+  "require_unarmed": true,
+  "trigger_range": 1.75,
+  "cooldown_on_start": true,
+  "global_cooldown_ticks": 24,
+  "cooldown_ticks": 130,
+  "telegraph": [
+    {
+      "delay_ticks": 0,
+      "actions": [
+        {
+          "type": "sound",
+          "id": "minecraft:entity.zombie.step",
+          "category": "hostile",
+          "volume": 0.75,
+          "pitch": 0.55
+        },
+        {
+          "type": "particle",
+          "id": "minecraft:cloud",
+          "count": 7,
+          "y_offset": 0.15,
+          "spread": 0.18,
+          "speed": 0.015
+        }
+      ]
+    },
+    {
+      "delay_ticks": 3,
+      "actions": [
+        {
+          "type": "particle",
+          "id": "minecraft:ash",
+          "count": 8,
+          "y_offset": 0.35,
+          "spread": 0.22,
+          "speed": 0.02
+        },
+        {
+          "type": "sound",
+          "id": "minecraft:block.gravel.step",
+          "category": "hostile",
+          "volume": 0.65,
+          "pitch": 0.7
+        }
+      ]
+    },
+    {
+      "delay_ticks": 3,
+      "actions": [
+        {
+          "type": "lunge",
+          "strength": 0.25,
+          "y_strength": 0.03
+        },
+        {
+          "type": "sound",
+          "id": "minecraft:block.wood.break",
+          "category": "hostile",
+          "volume": 0.45,
+          "pitch": 1.6
+        },
+        {
+          "type": "particle",
+          "id": "minecraft:cloud",
+          "count": 10,
+          "y_offset": 0.25,
+          "spread": 0.28,
+          "speed": 0.06
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "type": "knockback",
+      "target": "target",
+      "radius": 1.85,
+      "strength": 1.25,
+      "y_strength": 0.28
+    },
+    {
+      "type": "stun",
+      "target": "target",
+      "radius": 1.85,
+      "duration": 36,
+      "slowness_amplifier": 3,
+      "mining_fatigue_amplifier": 1
+    },
+    {
+      "type": "damage",
+      "target": "target",
+      "radius": 1.85,
+      "amount": 1.0,
+      "knockback": false
+    },
+    {
+      "type": "particle",
+      "target": "target",
+      "radius": 1.85,
+      "id": "minecraft:ash",
+      "count": 18,
+      "y_offset": 0.45,
+      "spread": 0.28,
+      "speed": 0.08
+    },
+    {
+      "type": "sound",
+      "target": "target",
+      "radius": 1.85,
+      "id": "minecraft:entity.generic.big_fall",
+      "category": "hostile",
+      "volume": 0.65,
+      "pitch": 1.35
+    },
+    {
+      "type": "sound",
+      "target": "target",
+      "radius": 1.85,
+      "id": "minecraft:block.gravel.break",
+      "category": "hostile",
+      "volume": 0.7,
+      "pitch": 0.85
+    }
+  ]
+}

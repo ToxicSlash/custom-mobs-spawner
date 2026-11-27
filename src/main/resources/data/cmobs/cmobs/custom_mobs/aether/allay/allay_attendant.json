@@ -1,0 +1,13 @@
+{
+  "entity": "minecraft:allay",
+  "tags": [
+    "checked",
+    "hasskill",
+    "passive_skill",
+    "allay_attendant"
+  ],
+  "skills": [
+    "cmobs:aether/allay/attendant"
+  ],
+  "nbt": "{Attributes:[{Name:\"generic.max_health\",Base:30.0f},{Name:\"generic.knockback_resistance\",Base:0.0f},{Name:\"generic.armor\",Base:10.0f}],Health:30.0f,Tags:[\"checked\",\"hasskill\",\"passive_skill\",\"allay_attendant\"],CustomName:\"{\\\"text\\\":\\\"Allay Attendant\\\"}\",Silent:0b,ArmorDropChances:[0.0f,0.0f,0.0f,0.0f]}"
+}

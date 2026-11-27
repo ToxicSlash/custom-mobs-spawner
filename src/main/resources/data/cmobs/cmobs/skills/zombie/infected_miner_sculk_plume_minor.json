@@ -1,0 +1,110 @@
+{
+  "trigger": "when_hurt",
+  "chance": 0.2,
+  "cooldown_ticks": 200,
+  "conditions": [
+    {
+      "type": "health",
+      "max": 80.0
+    }
+  ],
+  "actions": [
+    {
+      "type": "effect",
+      "id": "minecraft:wither",
+      "target": "living",
+      "radius": 5.0,
+      "exclude_tags": [
+        "sculk_mob"
+      ],
+      "exclude_entity_type": "minecraft:warden",
+      "duration": 200,
+      "amplifier": 4
+    },
+    {
+      "type": "effect",
+      "id": "minecraft:weakness",
+      "target": "living",
+      "radius": 5.0,
+      "exclude_tags": [
+        "sculk_mob"
+      ],
+      "exclude_entity_type": "minecraft:warden",
+      "duration": 200,
+      "amplifier": 0
+    },
+    {
+      "type": "effect",
+      "id": "minecraft:slowness",
+      "target": "living",
+      "radius": 5.0,
+      "exclude_tags": [
+        "sculk_mob"
+      ],
+      "exclude_entity_type": "minecraft:warden",
+      "duration": 200,
+      "amplifier": 1
+    },
+    {
+      "type": "damage",
+      "target": "players",
+      "radius": 8.0,
+      "amount": 14.0,
+      "knockback": false
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:block.sculk_shrieker.shriek",
+      "category": "hostile",
+      "volume": 1.0,
+      "pitch": 2.0
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:entity.warden.sonic_boom",
+      "category": "hostile",
+      "volume": 1.0,
+      "pitch": 1.5
+    },
+    {
+      "type": "effect",
+      "id": "minecraft:instant_damage",
+      "duration": 1,
+      "amplifier": 2
+    },
+    {
+      "type": "effect",
+      "id": "minecraft:speed",
+      "duration": 120,
+      "amplifier": 0
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:scrape",
+      "count": 100,
+      "y_offset": 1.5,
+      "spread_x": 3.0,
+      "spread_y": 1.5,
+      "spread_z": 3.0,
+      "speed": 1.0
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:sculk_soul",
+      "count": 100,
+      "y_offset": 1.0,
+      "spread_x": 2.0,
+      "spread_y": 1.0,
+      "spread_z": 2.0,
+      "speed": 0.05
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:sonic_boom",
+      "count": 5,
+      "y_offset": 1.0,
+      "spread": 1.0,
+      "speed": 0.05
+    }
+  ]
+}

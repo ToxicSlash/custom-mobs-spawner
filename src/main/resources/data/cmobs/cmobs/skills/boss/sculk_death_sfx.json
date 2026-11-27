@@ -1,0 +1,20 @@
+{
+  "trigger": "when_killed",
+  "actions": [
+    {
+      "type": "sound",
+      "id": "minecraft:entity.warden.death",
+      "category": "hostile",
+      "volume": 1,
+      "pitch": 0.7
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:sculk_soul",
+      "count": 80,
+      "y_offset": 1,
+      "spread": 2,
+      "speed": 0.03
+    }
+  ]
+}

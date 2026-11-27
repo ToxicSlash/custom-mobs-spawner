@@ -1,0 +1,20 @@
+{
+  "trigger": "when_hurt",
+  "cooldown_ticks": 10,
+  "actions": [
+    {
+      "type": "sound",
+      "id": "minecraft:entity.husk.hurt",
+      "category": "hostile",
+      "volume": 0.8,
+      "pitch": 0.6
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:entity.blaze.ambient",
+      "category": "hostile",
+      "volume": 0.3,
+      "pitch": 1.4
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "entity": "minecraft:warden",
+  "tags": [
+    "igneous_guardian",
+    "checked",
+    "passive_skill",
+    "hasskill",
+    "passive_sfx",
+    "hurtsfx",
+    "charred_mob",
+    "setMob",
+    "reduced_hit_delay"
+  ],
+  "skills": [
+    "cmobs:charred/ambient_sfx",
+    "cmobs:charred/hurt_sfx",
+    "cmobs:charred/trail"
+  ],
+  "nbt": "{Attributes:[{Name:\"generic.movement_speed\",Base:0.28f},{Name:\"generic.max_health\",Base:750.0f},{Name:\"generic.knockback_resistance\",Base:0.9f},{Name:\"generic.attack_damage\",Base:120.0f},{Name:\"generic.armor\",Base:12.0f},{Name:\"minecraft:generic.attack_knockback\",Base:7.0f},{Name:\"generic.armor\",Base:12.0f}],Tags:[\"igneous_guardian\",\"checked\",\"passive_skill\",\"hasskill\",\"passive_sfx\",\"hurtsfx\",\"charred_mob\",\"setMob\",\"reduced_hit_delay\"],Health:750.0f,CustomName:\"{\\\"text\\\":\\\"Nether Affliction\\\",\\\"color\\\":\\\"gold\\\"}\",ArmorDropChances:[0.0f,0.0f,0.0f,0.0f],HandDropChances:[0.0f,0.0f],PersistenceRequired:1b,Brain:{memories:{\"minecraft:dig_cooldown\":{value:{},ttl:1000000L}}},DeathLootTable:\"cmobs:entities/bosses/nether_affliction\"}"
+}

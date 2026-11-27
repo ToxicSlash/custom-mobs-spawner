@@ -1,0 +1,50 @@
+{
+  "trigger": "timed",
+  "interval_ticks": 80,
+  "cooldown_ticks": 400,
+  "chance": 0.5,
+  "requires_living_target": true,
+  "target_range": 28.0,
+  "actions": [
+    {
+      "type": "rally_target",
+      "selector": "mobs",
+      "tags": [
+        "lost_faction"
+      ],
+      "radius": 28.0,
+      "max_targets": 2,
+      "stop_navigation": true,
+      "allow_non_player_target": true
+    },
+    {
+      "type": "effect",
+      "id": "cmobs:vulnerable",
+      "target": "target",
+      "radius": 40.0,
+      "duration": 100,
+      "amplifier": 0
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:item.goat_horn.sound.1",
+      "category": "hostile",
+      "origin": "self",
+      "volume": 3.0,
+      "pitch": 1.35
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:angry_villager",
+      "target": "mobs",
+      "tags": [
+        "lost_faction"
+      ],
+      "radius": 28.0,
+      "count": 4,
+      "y_offset": 1.6,
+      "spread": 0.25,
+      "speed": 0.02
+    }
+  ]
+}

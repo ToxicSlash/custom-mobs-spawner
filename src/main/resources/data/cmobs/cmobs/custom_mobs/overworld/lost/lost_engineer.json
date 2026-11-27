@@ -1,0 +1,64 @@
+{
+  "entity": "repurposedend:cryingskeleton",
+  "custom_name": "Lost Engineer",
+  "custom_name_visible": true,
+  "team": "lost_faction",
+  "tags": [
+    "lost_faction",
+    "lost_engineer"
+  ],
+  "skills": [
+    "cmobs:lost/engineer_grenade"
+  ],
+  "attributes": [
+    {
+      "id": "minecraft:generic.max_health",
+      "base": 45.0
+    },
+    {
+      "id": "minecraft:generic.attack_damage",
+      "base": 8.0
+    },
+    {
+      "id": "minecraft:generic.movement_speed",
+      "base": 0.26
+    },
+    {
+      "id": "minecraft:generic.knockback_resistance",
+      "base": 0.7
+    },
+    {
+      "id": "minecraft:generic.armor",
+      "base": 2.0
+    },
+    {
+      "id": "minecraft:generic.follow_range",
+      "base": 60.0
+    }
+  ],
+  "health": 45.0,
+  "equipment": {
+    "head": {
+      "id": "knightquest:spider_helmet",
+      "count": 1
+    },
+    "chest": {
+      "id": "knightquest:spider_chestplate",
+      "count": 1
+    },
+    "legs": {
+      "id": "knightquest:deepslate_leggings",
+      "count": 1
+    },
+    "feet": {
+      "id": "knightquest:shinobi_boots",
+      "count": 1
+    },
+    "mainhand": {
+      "id": "paladins:stone_great_hammer",
+      "count": 1
+    }
+  },
+  "loot_table": "repurposedend:entities/cryingskeleton",
+  "nbt": "{CanPickUpLoot:0b,PersistenceRequired:1b,ArmorDropChances:[0.0f,0.0f,0.0f,0.0f]}"
+}

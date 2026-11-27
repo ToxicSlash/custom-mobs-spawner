@@ -1,0 +1,36 @@
+{
+  "trigger": "when_hurt",
+  "cooldown_ticks": 8,
+  "actions": [
+    {
+      "type": "sound",
+      "id": "minecraft:entity.blaze.hurt",
+      "category": "hostile",
+      "volume": 0.4,
+      "pitch": 2.0
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:entity.creeper.hurt",
+      "category": "hostile",
+      "volume": 0.5,
+      "pitch": 1.5
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:flame",
+      "count": 8,
+      "y_offset": 0.5,
+      "spread": 0.2,
+      "speed": 0.05
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:smoke",
+      "count": 4,
+      "y_offset": 0.5,
+      "spread": 0.2,
+      "speed": 0.05
+    }
+  ]
+}

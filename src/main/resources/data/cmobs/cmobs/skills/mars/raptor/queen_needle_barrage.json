@@ -1,0 +1,51 @@
+{
+  "trigger": "timed",
+  "interval_ticks": 20,
+  "cooldown_ticks": 40,
+  "target_range": 25,
+  "actions": [
+    {
+      "type": "sound",
+      "id": "minecraft:entity.spider.ambient",
+      "category": "hostile",
+      "volume": 1,
+      "pitch": 2
+    },
+    {
+      "type": "sound",
+      "id": "bosses_of_mass_destruction:missile_shoot",
+      "category": "hostile",
+      "volume": 0.5,
+      "pitch": 1.4
+    },
+    {
+      "type": "projectile",
+      "projectile_type": "minecraft:arrow",
+      "target": "target",
+      "calc_traj": true,
+      "damage": 4,
+      "speed": 1.8,
+      "divergence": 4
+    },
+    {
+      "type": "projectile",
+      "projectile_type": "minecraft:arrow",
+      "target": "target",
+      "calc_traj": true,
+      "damage": 4,
+      "speed": 1.8,
+      "divergence": 4,
+      "delay_ticks": 2
+    },
+    {
+      "type": "projectile",
+      "projectile_type": "minecraft:arrow",
+      "target": "target",
+      "calc_traj": true,
+      "damage": 4,
+      "speed": 1.8,
+      "divergence": 4,
+      "delay_ticks": 2
+    }
+  ]
+}

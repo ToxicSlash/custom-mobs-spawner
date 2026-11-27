@@ -1,0 +1,53 @@
+{
+  "entity": "minecraft:zombie",
+  "custom_name": "Molten Zombie",
+  "custom_name_visible": true,
+  "tags": [
+    "molten_zombie"
+  ],
+  "skills": [
+    "cmobs:charred/burning_aura_stance",
+    "cmobs:charred/molten_damage_reflect",
+    "cmobs:zombie/unarmed_close_range",
+    "cmobs:zombie/unarmed_kick"
+  ],
+  "attributes": [
+    {
+      "id": "minecraft:generic.max_health",
+      "base": 30.0
+    },
+    {
+      "id": "minecraft:generic.attack_damage",
+      "base": 18.0
+    },
+    {
+      "id": "minecraft:generic.movement_speed",
+      "base": 0.21
+    },
+    {
+      "id": "minecraft:generic.armor",
+      "base": 4.0
+    },
+    {
+      "id": "minecraft:generic.knockback_resistance",
+      "base": 0.35
+    }
+  ],
+  "health": 30.0,
+  "equipment": {
+    "head": {
+      "id": "minecraft:golden_helmet",
+      "count": 1
+    },
+    "chest": {
+      "id": "minecraft:chainmail_chestplate",
+      "count": 1
+    },
+    "mainhand": {
+      "id": "minecraft:blaze_rod",
+      "count": 1
+    }
+  },
+  "loot_table": "minecraft:entities/zombie",
+  "nbt": "{CanPickUpLoot:0b,PersistenceRequired:1b,Fire:32767s}"
+}

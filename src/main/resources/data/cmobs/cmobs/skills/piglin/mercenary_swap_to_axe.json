@@ -1,0 +1,41 @@
+{
+  "trigger": "timed",
+  "interval_ticks": 20,
+  "chance": 0.2,
+  "require_mainhand": "mythicmetals:palladium_sword",
+  "cooldown_ticks": 300,
+  "conditions": [
+    {
+      "type": "nearby_entity",
+      "entity_type": "minecraft:player",
+      "radius": 8.0
+    }
+  ],
+  "actions": [
+    {
+      "type": "equip",
+      "slot": "mainhand",
+      "item": {
+        "id": "berserker_rpg:netherite_berserker_axe",
+        "count": 1
+      }
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:item.armor.equip_iron",
+      "category": "hostile",
+      "volume": 1.0,
+      "pitch": 1.4
+    },
+    {
+      "type": "heal",
+      "amount": 4.0
+    },
+    {
+      "type": "effect",
+      "id": "minecraft:slowness",
+      "duration": 6000,
+      "amplifier": 0
+    }
+  ]
+}

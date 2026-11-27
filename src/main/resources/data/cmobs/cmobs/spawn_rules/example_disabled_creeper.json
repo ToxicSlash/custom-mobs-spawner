@@ -1,0 +1,24 @@
+{
+  "custom_mob": "cmobs:debug/creeper/debug_creeper",
+  "dimensions": [
+    "minecraft:overworld"
+  ],
+  "biomes": [
+    "minecraft:plains"
+  ],
+  "min_light": 0,
+  "max_light": 15,
+  "blocks": [
+    "minecraft:grass_block"
+  ],
+  "extra_spawn": true,
+  "interval_ticks": 20,
+  "attempts_per_player": 2,
+  "chance": 0.0,
+  "min_distance": 24,
+  "max_distance": 48,
+  "spawn_group": "monster",
+  "group_mob_cap": 70,
+  "mob_cap": 4,
+  "obey_do_mob_spawning": true
+}

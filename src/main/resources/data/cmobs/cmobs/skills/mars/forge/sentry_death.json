@@ -1,0 +1,12 @@
+{
+  "trigger": "when_killed",
+  "actions": [
+    {
+      "type": "sound",
+      "id": "kubejs:robotdeath",
+      "category": "hostile",
+      "volume": 0.5,
+      "pitch": 1.5
+    }
+  ]
+}

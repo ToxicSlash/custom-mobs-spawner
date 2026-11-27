@@ -1,0 +1,217 @@
+{
+  "trigger": "when_attacks",
+  "chance": 1,
+  "requires_living_target": true,
+  "require_mainhand": "#cmobs:claymores",
+  "trigger_range": 6,
+  "cooldown_on_start": false,
+  "global_cooldown_ticks": 0,
+  "cooldown_ticks": 2,
+  "actions": [
+    {
+      "type": "effect",
+      "id": "cmobs:momentum",
+      "target": "self",
+      "duration": 80,
+      "amplifier": 0,
+      "stack": true,
+      "amplifier_increment": 1,
+      "max_amplifier": 9,
+      "stack_duration": true,
+      "duration_increment": 40,
+      "max_duration": 100
+    },
+    {
+      "type": "sound",
+      "id": "bettercombat:claymore_slam",
+      "category": "players",
+      "volume": 0.4,
+      "pitch": 1.2,
+      "conditions": [
+        {
+          "type": "effect",
+          "id": "cmobs:momentum",
+          "min_level": 3,
+          "max_level": 4
+        }
+      ]
+    },
+    {
+      "type": "sound",
+      "id": "bettercombat:claymore_slam",
+      "category": "players",
+      "volume": 0.5,
+      "pitch": 1.4,
+      "conditions": [
+        {
+          "type": "effect",
+          "id": "cmobs:momentum",
+          "min_level": 5,
+          "max_level": 6
+        }
+      ]
+    },
+    {
+      "type": "sound",
+      "id": "bettercombat:claymore_slam",
+      "category": "players",
+      "volume": 0.6,
+      "pitch": 1.6,
+      "conditions": [
+        {
+          "type": "effect",
+          "id": "cmobs:momentum",
+          "min_level": 7,
+          "max_level": 8
+        }
+      ]
+    },
+    {
+      "type": "sound",
+      "id": "bettercombat:claymore_slam",
+      "category": "players",
+      "volume": 0.8,
+      "pitch": 1.9,
+      "conditions": [
+        {
+          "type": "effect",
+          "id": "cmobs:momentum",
+          "min_level": 9,
+          "max_level": 10
+        }
+      ]
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:sweep_attack",
+      "count": 1,
+      "y_offset": 0.95,
+      "spread": 0.02,
+      "speed": 0,
+      "forward_offset": 1,
+      "conditions": [
+        {
+          "type": "effect",
+          "id": "cmobs:momentum",
+          "min_level": 3,
+          "max_level": 5
+        }
+      ],
+      "arc": {
+        "points": 3,
+        "count_per_point": 1,
+        "radius": 1.5,
+        "start_degrees": -30,
+        "end_degrees": 30,
+        "y_offset": 0.7,
+        "end_y_offset": 0.95,
+        "spread": 0.02,
+        "speed": 0
+      }
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:sweep_attack",
+      "count": 1,
+      "y_offset": 0.95,
+      "spread": 0.02,
+      "speed": 0,
+      "forward_offset": 1,
+      "conditions": [
+        {
+          "type": "effect",
+          "id": "cmobs:momentum",
+          "min_level": 6,
+          "max_level": 10
+        }
+      ],
+      "arc": {
+        "points": 5,
+        "count_per_point": 1,
+        "radius": 2.5,
+        "start_degrees": -50,
+        "end_degrees": 50,
+        "y_offset": 0.7,
+        "end_y_offset": 1.15,
+        "spread": 0.02,
+        "speed": 0
+      }
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:scrape",
+      "count": 1,
+      "y_offset": 0.95,
+      "spread": 0.02,
+      "speed": 0,
+      "forward_offset": 1,
+      "conditions": [
+        {
+          "type": "effect",
+          "id": "cmobs:momentum",
+          "min_level": 9,
+          "max_level": 10
+        }
+      ],
+      "arc": {
+        "points": 8,
+        "count_per_point": 1,
+        "radius": 2.5,
+        "start_degrees": -50,
+        "end_degrees": 50,
+        "y_offset": 0.7,
+        "end_y_offset": 1.15,
+        "spread": 0.05,
+        "speed": 0.05
+      }
+    },
+    {
+      "type": "knockback",
+      "target": "mobs",
+      "radius": 2,
+      "forward_offset": 1.25,
+      "strength": 0.12,
+      "y_strength": 0.03,
+      "conditions": [
+        {
+          "type": "effect",
+          "id": "cmobs:momentum",
+          "min_level": 3,
+          "max_level": 5
+        }
+      ]
+    },
+    {
+      "type": "knockback",
+      "target": "mobs",
+      "radius": 2.6,
+      "forward_offset": 1.55,
+      "strength": 0.18,
+      "y_strength": 0.04,
+      "conditions": [
+        {
+          "type": "effect",
+          "id": "cmobs:momentum",
+          "min_level": 6,
+          "max_level": 8
+        }
+      ]
+    },
+    {
+      "type": "knockback",
+      "target": "mobs",
+      "radius": 3,
+      "forward_offset": 1.8,
+      "strength": 0.24,
+      "y_strength": 0.05,
+      "conditions": [
+        {
+          "type": "effect",
+          "id": "cmobs:momentum",
+          "min_level": 9,
+          "max_level": 10
+        }
+      ]
+    }
+  ]
+}

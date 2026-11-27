@@ -1,0 +1,82 @@
+{
+  "school": "LIGHTNING",
+  "range": 8,
+  "learn": {
+    "tier": 1
+  },
+  "cast": {
+    "duration": 0
+  },
+  "release": {
+    "target": {
+      "type": "BEAM",
+      "beam": {
+        "color_rgba": 2684418815,
+        "width": 0.07,
+        "flow": 2.0,
+        "block_hit_particles": [
+          {
+            "particle_id": "spell_engine:electric_arc_a",
+            "shape": "CIRCLE",
+            "rotation": "LOOK",
+            "origin": "CENTER",
+            "count": 1,
+            "min_speed": 0.02,
+            "max_speed": 0.08
+          },
+          {
+            "particle_id": "spell_engine:white_spark_mini",
+            "shape": "CIRCLE",
+            "rotation": "LOOK",
+            "origin": "CENTER",
+            "count": 1,
+            "min_speed": 0.04,
+            "max_speed": 0.12
+          }
+        ]
+      }
+    },
+    "sound": {
+      "id": "minecraft:block.amethyst_block.chime"
+    }
+  },
+  "impact": [
+    {
+      "action": {
+        "type": "DAMAGE",
+        "damage": {
+          "spell_power_coefficient": 0.7
+        }
+      },
+      "particles": [
+        {
+          "particle_id": "spell_engine:white_spark_mini",
+          "shape": "SPHERE",
+          "origin": "CENTER",
+          "count": 8,
+          "min_speed": 0.06,
+          "max_speed": 0.16
+        },
+        {
+          "particle_id": "firework",
+          "shape": "SPHERE",
+          "origin": "CENTER",
+          "count": 2,
+          "min_speed": 0.04,
+          "max_speed": 0.12
+        }
+      ],
+      "sound": {
+        "id": "minecraft:entity.bee.hurt",
+        "volume": 0.6,
+        "pitch": 0.7
+      }
+    }
+  ],
+  "cost": {
+    "item_id": "rpgmana:mana",
+    "rpgmana": 0,
+    "exhaust": 0,
+    "cooldown_duration": 0
+  }
+}

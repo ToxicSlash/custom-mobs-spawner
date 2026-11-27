@@ -1,0 +1,84 @@
+{
+  "trigger": "timed",
+  "interval_ticks": 1,
+  "cooldown_on_start": true,
+  "cooldown_ticks": 100000,
+  "actions": [
+    {
+      "type": "particle",
+      "id": "minecraft:end_rod",
+      "count": 60,
+      "spread": 3,
+      "speed": 0.02
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:entity.warden.tendril_clicks",
+      "category": "hostile",
+      "volume": 0.7,
+      "pitch": 0.7
+    },
+    {
+      "type": "delay",
+      "ticks": 80
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:entity.warden.tendril_clicks",
+      "category": "hostile",
+      "volume": 0.7,
+      "pitch": 0.8
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:portal",
+      "count": 30,
+      "spread": 1,
+      "speed": 0.3
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:block.beacon.activate",
+      "category": "hostile",
+      "volume": 1,
+      "pitch": 0.7
+    },
+    {
+      "type": "delay",
+      "ticks": 80
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:entity.warden.sonic_boom",
+      "category": "hostile",
+      "volume": 0.8,
+      "pitch": 0.6
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:block.end_portal.spawn",
+      "category": "hostile",
+      "volume": 1.5,
+      "pitch": 0.4
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:flash",
+      "count": 3,
+      "speed": 1
+    },
+    {
+      "type": "explosion",
+      "power": 5,
+      "create_fire": false,
+      "break_blocks": false
+    },
+    {
+      "type": "summon_custom_mob",
+      "custom_mob": "cmobs:end/sculk/sculk_anomaly"
+    },
+    {
+      "type": "discard"
+    }
+  ]
+}

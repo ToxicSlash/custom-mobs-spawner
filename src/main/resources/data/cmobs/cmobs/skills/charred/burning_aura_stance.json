@@ -1,0 +1,69 @@
+{
+  "trigger": "timed",
+  "interval_ticks": 20,
+  "chance": 0.35,
+  "global_cooldown_ticks": 40,
+  "cooldown_ticks": 160,
+  "stance": {
+    "parry": false,
+    "target_range": 6.0,
+    "duration_ticks": 80,
+    "tick_interval_ticks": 1,
+    "enter_stance": [
+      {
+        "type": "particle",
+        "id": "minecraft:flame",
+        "count": 18,
+        "y_offset": 1.0,
+        "spread": 0.45,
+        "speed": 0.05
+      },
+      {
+        "type": "sound",
+        "id": "minecraft:item.firecharge.use",
+        "category": "hostile",
+        "volume": 0.9,
+        "pitch": 0.8
+      }
+    ],
+    "stance_tick": [
+      {
+        "type": "damage",
+        "amount": 2.0,
+        "radius": 3.0,
+        "target": "players",
+        "knockback": false,
+        "fire_ticks": 80,
+        "interval_ticks": 10
+      },
+      {
+        "type": "particle",
+        "id": "minecraft:flame",
+        "count": 8,
+        "y_offset": 1.0,
+        "spread": 0.35,
+        "speed": 0.02,
+        "interval_ticks": 10
+      },
+      {
+        "type": "effect",
+        "id": "minecraft:slowness",
+        "duration": 30,
+        "amplifier": 0,
+        "target": "players",
+        "radius": 3.0,
+        "interval_ticks": 10
+      }
+    ],
+    "stance_end": [
+      {
+        "type": "particle",
+        "id": "minecraft:smoke",
+        "count": 12,
+        "y_offset": 1.0,
+        "spread": 0.4,
+        "speed": 0.03
+      }
+    ]
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "trigger": "when_hurt",
+  "cooldown_ticks": 10,
+  "actions": [
+    {
+      "type": "sound",
+      "id": "minecraft:entity.blaze.ambient",
+      "category": "hostile",
+      "volume": 0.3,
+      "pitch": 2
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:entity.wither.hurt",
+      "category": "hostile",
+      "volume": 0.1,
+      "pitch": 2
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:soul",
+      "count": 5,
+      "y_offset": 1,
+      "spread": 0.3
+    }
+  ]
+}

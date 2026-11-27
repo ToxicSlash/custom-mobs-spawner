@@ -1,0 +1,81 @@
+{
+  "trigger": "when_hurt",
+  "chance": 0.5,
+  "cooldown_ticks": 600,
+  "conditions": [
+    {
+      "type": "health",
+      "max": 50.0
+    }
+  ],
+  "actions": [
+    {
+      "type": "sound",
+      "id": "minecraft:entity.zombie.ambient",
+      "category": "hostile",
+      "volume": 1.0,
+      "pitch": 0.3
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:entity.zombie.death",
+      "category": "hostile",
+      "volume": 1.0,
+      "pitch": 0.4
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:entity.zombie.attack_wooden_door",
+      "category": "hostile",
+      "volume": 0.5,
+      "pitch": 1.2
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:entity.zombie.break_wooden_door",
+      "category": "hostile",
+      "volume": 0.5,
+      "pitch": 0.8
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:happy_villager",
+      "count": 80,
+      "y_offset": 1.0,
+      "spread_x": 2.0,
+      "spread_y": 1.0,
+      "spread_z": 2.0,
+      "speed": 0.05
+    },
+    {
+      "type": "effect",
+      "id": "minecraft:resistance",
+      "target": "mobs",
+      "entity_type": "minecraft:zombie",
+      "radius": 10.0,
+      "duration": 160,
+      "amplifier": 1
+    },
+    {
+      "type": "effect",
+      "id": "minecraft:absorption",
+      "target": "mobs",
+      "entity_type": "minecraft:zombie",
+      "radius": 10.0,
+      "duration": 400,
+      "amplifier": 1
+    },
+    {
+      "type": "summon_custom_mob",
+      "custom_mob": "cmobs:overworld/zombie/zombie_knight",
+      "side_offset": 2.5,
+      "target_owner_target": true
+    },
+    {
+      "type": "summon_custom_mob",
+      "custom_mob": "cmobs:overworld/zombie/zombie_knight",
+      "side_offset": -2.5,
+      "target_owner_target": true
+    }
+  ]
+}

@@ -1,0 +1,271 @@
+{
+  "description": "Lost Knight advancing shield stance. Pushes players from an area in front, pressures posture, and regenerates Lost faction mobs in an area behind the knight.",
+  "trigger": "timed",
+  "interval_ticks": 40,
+  "chance": 0.3,
+  "requires_living_target": true,
+  "trigger_range": 16.0,
+  "global_cooldown_ticks": 220,
+  "cooldown_ticks": 260,
+  "stance": {
+    "parry": false,
+    "target_range": 12.0,
+    "duration_ticks": 200,
+    "tick_interval_ticks": 1,
+    "enter_stance": [
+      {
+        "type": "effect",
+        "id": "minecraft:glowing",
+        "duration": 200,
+        "amplifier": 0
+      },
+      {
+        "type": "effect",
+        "id": "minecraft:resistance",
+        "duration": 200,
+        "amplifier": 2
+      },
+      {
+        "type": "effect",
+        "id": "cmobs:turning_slow",
+        "duration": 205,
+        "amplifier": 2
+      },
+      {
+        "type": "sound",
+        "id": "minecraft:item.shield.block",
+        "category": "hostile",
+        "volume": 0.9,
+        "pitch": 0.75
+      }
+    ],
+    "stance_tick": [
+      {
+        "type": "particle",
+        "id": "minecraft:glow",
+        "count": 6,
+        "y_offset": 0.9,
+        "spread": 0.38,
+        "speed": 0.02,
+        "interval_ticks": 4
+      },
+      {
+        "type": "particle",
+        "id": "minecraft:scrape",
+        "y_offset": 0.08,
+        "spread": 0.02,
+        "speed": 0.025,
+        "interval_ticks": 4,
+        "arc": {
+          "points": 20,
+          "count_per_point": 1,
+          "radius": 5,
+          "start_degrees": -70.0,
+          "end_degrees": 70.0,
+          "y_offset": 0.08,
+          "spread": 0.015,
+          "speed": 0.025
+        }
+      },
+      {
+        "type": "particle",
+        "id": "minecraft:witch",
+        "y_offset": 0.08,
+        "spread": 0.5,
+        "speed": 0.03,
+        "interval_ticks": 4,
+        "arc": {
+          "points": 10,
+          "count_per_point": 2,
+          "radius": 3,
+          "start_degrees": -260.0,
+          "end_degrees": -100.0,
+          "y_offset": 0.08,
+          "spread": 0.015,
+          "speed": 0.025
+        }
+      },
+      {
+        "type": "particle",
+        "id": "minecraft:witch",
+        "count": 11,
+        "y_offset": 0.08,
+        "spread": 0.02,
+        "speed": 0.025,
+        "interval_ticks": 4,
+        "arc": {
+          "points": 5,
+          "count_per_point": 1,
+          "radius": 1.25,
+          "start_degrees": -45.0,
+          "end_degrees": 45.0,
+          "y_offset": 1,
+          "spread": 0.015,
+          "speed": 0.025
+        }
+      },
+      {
+        "type": "particle",
+        "id": "minecraft:witch",
+        "count": 11,
+        "y_offset": 0.08,
+        "spread": 0.02,
+        "speed": 0.025,
+        "interval_ticks": 4,
+        "arc": {
+          "points": 5,
+          "count_per_point": 1,
+          "radius": 1.25,
+          "start_degrees": -45.0,
+          "end_degrees": 45.0,
+          "y_offset": 1.5,
+          "spread": 0.015,
+          "speed": 0.025
+        }
+      },
+      {
+        "type": "particle",
+        "id": "minecraft:witch",
+        "count": 11,
+        "y_offset": 0.08,
+        "spread": 0.02,
+        "speed": 0.025,
+        "interval_ticks": 4,
+        "arc": {
+          "points": 5,
+          "count_per_point": 1,
+          "radius": 1.25,
+          "start_degrees": -45.0,
+          "end_degrees": 45.0,
+          "y_offset": 2,
+          "spread": 0.015,
+          "speed": 0.025
+        }
+      },
+      {
+        "type": "sound",
+        "id": "minecraft:entity.zombie.attack_iron_door",
+        "category": "hostile",
+        "volume": 0.75,
+        "pitch": 1.2,
+        "origin": "owner",
+        "target": "living",
+        "exclude_tags": [
+          "lost_faction"
+        ],
+        "forward_offset": 3,
+        "radius": 3,
+        "interval_ticks": 10
+      },
+      {
+        "type": "sound",
+        "id": "minecraft:entity.ravager.hurt",
+        "category": "hostile",
+        "volume": 0.75,
+        "pitch": 1.7,
+        "origin": "owner",
+        "target": "living",
+        "exclude_tags": [
+          "lost_faction"
+        ],
+        "forward_offset": 3,
+        "radius": 3,
+        "interval_ticks": 10
+      },
+      {
+        "type": "particle",
+        "id": "minecraft:explosion",
+        "count": 1,
+        "target": "living",
+        "exclude_tags": [
+          "lost_faction"
+        ],
+        "y_offset": 1,
+        "spread": 0.1,
+        "speed": 0.02,
+        "radius_forward_offset": 3,
+        "radius": 3,
+        "interval_ticks": 10
+      },
+      {
+        "type": "knockback",
+        "target": "living",
+        "exclude_tags": [
+          "lost_faction"
+        ],
+        "radius_forward_offset": 3,
+        "radius": 3,
+        "strength": 0.7,
+        "y_strength": 0.5,
+        "interval_ticks": 10
+      },
+      {
+        "type": "sound",
+        "id": "minecraft:entity.warden.attack_impact",
+        "category": "hostile",
+        "volume": 1,
+        "pitch": 0.8,
+        "origin": "owner",
+        "target": "living",
+        "exclude_tags": [
+          "lost_faction"
+        ],
+        "radius": 10,
+        "interval_ticks": 20
+      },
+      {
+        "type": "effect",
+        "id": "cmobs:vulnerable",
+        "target": "living",
+        "exclude_tags": [
+          "lost_faction"
+        ],
+        "radius_forward_offset": 3,
+        "radius": 3,
+        "duration": 25,
+        "amplifier": 0,
+        "interval_ticks": 10
+      },
+      {
+        "type": "posture_damage",
+        "target": "living",
+        "exclude_tags": [
+          "lost_faction"
+        ],
+        "radius_forward_offset": 3,
+        "radius": 3,
+        "amount": 60.0,
+        "blockable": false,
+        "bypass_posture_invulnerability": true,
+        "interval_ticks": 10
+      },
+      {
+        "type": "effect",
+        "id": "minecraft:regeneration",
+        "target": "mobs",
+        "tags": [
+          "lost_faction"
+        ],
+        "forward_offset": -3,
+        "radius": 2.4,
+        "duration": 40,
+        "amplifier": 0,
+        "interval_ticks": 10
+      }
+    ],
+    "stance_end": [
+      {
+        "type": "effect_clear",
+        "id": "minecraft:glowing"
+      },
+      {
+        "type": "particle",
+        "id": "minecraft:smoke",
+        "count": 10,
+        "y_offset": 0.9,
+        "spread": 0.35,
+        "speed": 0.025
+      }
+    ]
+  }
+}

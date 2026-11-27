@@ -1,0 +1,86 @@
+{
+  "members": [
+    {
+      "custom_mob": "cmobs:mars/raptor/raptorling"
+    },
+    {
+      "custom_mob": "cmobs:mars/raptor/raptorling",
+      "x": 0.4,
+      "z": 0.2
+    }
+  ],
+  "pools": [
+    {
+      "chance": 0.3,
+      "x": 0.5,
+      "y": 0,
+      "z": 0,
+      "entries": [
+        {
+          "custom_mob": "cmobs:mars/raptor/diseased_raptor",
+          "weight": 1
+        },
+        {
+          "custom_mob": "cmobs:mars/raptor/raptor_soldier",
+          "weight": 3
+        },
+        {
+          "entity": "ad_astra:martian_raptor",
+          "weight": 4
+        },
+        {
+          "custom_mob": "cmobs:mars/raptor/raptor_sentry",
+          "weight": 2
+        }
+      ]
+    },
+    {
+      "chance": 0.3,
+      "x": -0.5,
+      "y": 0,
+      "z": 0,
+      "entries": [
+        {
+          "custom_mob": "cmobs:mars/raptor/diseased_raptor",
+          "weight": 1
+        },
+        {
+          "custom_mob": "cmobs:mars/raptor/raptor_soldier",
+          "weight": 3
+        },
+        {
+          "entity": "ad_astra:martian_raptor",
+          "weight": 4
+        },
+        {
+          "custom_mob": "cmobs:mars/raptor/raptor_sentry",
+          "weight": 2
+        }
+      ]
+    },
+    {
+      "chance": 0.3,
+      "x": 0,
+      "y": 0,
+      "z": 0.5,
+      "entries": [
+        {
+          "custom_mob": "cmobs:mars/raptor/diseased_raptor",
+          "weight": 1
+        },
+        {
+          "custom_mob": "cmobs:mars/raptor/raptor_soldier",
+          "weight": 3
+        },
+        {
+          "entity": "ad_astra:martian_raptor",
+          "weight": 4
+        },
+        {
+          "custom_mob": "cmobs:mars/raptor/raptor_sentry",
+          "weight": 2
+        }
+      ]
+    }
+  ]
+}

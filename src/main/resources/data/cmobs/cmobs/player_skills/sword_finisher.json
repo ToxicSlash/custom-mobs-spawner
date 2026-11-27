@@ -1,0 +1,208 @@
+{
+  "trigger": "when_spell_cast",
+  "spell": "cmobs:sword_finisher",
+  "chance": 1,
+  "require_mainhand": "#cmobs:swords",
+  "cooldown_on_start": true,
+  "global_cooldown_ticks": 0,
+  "cooldown_ticks": 0,
+  "lock_telegraph_direction": false,
+  "body_direction": "rotation",
+  "telegraph": [
+    {
+      "delay_ticks": 0,
+      "actions": [
+        {
+          "type": "effect_clear",
+          "id": "cmobs:flow",
+          "target": "self"
+        },
+        {
+          "type": "clear_combo"
+        },
+        {
+          "type": "attack_cooldown",
+          "ticks": 20
+        },
+        {
+          "type": "sound",
+          "id": "minecraft:block.grindstone.use",
+          "category": "players",
+          "volume": 0.8,
+          "pitch": 0.55
+        },
+        {
+          "type": "particle",
+          "id": "minecraft:scrape",
+          "count": 14,
+          "y_offset": 0.9,
+          "spread": 0.28,
+          "speed": 0.02
+        }
+      ]
+    },
+    {
+      "delay_ticks": 5,
+      "actions": [
+        {
+          "type": "swing",
+          "hand": "two_handed",
+          "better_combat": true,
+          "animation": "bettercombat:two_handed_slash_vertical_right",
+          "length": 20,
+          "upswing": 0.55
+        }
+      ]
+    },
+    {
+      "delay_ticks": 2,
+      "actions": [
+        {
+          "type": "lunge",
+          "direction": "rotation",
+          "strength": 0.58,
+          "y_strength": 0.06
+        }
+      ]
+    },
+    {
+      "delay_ticks": 3,
+      "actions": [
+        {
+          "type": "sound",
+          "id": "minecraft:entity.player.attack.sweep",
+          "category": "players",
+          "volume": 1.15,
+          "pitch": 0.55
+        },
+        {
+          "type": "sound",
+          "id": "minecraft:entity.lightning_bolt.thunder",
+          "category": "players",
+          "volume": 0.2,
+          "pitch": 1.65,
+          "conditions": [
+            {
+              "type": "combo",
+              "min": 10
+            }
+          ]
+        },
+        {
+          "type": "particle",
+          "id": "minecraft:sweep_attack",
+          "count": 1,
+          "y_offset": 1,
+          "spread": 0.02,
+          "speed": 0,
+          "arc": {
+            "points": 1,
+            "count_per_point": 1,
+            "radius": 1.55,
+            "forward_offset": 0,
+            "start_degrees": 0,
+            "end_degrees": 0,
+            "y_offset": 1.4,
+            "end_y_offset": 1.4,
+            "spread": 0.02,
+            "speed": 0
+          }
+        },
+        {
+          "type": "sound",
+          "id": "minecraft:item.trident.throw",
+          "category": "players",
+          "volume": 0.75,
+          "pitch": 0.65
+        },
+        {
+          "type": "particle",
+          "id": "minecraft:end_rod",
+          "count": 1,
+          "y_offset": 1,
+          "spread": 0.04,
+          "speed": 0.08,
+          "arc": {
+            "points": 9,
+            "count_per_point": 2,
+            "radius": 1.55,
+            "forward_offset": 0,
+            "start_degrees": 24,
+            "end_degrees": -18,
+            "y_offset": 3.15,
+            "end_y_offset": 0.45,
+            "spread": 0.03,
+            "speed": 0
+          }
+        },
+        {
+          "type": "particle",
+          "id": "minecraft:crit",
+          "count": 24,
+          "y_offset": 1.35,
+          "spread": 0.45,
+          "speed": 0.08
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "type": "damage",
+      "target": "mobs",
+      "radius": 3.6,
+      "forward_offset": 2.6,
+      "use_attack_damage": true,
+      "damage_scale": 3.6,
+      "bypass_invulnerability": true,
+      "knockback": false,
+      "combo_scale": 0.05
+    },
+    {
+      "type": "posture_damage",
+      "target": "mobs",
+      "radius": 3.4,
+      "forward_offset": 2.6,
+      "amount": 70,
+      "stagger_on_break": true
+    },
+    {
+      "type": "knockback",
+      "target": "mobs",
+      "radius": 3.4,
+      "forward_offset": 2.6,
+      "strength": 0.75,
+      "y_strength": 0.18
+    },
+    {
+      "type": "effect",
+      "id": "cmobs:vulnerable",
+      "target": "mobs",
+      "radius": 3.4,
+      "forward_offset": 2.6,
+      "duration": 80,
+      "amplifier": 1
+    },
+    {
+      "type": "particle",
+      "target": "mobs",
+      "radius": 3.4,
+      "forward_offset": 2.6,
+      "id": "minecraft:enchanted_hit",
+      "count": 28,
+      "y_offset": 1,
+      "spread": 0.6,
+      "speed": 0.1
+    },
+    {
+      "type": "sound",
+      "target": "mobs",
+      "radius": 3.4,
+      "forward_offset": 2.6,
+      "id": "minecraft:entity.player.attack.crit",
+      "category": "players",
+      "volume": 1,
+      "pitch": 0.75
+    }
+  ]
+}

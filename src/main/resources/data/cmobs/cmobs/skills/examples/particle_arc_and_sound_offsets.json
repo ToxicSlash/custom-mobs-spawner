@@ -1,0 +1,85 @@
+{
+  "description": "Example: particle actions, particle arcs, sound offsets, and absolute positions. Not attached to any mob.",
+  "trigger": "timed",
+  "interval_ticks": 20,
+  "chance": 1.0,
+  "requires_living_target": true,
+  "trigger_range": 10.0,
+  "cooldown_ticks": 80,
+  "actions": [
+    {
+      "type": "particle",
+      "id": "minecraft:scrape",
+      "count": 16,
+      "y_offset": 0.8,
+      "spread": 0.05,
+      "speed": 0.03,
+      "forward_offset": 1.5,
+      "side_offset": 0.0,
+      "vertical_offset": 0.2
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:crit",
+      "count": 20,
+      "y_offset": 1.0,
+      "spread": 0.12,
+      "speed": 0.08,
+      "arc": {
+        "points": 12,
+        "count_per_point": 2,
+        "radius": 2.5,
+        "start_degrees": -90.0,
+        "end_degrees": 90.0,
+        "y_offset": 1.0,
+        "end_y_offset": 1.0,
+        "forward_offset": 0.0,
+        "side_offset": 0.0,
+        "spread": 0.08,
+        "speed": 0.06
+      }
+    },
+    {
+      "type": "particle",
+      "id": "minecraft:witch",
+      "count": 20,
+      "y_offset": 0.2,
+      "spread": 0.02,
+      "speed": 0.02,
+      "arc": {
+        "points": 24,
+        "count_per_point": 1,
+        "radius": 3.0,
+        "start_degrees": -180.0,
+        "end_degrees": 180.0,
+        "y_offset": 0.2,
+        "end_y_offset": 0.2,
+        "forward_offset": 0.0,
+        "side_offset": 0.0,
+        "spread": 0.02,
+        "speed": 0.02
+      }
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:block.anvil.land",
+      "category": "hostile",
+      "volume": 0.7,
+      "pitch": 1.2,
+      "forward_offset": 2.0,
+      "side_offset": 0.0,
+      "vertical_offset": 0.0
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:block.amethyst_block.chime",
+      "category": "hostile",
+      "volume": 0.5,
+      "pitch": 1.6,
+      "x": 0.0,
+      "y": 80.0,
+      "z": 0.0,
+      "vertical_offset": 0.0
+    }
+  ]
+}

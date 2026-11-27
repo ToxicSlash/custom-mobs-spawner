@@ -1,0 +1,18 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:crossbow",
+    {
+      "id": "#c:crossbows",
+      "required": false
+    },
+    {
+      "id": "#fabric:crossbows",
+      "required": false
+    },
+    {
+      "id": "#archers:crossbows",
+      "required": false
+    }
+  ]
+}

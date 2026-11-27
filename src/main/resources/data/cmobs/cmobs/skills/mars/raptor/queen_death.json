@@ -1,0 +1,19 @@
+{
+  "trigger": "when_killed",
+  "actions": [
+    {
+      "type": "sound",
+      "id": "minecraft:entity.spider.death",
+      "category": "hostile",
+      "volume": 1,
+      "pitch": 1.5
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:entity.bee.death",
+      "category": "hostile",
+      "volume": 1,
+      "pitch": 0.8
+    }
+  ]
+}

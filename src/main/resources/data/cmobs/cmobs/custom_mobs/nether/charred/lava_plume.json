@@ -1,0 +1,12 @@
+{
+  "entity": "minecraft:armor_stand",
+  "tags": [
+    "anim_stand",
+    "lava_plume_stand",
+    "passive_anim"
+  ],
+  "skills": [
+    "cmobs:charred/lava_plume"
+  ],
+  "nbt": "{Invulnerable:1b,NoGravity:1b,Invisible:1b,DisabledSlots:2039583,Small:1b,Silent:1b}"
+}

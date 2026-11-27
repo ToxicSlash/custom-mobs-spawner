@@ -1,0 +1,49 @@
+{
+  "members": [
+    {
+      "custom_mob": "cmobs:mars/enderman/martian_enderman"
+    },
+    {
+      "custom_mob": "cmobs:mars/enderman/martian_enderman",
+      "x": 1
+    }
+  ],
+  "pools": [
+    {
+      "chance": 0.5,
+      "x": -1,
+      "y": 0,
+      "z": 0,
+      "entries": [
+        {
+          "custom_mob": "cmobs:mars/enderman/martian_enderman",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "chance": 0.5,
+      "x": 0,
+      "y": 0,
+      "z": 1,
+      "entries": [
+        {
+          "custom_mob": "cmobs:mars/enderman/martian_enderman",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "chance": 0.2,
+      "x": 0,
+      "y": 0,
+      "z": -1,
+      "entries": [
+        {
+          "custom_mob": "cmobs:mars/enderman/martian_enderman_elder",
+          "weight": 1
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "description": "Example: when_hurt trigger using source-aware actions like target_attacker, dodge, and reflect_damage.",
+  "trigger": "when_hurt",
+  "chance": 1.0,
+  "cooldown_ticks": 100,
+  "target_attacker": true,
+  "dodge": {
+    "distance": 1.4,
+    "forward_distance": 0.35,
+    "pathfind_speed": 1.2
+  },
+  "actions": [
+    {
+      "type": "reflect_damage",
+      "multiplier": 0.35,
+      "knockback": true
+    },
+    {
+      "type": "effect",
+      "id": "minecraft:resistance",
+      "duration": 60,
+      "amplifier": 0
+    },
+    {
+      "type": "effect_clear",
+      "id": "minecraft:slowness"
+    },
+    {
+      "type": "sound",
+      "id": "minecraft:item.shield.block",
+      "category": "hostile",
+      "volume": 0.8,
+      "pitch": 0.9
+    }
+  ]
+}

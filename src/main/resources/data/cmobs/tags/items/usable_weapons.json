@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    "#c:swords",
+    "#paladins:claymores",
+    "#wizards:wands",
+    "#wizards:staves",
+    "#rpg_series:daggers",
+    "#rpg_series:sickles",
+    "#rpg_series:glaives",
+    "#rpg_series:double_axes"
+  ]
+}
