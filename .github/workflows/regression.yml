@@ -11,11 +11,11 @@ on:
         default: full
 permissions:
   contents: read
-concurrency:
-  group: cmobs-dev-${{ github.ref }}
-  cancel-in-progress: false
 jobs:
   background:
+    concurrency:
+      group: cmobs-background-${{ github.ref }}
+      cancel-in-progress: false
     needs: visual
     outputs:
       build_ok: ${{ steps.build.outcome }}
@@ -102,6 +102,9 @@ jobs:
             build/libs/*.jar
           if-no-files-found: warn
   visual:
+    concurrency:
+      group: cmobs-desktop-${{ github.ref }}
+      cancel-in-progress: false
     runs-on: [self-hosted, Windows, "${{ vars.ADADV_VISUAL_RUNNER_LABEL || 'visual-test' }}"]
     timeout-minutes: 20
     permissions:
@@ -175,6 +178,9 @@ jobs:
           if-no-files-found: error
 
   client:
+    concurrency:
+      group: cmobs-desktop-${{ github.ref }}
+      cancel-in-progress: false
     needs: [visual, background]
     if: ${{ !cancelled() && inputs.suite != 'build' && needs.background.outputs.build_ok == 'success' }}
     runs-on: [self-hosted, Windows, "${{ vars.ADADV_VISUAL_RUNNER_LABEL || 'visual-test' }}"]
