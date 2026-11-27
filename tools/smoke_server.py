@@ -8,11 +8,13 @@ import re
 import shutil
 import subprocess
 import tempfile
+import sys
 import threading
 import time
 import urllib.request
 import zipfile
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 from prepare_ci import ROOT, OUT, discover, metadata, sha
 
 def choose(paths, label):
@@ -50,6 +52,12 @@ def resolve():
         choices = [p for p, m in candidates if mid == m.get("id") or mid in m.get("provides", [])]
         if not choices:
             choices = [p for p, m in candidates if m.get("jars") and mid in provided(p)]
+        # The installed pack runtime is authoritative for compatibility; compile-only
+        # Botania 453 may differ from the desktop runtime 455.
+        if mid == "botania":
+            desktop = [p for p in choices if p.parent == ROOT / "ci-desktop/jars"]
+            if desktop:
+                choices = desktop
         jar = choose(choices, mid)
         chosen.append(jar)
         ids.update(provided(jar))
