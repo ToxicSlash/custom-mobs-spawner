@@ -25,18 +25,57 @@ def metadata(path):
 
 def discover():
     configured = os.environ.get("CMOBS_MOD_SOURCE", "").strip()
+    override = os.environ.get("ADADV_CURSEFORGE_INSTANCE", "").strip()
     roots = [Path(configured)] if configured else []
-    for home in {Path.home(), Path(os.environ.get("USERPROFILE", str(Path.home())))}:
-        roots.extend((home / "curseforge/minecraft/Instances/ADADV-2.0",
-                      home / "CurseForge/Instances/ADADV-2.0"))
+    if not configured:
+        if override:
+            roots.append(Path(override))
+        else:
+            # DevHub background service may run under a different Windows account.
+            drive = Path(os.environ.get("SystemDrive", "C:") + "/")
+            profiles = {Path.home(), Path(os.environ.get("PUBLIC", drive / "Users/Public")).parent}
+            try:
+                profiles.update(p for p in (drive / "Users").iterdir() if p.is_dir())
+            except OSError:
+                pass
+            parents = {drive / "CurseForge/Minecraft/Instances"}
+            for profile in profiles:
+                parents.update(profile / part for part in (
+                    "curseforge/minecraft/Instances", "Documents/Curse/Minecraft/Instances",
+                    "Documents/CurseForge/Minecraft/Instances", "CurseForge/Minecraft/Instances"))
+            matches = set()
+            for parent in parents:
+                try:
+                    matches.update(p.resolve() for p in parent.iterdir()
+                                   if p.name.casefold() == "adadv-2.0" and (p / "mods").is_dir())
+                except OSError:
+                    continue
+            if len(matches) > 1:
+                raise RuntimeError("Multiple ADADV-2.0 instances; set CMOBS_MOD_SOURCE to the intended instance.")
+            roots.extend(matches)
     roots.append(ROOT / "run/mods")
     jars = {}
     for root in roots:
-        if root.is_dir():
-            for p in root.rglob("*.jar"):
-                relative = p.relative_to(root)
-                if root.name.lower() == "mods" or any(part.lower() in {"mods", "automodpack"} for part in relative.parts[:-1]):
+        if not root.is_dir():
+            continue
+        dirs = [root] if root.name.lower() == "mods" else [root / "mods"]
+        for folder in ("automodpack", ".automodpack"):
+            base = root / folder
+            dirs.append(base / "mods")
+            try:
+                dirs.extend(p / "mods" for p in (base / "modpacks").iterdir())
+            except OSError:
+                pass
+        # A separately configured dependency directory may contain JARs directly.
+        if configured and root == Path(configured):
+            dirs.append(root)
+        for directory in dirs:
+            try:
+                for p in directory.glob("*.jar"):
                     jars[str(p.resolve())] = p
+            except OSError:
+                continue
+    print("CMOBS_DISCOVERY", len(roots) - 1, "source roots,", len(jars), "candidate JARs")
     return list(jars.values())
 
 def main():
