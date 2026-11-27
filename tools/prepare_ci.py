@@ -29,7 +29,7 @@ def metadata(path):
 
 def discover():
     configured = os.environ.get("CMOBS_MOD_SOURCE", "").strip()
-    override = os.environ.get("ADADV_CURSEFORGE_INSTANCE", "").strip()
+    override = (os.environ.get("ADADV_INSTANCE_PATH") or os.environ.get("ADADV_CURSEFORGE_INSTANCE") or "").strip()
     roots = [Path(configured)] if configured else []
     if not configured:
         if override:
@@ -148,6 +148,11 @@ def export_runtime(jars, dest, report):
     records = [(p, m) for p, m in records if m and m.get("id") not in {"cmobs", "automodpack", "smitherz"}]
     ids = {"minecraft", "java", "fabricloader"}
     required = set(json.loads((ROOT / "src/main/resources/fabric.mod.json").read_text())["depends"]) | {"botania", "trinkets", "rpgmana"}
+    # Include installed optional integrations in the test-only export, with their closure.
+    optional = {"iceandfire", "bettercombat", "amethyst_imbuement"}
+    present = {m["id"] for p, m in records}
+    required.update(optional & present)
+    report["optional_integrations_present"] = sorted(optional & present)
     visited = set()
     while required - ids - visited:
         mid = sorted(required - ids - visited)[0]

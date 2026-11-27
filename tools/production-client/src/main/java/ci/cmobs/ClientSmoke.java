@@ -12,14 +12,21 @@ import java.nio.file.Path;
 public final class ClientSmoke implements ClientModInitializer {
     private int ticks;
     private boolean finished;
+    private String lastScreen = "";
 
     @Override
     public void onInitializeClient() {
         if (!FabricLoader.getInstance().isModLoaded("cmobs")) {
             throw new IllegalStateException("CMobs production mod was not loaded");
         }
+        System.out.println("CMOBS_CLIENT_PROBE_INITIALIZED");
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             if (finished) return;
+            String screen = client.currentScreen == null ? "none" : client.currentScreen.getClass().getName();
+            if (!screen.equals(lastScreen)) {
+                System.out.println("CMOBS_CLIENT_SCREEN " + screen);
+                lastScreen = screen;
+            }
             if (!(client.currentScreen instanceof TitleScreen)) {
                 ticks = 0;
                 return;

@@ -20,9 +20,7 @@ tasks.withType(JavaCompile).configureEach {
     options.release = 17
 }
 tasks.register('runCmobsClient', ClientProductionRunTask) {
-    dependsOn tasks.named('remapJar')
-    mods.setFrom(fileTree(providers.gradleProperty('cmobsRuntimeMods').get()) { include '*.jar' },
-            tasks.named('remapJar').flatMap { it.archiveFile })
+    mods.setFrom(fileTree(providers.gradleProperty('cmobsRuntimeMods').get()) { include '*.jar' })
     runDir.set(file(providers.gradleProperty('cmobsClientRunDir').get()))
     programArgs.addAll(['--username', 'CMobsVisualCI', '--width', '1280', '--height', '720'])
     useXVFB = false

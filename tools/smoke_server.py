@@ -38,15 +38,15 @@ def provided(path):
     with zipfile.ZipFile(path) as z:
         return walk(z)
 
-def resolve():
+def resolve(extra=(), client=False):
     built = choose([p for p in (ROOT / "build/libs").glob("*.jar")
                     if not p.name.endswith(("-sources.jar", "-dev.jar")) and metadata(p).get("id") == "cmobs"], "built cmobs")
     candidates = [(p, metadata(p)) for p in discover()]
-    candidates = [(p, m) for p, m in candidates if m and m.get("environment") != "client"
+    candidates = [(p, m) for p, m in candidates if m and (client or m.get("environment") != "client")
                   and m.get("id") not in {"cmobs", "automodpack", "smitherz"}]
     chosen = [built]
     ids = provided(built) | {"minecraft", "java", "fabricloader"}
-    required = set(metadata(built).get("depends", {})) | {"botania", "trinkets", "rpgmana"}
+    required = set(metadata(built).get("depends", {})) | {"botania", "trinkets", "rpgmana"} | set(extra)
     while required - ids:
         mid = sorted(required - ids)[0]
         choices = [p for p, m in candidates if mid == m.get("id") or mid in m.get("provides", [])]
@@ -65,8 +65,10 @@ def resolve():
     return chosen
 
 def main():
-    chosen = resolve()
-    (OUT / "server-dependencies.json").write_text(json.dumps({p.name: sha(p) for p in chosen}, indent=2))
+    ice = "--ice-and-fire" in sys.argv
+    suffix = "-ice-and-fire" if ice else ""
+    chosen = resolve(extra=("iceandfire",) if ice else ())
+    (OUT / ("server-dependencies" + suffix + ".json")).write_text(json.dumps({p.name: sha(p) for p in chosen}, indent=2))
     with tempfile.TemporaryDirectory(prefix="cmobs-server-", dir=os.environ.get("RUNNER_TEMP")) as tmp:
         run = Path(tmp)
         (run / "mods").mkdir()
@@ -81,6 +83,20 @@ def main():
         fixture.write_text(json.dumps({"entity": "minecraft:zombie", "tags": ["cmobs_ci_probe"],
                                        "attributes": [{"id": "minecraft:generic.max_health", "base": 60}],
                                        "health": 60, "nbt": "{NoAI:1b,PersistenceRequired:1b}"}))
+        def mob_fixture(name, entity, health, **extra):
+            (fixture.parent / (name + ".json")).write_text(json.dumps({
+                "entity": entity, "tags": ["cmobs_ci_" + name],
+                "attributes": [{"id": "minecraft:generic.max_health", "base": health}],
+                "health": health, "nbt": "{NoAI:1b,PersistenceRequired:1b,Silent:1b}", **extra}))
+        mob_fixture("equipment", "minecraft:zombie", 80,
+                    equipment={"head": "minecraft:iron_helmet",
+                               "mainhand": {"id": "minecraft:diamond_sword", "nbt": "{Unbreakable:1b}"}},
+                    loot_table="minecraft:entities/cow", passengers=["cmobs_ci:passenger"])
+        mob_fixture("passenger", "minecraft:chicken", 40)
+        species = {"fire_dragon": 173, "ice_dragon": 179, "lightning_dragon": 181,
+                   "cyclops": 137, "troll": 143} if ice else {}
+        for name, hp in species.items():
+            mob_fixture(name, "iceandfire:" + name, hp)
         launcher = run / "server.jar"
         url = "https://meta.fabricmc.net/v2/versions/loader/1.20.1/0.18.6/1.0.3/server/jar"
         with urllib.request.urlopen(url, timeout=90) as response, launcher.open("wb") as f:
@@ -91,7 +107,7 @@ def main():
                                 text=True, encoding="utf-8", errors="replace", bufsize=1)
         proc = launch()
         messages = queue.Queue()
-        def collect(name="server.log"):
+        def collect(name="server" + suffix + ".log"):
             with (OUT / name).open("w", encoding="utf-8") as log:
                 for line in proc.stdout:
                     log.write(line)
@@ -128,6 +144,32 @@ def main():
             wait(r"(?i)base value.*60(?:\.0+)?\b")
             cmd("data get entity @e[tag=cmobs_ci_probe,limit=1] Health")
             wait(r"(?i)following entity data: 60(?:\.0+)?f")
+            cmd("csummon cmobs_ci:equipment 2 100 2")
+            wait(r"Summoned custom mob cmobs_ci:equipment")
+            cmd("data get entity @e[tag=cmobs_ci_equipment,limit=1] HandItems[0].id")
+            wait(r'following entity data: "minecraft:diamond_sword"')
+            cmd("data get entity @e[tag=cmobs_ci_equipment,limit=1] HandItems[0].tag.Unbreakable")
+            wait(r"following entity data: 1b")
+            cmd("data get entity @e[tag=cmobs_ci_equipment,limit=1] ArmorItems[3].id")
+            wait(r'following entity data: "minecraft:iron_helmet"')
+            cmd("data get entity @e[tag=cmobs_ci_equipment,limit=1] DeathLootTable")
+            wait(r'following entity data: "minecraft:entities/cow"')
+            cmd("data get entity @e[tag=cmobs_ci_equipment,limit=1] Passengers[0].id")
+            wait(r'following entity data: "minecraft:chicken"')
+            cmd("attribute @e[tag=cmobs_ci_passenger,limit=1] minecraft:generic.max_health base get")
+            wait(r"(?i)base value.*40(?:\.0+)?\b")
+            print("CMOBS_EQUIPMENT_NBT_LOOT_PASSENGER_OK")
+            for name, hp in species.items():
+                cmd(f"csummon cmobs_ci:{name} 0 120 0")
+                wait(f"Summoned custom mob cmobs_ci:{name}", 20)
+                cmd(f"attribute @e[tag=cmobs_ci_{name},limit=1] minecraft:generic.max_health base get")
+                wait(rf"(?i)base value.*{hp}(?:\.0+)?\b", 20)
+            if species:
+                time.sleep(12)
+                for name, hp in species.items():
+                    cmd(f"attribute @e[tag=cmobs_ci_{name},limit=1] minecraft:generic.max_health base get")
+                    wait(rf"(?i)base value.*{hp}(?:\.0+)?\b", 20)
+                    print("CMOBS_SPECIES_DELAYED_BASE_OK", name, hp)
             cmd("reload")
             wait(r"(?i)reload(?:ing|ed)")
             cmd("attribute @e[tag=cmobs_ci_probe,limit=1] minecraft:generic.max_health base get")
@@ -141,13 +183,17 @@ def main():
             print("CMOBS_SERVER_SUMMON_RELOAD_OK")
             proc = launch()
             messages = queue.Queue()
-            reader = threading.Thread(target=collect, args=("server-restart.log",), daemon=True)
+            reader = threading.Thread(target=collect, args=("server-restart" + suffix + ".log",), daemon=True)
             reader.start()
             wait(r'Done \(', 600)
             cmd("attribute @e[tag=cmobs_ci_probe,limit=1] minecraft:generic.max_health base get")
             wait(r"(?i)base value.*60(?:\.0+)?\b")
             cmd("data get entity @e[tag=cmobs_ci_probe,limit=1] Health")
             wait(r"(?i)following entity data: 60(?:\.0+)?f")
+            for name, hp in species.items():
+                cmd(f"attribute @e[tag=cmobs_ci_{name},limit=1] minecraft:generic.max_health base get")
+                wait(rf"(?i)base value.*{hp}(?:\.0+)?\b", 20)
+                print("CMOBS_SPECIES_RESTART_BASE_OK", name, hp)
             cmd("stop")
             if proc.wait(timeout=90):
                 raise RuntimeError("Restarted server did not exit cleanly")
