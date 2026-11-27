@@ -18,6 +18,9 @@ jobs:
   background:
     runs-on: [self-hosted, Windows, "${{ vars.ADADV_BACKGROUND_RUNNER_LABEL || 'background' }}"]
     timeout-minutes: 45
+    defaults:
+      run:
+        shell: cmd
     env:
       CMOBS_MOD_SOURCE: "${{ vars.CMOBS_MOD_SOURCE }}"
     steps:
@@ -61,9 +64,8 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Verify visual runner identity
-        shell: powershell
+        shell: cmd
         run: |
-          Write-Host "Runner: $env:RUNNER_NAME"
-          Write-Host "Interactive session: $([Environment]::UserInteractive)"
-          if (-not [Environment]::UserInteractive) { throw 'Visual runner is not interactive' }
-          # Runner identity only; Minecraft client startup is a separate acceptance gate.
+          echo Runner: %RUNNER_NAME%
+          powershell.exe -NoProfile -NonInteractive -Command "Write-Host ('Interactive session: ' + [Environment]::UserInteractive); if (-not [Environment]::UserInteractive) { exit 1 }"
+          if errorlevel 1 exit /b 1
