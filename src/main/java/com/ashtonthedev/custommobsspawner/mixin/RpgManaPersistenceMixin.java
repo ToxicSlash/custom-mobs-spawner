@@ -1,7 +1,6 @@
 package com.ashtonthedev.custommobsspawner.mixin;
 
 import com.ashtonthedev.custommobsspawner.compat.RpgManaOverchargeCompat;
-import com.cleannrooster.rpgmana.Rpgmana;
 import com.cleannrooster.rpgmana.api.ManaInstance;
 import com.cleannrooster.rpgmana.api.ManaInterface;
 import net.minecraft.entity.attribute.EntityAttribute;
@@ -9,6 +8,8 @@ import net.minecraft.entity.attribute.EntityAttributeInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
+import net.minecraft.registry.Registries;
+import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -60,16 +61,17 @@ public abstract class RpgManaPersistenceMixin {
     }
 
     private static void customMobsSpawner$migrateLegacyRpgManaAttributes(PlayerEntity player) {
-        customMobsSpawner$migrateLegacyBaseValue(player, Rpgmana.MANA, LEGACY_BASE_MANA, TARGET_BASE_MANA);
-        customMobsSpawner$migrateLegacyBaseValue(player, Rpgmana.MANAREGEN, LEGACY_BASE_MANA_REGEN, TARGET_BASE_MANA_REGEN);
+        customMobsSpawner$migrateLegacyBaseValue(player, "mana", LEGACY_BASE_MANA, TARGET_BASE_MANA);
+        customMobsSpawner$migrateLegacyBaseValue(player, "manaregen", LEGACY_BASE_MANA_REGEN, TARGET_BASE_MANA_REGEN);
     }
 
     private static void customMobsSpawner$migrateLegacyBaseValue(
             PlayerEntity player,
-            EntityAttribute attribute,
+            String attributePath,
             double legacyValue,
             double targetValue
     ) {
+        EntityAttribute attribute = Registries.ATTRIBUTE.get(new Identifier("rpgmana", attributePath));
         EntityAttributeInstance instance = player.getAttributeInstance(attribute);
         if (instance != null && Math.abs(instance.getBaseValue() - legacyValue) <= ATTRIBUTE_EPSILON) {
             instance.setBaseValue(targetValue);

@@ -1,0 +1,15 @@
+{
+    "values": [
+        "minecraft:netherite_sword",
+        "minecraft:bow",
+        "minecraft:crossbow",
+        {
+            "id": "#cmobs:bows",
+            "required": false
+        },
+        {
+            "id": "#cmobs:crossbows",
+            "required": false
+        }
+    ]
+}

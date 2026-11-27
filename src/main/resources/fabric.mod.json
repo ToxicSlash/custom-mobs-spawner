@@ -12,14 +12,20 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "com.ashtonthedev.custommobsspawner.CustomMobsSpawner"
+      "com.ashtonthedev.custommobsspawner.CustomMobsSpawner",
+      "net.smitherz.SmitherzMain"
     ],
     "client": [
-      "com.ashtonthedev.custommobsspawner.client.CustomMobsSpawnerClient"
+      "com.ashtonthedev.custommobsspawner.client.CustomMobsSpawnerClient",
+      "net.smitherz.SmitherzClient"
+    ],
+    "modmenu": [
+      "net.smitherz.config.ModMenuIntegration"
     ]
   },
   "mixins": [
-    "cmobs.mixins.json"
+    "cmobs.mixins.json",
+    "smitherz.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.15.0",
@@ -28,6 +34,15 @@
     "java": ">=17",
     "spell_engine": ">=0.15.12",
     "spell_power": ">=0.12.0",
-    "zenith_attributes": ">=0.2.10"
+    "zenith_attributes": ">=0.2.10",
+    "cloth-config2": ">=${cloth_config_version}",
+    "libz": ">=${libz_version}",
+    "autotag-convention": ">=${autotag_version}",
+    "advanced_runtime_resource_pack": ">=${arrp_version}"
+  },
+  "suggests": {
+    "modmenu": "*",
+    "rpgdifficulty": "*",
+    "tiered": "*"
   }
 }
