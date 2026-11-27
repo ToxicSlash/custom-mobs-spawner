@@ -43,6 +43,9 @@ jobs:
         if: ${{ !cancelled() && steps.deps.outcome == 'success' }}
         shell: cmd
         run: gradlew.bat build --no-daemon --console=plain
+      - name: Dedicated server and custom mob datapack smoke
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && inputs.suite != 'build' }}
+        run: python tools/smoke_server.py
       - name: Publish diagnostics
         if: always()
         uses: actions/upload-artifact@v4
