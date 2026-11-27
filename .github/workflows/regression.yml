@@ -16,6 +16,8 @@ concurrency:
   cancel-in-progress: false
 jobs:
   background:
+    needs: visual
+    if: ${{ !cancelled() }}
     runs-on: [self-hosted, Windows, "${{ vars.ADADV_BACKGROUND_RUNNER_LABEL || 'background' }}"]
     timeout-minutes: 45
     defaults:
@@ -23,6 +25,7 @@ jobs:
         shell: cmd
     env:
       CMOBS_MOD_SOURCE: "${{ vars.CMOBS_MOD_SOURCE }}"
+      ADADV_CURSEFORGE_INSTANCE: "${{ vars.ADADV_CURSEFORGE_INSTANCE }}"
     steps:
       - uses: actions/checkout@v4
         with:
@@ -68,6 +71,12 @@ jobs:
       - name: Resource and schema integrity
         id: resources
         run: '"%PYTHON_EXE%" -m unittest discover -s tests -v'
+      - name: Import desktop-discovered dependency inputs
+        if: ${{ !cancelled() }}
+        uses: actions/download-artifact@v4
+        with:
+          name: cmobs-desktop-inputs
+          path: ci-desktop
       - name: Resolve pinned local integration jars
         id: deps
         if: ${{ !cancelled() && steps.locate_python.outcome == 'success' }}
@@ -90,13 +99,63 @@ jobs:
             build/libs/*.jar
           if-no-files-found: warn
   visual:
-    if: ${{ inputs.suite != 'build' }}
     runs-on: [self-hosted, Windows, "${{ vars.ADADV_VISUAL_RUNNER_LABEL || 'visual-test' }}"]
-    timeout-minutes: 10
-    steps:
-      - name: Verify visual runner identity
+    timeout-minutes: 20
+    defaults:
+      run:
         shell: cmd
+    env:
+      CMOBS_MOD_SOURCE: "${{ vars.CMOBS_MOD_SOURCE }}"
+      ADADV_CURSEFORGE_INSTANCE: "${{ vars.ADADV_CURSEFORGE_INSTANCE }}"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Verify visual runner identity
+        if: ${{ inputs.suite != 'build' }}
         run: |
           echo Runner: %RUNNER_NAME%
           powershell.exe -NoProfile -NonInteractive -Command "Write-Host ('Interactive session: ' + [Environment]::UserInteractive); if (-not [Environment]::UserInteractive) { exit 1 }"
           if errorlevel 1 exit /b 1
+      - name: Locate installed Python
+        id: locate_python
+        run: |
+          where py >nul 2>&1
+          if not errorlevel 1 (
+            py -3 -c "import sys; print(sys.executable)" > python-path.txt 2>nul
+            if not errorlevel 1 goto found_python
+          )
+          where python >nul 2>&1
+          if not errorlevel 1 (
+            python -c "import sys; print(sys.executable)" > python-path.txt 2>nul
+            if not errorlevel 1 goto found_python
+          )
+          for %%P in ("%LOCALAPPDATA%\Python\pythoncore-3.15-64\python.exe" "%LOCALAPPDATA%\Programs\Python\Python315\python.exe" "%LOCALAPPDATA%\Programs\Python\Python314\python.exe" "%LOCALAPPDATA%\Programs\Python\Python313\python.exe" "%LOCALAPPDATA%\Programs\Python\Python312\python.exe" "%LOCALAPPDATA%\Programs\Python\Python311\python.exe") do (
+            if exist %%P (
+              echo %%~P > python-path.txt
+              goto found_python
+            )
+          )
+          echo Installing portable Python in runner temporary directory
+          set "PORTABLE=%RUNNER_TEMP%\cozy-python-3.11.9"
+          if not exist "%PORTABLE%\python.exe" (
+            curl.exe --fail --location --retry 3 https://www.python.org/ftp/python/3.11.9/python-3.11.9-embed-amd64.zip --output "%RUNNER_TEMP%\cozy-python.zip"
+            if errorlevel 1 exit /b 1
+            if not exist "%PORTABLE%" mkdir "%PORTABLE%"
+            tar.exe -xf "%RUNNER_TEMP%\cozy-python.zip" -C "%PORTABLE%"
+            if errorlevel 1 exit /b 1
+          )
+          "%PORTABLE%\python.exe" -c "import sys; print(sys.executable)" > python-path.txt
+          if errorlevel 1 exit /b 1
+          :found_python
+          set /p PYTHON_EXE=<python-path.txt
+          echo PYTHON_EXE=%PYTHON_EXE%>>"%GITHUB_ENV%"
+          echo Using %PYTHON_EXE%
+      - name: Discover local compile and runtime inputs as desktop user
+        run: '"%PYTHON_EXE%" tools/prepare_ci.py --export'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cmobs-desktop-inputs
+          path: ci-output/
+          if-no-files-found: error
