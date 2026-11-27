@@ -15,6 +15,7 @@ import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.StringNbtReader;
 import net.minecraft.registry.Registries;
 import net.minecraft.scoreboard.Scoreboard;
@@ -39,6 +40,10 @@ public final class CustomMobRegistry {
     private static final double MAX_SCALE = 64.0D;
     private static final int DEFAULT_SCALE_DELAY_TICKS = 1;
     private static final String POST_SPAWN_APPLIED_TAG = "cmobs_spawn_integrations_applied";
+    private static final Set<String> IAF_SPECIES = Set.of("fire_dragon", "ice_dragon", "lightning_dragon", "cyclops", "troll");
+    private static final Set<EntityAttribute> IAF_RECALCULATED = Set.of(EntityAttributes.GENERIC_MAX_HEALTH,
+            EntityAttributes.GENERIC_ATTACK_DAMAGE, EntityAttributes.GENERIC_MOVEMENT_SPEED,
+            EntityAttributes.GENERIC_ARMOR, EntityAttributes.GENERIC_FOLLOW_RANGE);
     private static final Map<Identifier, CustomMobDefinition> DEFINITIONS = new ConcurrentHashMap<>();
 
     private CustomMobRegistry() {
@@ -185,11 +190,13 @@ public final class CustomMobRegistry {
             }
         }
 
+        NbtCompound explicitNbt = null;
         if (json.has("nbt")) {
             try {
                 NbtCompound base = new NbtCompound();
                 entity.writeNbt(base);
-                base.copyFrom(StringNbtReader.parse(json.get("nbt").getAsString()));
+                explicitNbt = StringNbtReader.parse(json.get("nbt").getAsString());
+                base.copyFrom(explicitNbt);
                 entity.readNbt(base);
             } catch (Exception exception) {
                 CustomMobsSpawnerLog.warn("Failed to apply custom mob NBT for " + definition.id() + ": " + exception.getMessage());
@@ -197,6 +204,15 @@ public final class CustomMobRegistry {
         }
 
         applyTagsAndSkills(entity, definition, json);
+        // IaF reads custom NBT after vanilla attributes and may replace their base values.
+        if (entity instanceof MobEntity mob && isIafSpecies(entity)) {
+            restoreIafAttributes(mob);
+            if (explicitNbt != null && explicitNbt.contains("Health", NbtElement.NUMBER_TYPE)) {
+                mob.setHealth(explicitNbt.getFloat("Health"));
+            } else if (json.has("health")) {
+                mob.setHealth(json.get("health").getAsFloat());
+            }
+        }
         applyTeam(entity, definition);
     }
 
@@ -634,6 +650,50 @@ public final class CustomMobRegistry {
 
     private static String customMobTag(Identifier id) {
         return "custom_mob_" + id.toString().toLowerCase().replaceAll("[^a-z0-9_]", "_");
+    }
+
+    private static boolean isIafSpecies(Entity entity) {
+        Identifier type = Registries.ENTITY_TYPE.getId(entity.getType());
+        return "iceandfire".equals(type.getNamespace()) && IAF_SPECIES.contains(type.getPath());
+    }
+
+    /**
+     * IaF recalculates age/config-derived bases. Only explicitly configured CMobs
+     * attributes are restored, only for matching custom IaF entities. Attribute
+     * modifiers, normal mobs and unspecified attributes are untouched.
+     */
+    public static boolean restoreIafAttributes(Entity entity) {
+        if (!(entity instanceof MobEntity mob) || entity.getWorld().isClient() || !isIafSpecies(entity)
+                || entity.getCommandTags().stream().noneMatch(tag -> tag.startsWith("custom_mob_"))) return false;
+        CustomMobDefinition definition = definitionFor(entity).orElse(null);
+        if (definition == null || !definition.entity().equals(Registries.ENTITY_TYPE.getId(entity.getType()))) return false;
+        JsonObject json = definition.json();
+        if (!json.has("attributes") || !json.get("attributes").isJsonArray()) return false;
+        boolean maxHealthExplicit = false;
+        for (JsonElement element : json.getAsJsonArray("attributes")) {
+            if (!element.isJsonObject()) continue;
+            JsonObject entry = element.getAsJsonObject();
+            if (!entry.has("id") || !entry.has("base")) continue;
+            Identifier id = Identifier.tryParse(entry.get("id").getAsString());
+            if (id == null) continue;
+            EntityAttribute attribute = Registries.ATTRIBUTE.getOrEmpty(id).orElse(null);
+            if (attribute == null || !IAF_RECALCULATED.contains(attribute)) continue;
+            EntityAttributeInstance instance = mob.getAttributeInstance(attribute);
+            double requested = entry.get("base").getAsDouble();
+            if (instance == null || !Double.isFinite(requested)) continue;
+            if (Double.compare(instance.getBaseValue(), requested) != 0) instance.setBaseValue(requested);
+            if (attribute == EntityAttributes.GENERIC_MAX_HEALTH) maxHealthExplicit = true;
+        }
+        if (maxHealthExplicit && mob.getHealth() > mob.getMaxHealth()) mob.setHealth(mob.getMaxHealth());
+        return maxHealthExplicit;
+    }
+
+    public static void restoreIafSavedHealth(Entity entity, NbtCompound nbt) {
+        if (restoreIafAttributes(entity) && entity instanceof MobEntity mob
+                && nbt.contains("Health", NbtElement.NUMBER_TYPE)) {
+            // Preserve actual saved damage, not the definition's initial health.
+            mob.setHealth(nbt.getFloat("Health"));
+        }
     }
 
     private static void applyAttributes(MobEntity mob, JsonObject json) {

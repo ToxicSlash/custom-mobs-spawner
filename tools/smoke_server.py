@@ -127,7 +127,7 @@ def main():
                 if line is None:
                     raise RuntimeError("Server exited waiting for " + pattern)
                 if re.search(pattern, line):
-                    return
+                    return line
             raise RuntimeError("Timed out waiting for " + pattern)
         def cmd(command):
             proc.stdin.write(command + "\n")
@@ -159,17 +159,51 @@ def main():
             cmd("attribute @e[tag=cmobs_ci_passenger,limit=1] minecraft:generic.max_health base get")
             wait(r"(?i)base value.*40(?:\.0+)?\b")
             print("CMOBS_EQUIPMENT_NBT_LOOT_PASSENGER_OK")
-            for name, hp in species.items():
-                cmd(f"csummon cmobs_ci:{name} 0 120 0")
+            errors = []
+            def check_species(name, hp, stage, health=None):
+                target = f"@e[tag=cmobs_ci_{name},limit=1]"
+                cmd(f"attribute {target} minecraft:generic.max_health base get")
+                line = wait(r"(?i)base value.* is [\d.]+|No entity was found", 20)
+                match = re.search(r" is ([\d.]+)", line)
+                actual = float(match.group(1)) if match else None
+                print("CMOBS_SPECIES_BASE", stage, name, "expected", hp, "actual", actual)
+                if actual != hp:
+                    errors.append(f"{stage} {name}: base {actual}, expected {hp}")
+                if health is not None:
+                    cmd(f"data get entity {target} Health")
+                    line = wait(r"following entity data: [\d.]+f|No entity was found", 20)
+                    match = re.search(r"following entity data: ([\d.]+)f", line)
+                    actual = float(match.group(1)) if match else None
+                    print("CMOBS_SPECIES_HEALTH", stage, name, "expected", health, "actual", actual)
+                    if actual is None or abs(actual-health) > .01:
+                        errors.append(f"{stage} {name}: health {actual}, expected {health}")
+            for index, (name, hp) in enumerate(species.items()):
+                cmd(f"csummon cmobs_ci:{name} {index * 3} 120 0")
                 wait(f"Summoned custom mob cmobs_ci:{name}", 20)
-                cmd(f"attribute @e[tag=cmobs_ci_{name},limit=1] minecraft:generic.max_health base get")
-                wait(rf"(?i)base value.*{hp}(?:\.0+)?\b", 20)
+                check_species(name, hp, "spawn", hp)
             if species:
                 time.sleep(12)
                 for name, hp in species.items():
-                    cmd(f"attribute @e[tag=cmobs_ci_{name},limit=1] minecraft:generic.max_health base get")
-                    wait(rf"(?i)base value.*{hp}(?:\.0+)?\b", 20)
-                    print("CMOBS_SPECIES_DELAYED_BASE_OK", name, hp)
+                    check_species(name, hp, "delayed", hp)
+                # Force IaF's NBT/age recalculation and an actual damaged save state.
+                for name, hp in species.items():
+                    target = f"@e[tag=cmobs_ci_{name},limit=1]"
+                    if name.endswith("_dragon"):
+                        cmd(f"data merge entity {target} {{AgeTicks:1200000,Health:{hp-11}.0f}}")
+                    else:
+                        cmd(f"data merge entity {target} {{Health:{hp-11}.0f}}")
+                    wait(r"Modified entity data", 20)
+                    check_species(name, hp, "nbt", hp-11)
+                # A vanilla attribute modifier must survive custom base restoration.
+                target = "@e[tag=cmobs_ci_fire_dragon,limit=1]"
+                cmd(f"attribute {target} minecraft:generic.max_health modifier add 95280900-180b-4b91-849d-b7dc10293b5a ci_bonus 13 add")
+                wait(r"Added modifier", 20)
+                cmd(f"data merge entity {target} {{AgeTicks:1440000}}")
+                wait(r"Modified entity data", 20)
+                cmd(f"attribute {target} minecraft:generic.max_health get")
+                line = wait(r"(?i)value of attribute.* is [\d.]+", 20)
+                if not re.search(r" is 186(?:\.0+)?\s*$", line):
+                    errors.append("Fire Dragon modifier lost: " + line.strip())
             cmd("reload")
             wait(r"(?i)reload(?:ing|ed)")
             cmd("attribute @e[tag=cmobs_ci_probe,limit=1] minecraft:generic.max_health base get")
@@ -191,13 +225,15 @@ def main():
             cmd("data get entity @e[tag=cmobs_ci_probe,limit=1] Health")
             wait(r"(?i)following entity data: 60(?:\.0+)?f")
             for name, hp in species.items():
-                cmd(f"attribute @e[tag=cmobs_ci_{name},limit=1] minecraft:generic.max_health base get")
-                wait(rf"(?i)base value.*{hp}(?:\.0+)?\b", 20)
-                print("CMOBS_SPECIES_RESTART_BASE_OK", name, hp)
+                check_species(name, hp, "restart", hp-11)
             cmd("stop")
             if proc.wait(timeout=90):
                 raise RuntimeError("Restarted server did not exit cleanly")
             print("CMOBS_SERVER_RESTART_OK")
+            if errors:
+                raise AssertionError("Ice and Fire regression failures:\n" + "\n".join(errors))
+            if species:
+                print("CMOBS_IAF_SPECIES_ALL_OK", len(species))
         finally:
             if proc.poll() is None:
                 proc.terminate()

@@ -2,12 +2,33 @@
   "replace": false,
   "values": [
     "#c:swords",
-    "#paladins:claymores",
-    "#wizards:wands",
-    "#wizards:staves",
-    "#rpg_series:daggers",
-    "#rpg_series:sickles",
-    "#rpg_series:glaives",
-    "#rpg_series:double_axes"
+    {
+      "id": "#paladins:claymores",
+      "required": false
+    },
+    {
+      "id": "#wizards:wands",
+      "required": false
+    },
+    {
+      "id": "#wizards:staves",
+      "required": false
+    },
+    {
+      "id": "#rpg_series:daggers",
+      "required": false
+    },
+    {
+      "id": "#rpg_series:sickles",
+      "required": false
+    },
+    {
+      "id": "#rpg_series:glaives",
+      "required": false
+    },
+    {
+      "id": "#rpg_series:double_axes",
+      "required": false
+    }
   ]
 }

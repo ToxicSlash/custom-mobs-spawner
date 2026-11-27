@@ -35,7 +35,10 @@
     "SpellDamagePenetrationEnchantmentHelperMixin",
     "SpellDamagePenetrationLivingEntityMixin",
     "SpellEngineDamagePenetrationMixin",
-    "SpellProjectileMixin"
+    "SpellProjectileMixin",
+    "IceAndFireDragonAttributesMixin",
+    "IceAndFireConfiguredAttributesMixin",
+    "EntityIafHealthReadMixin"
   ],
   "client": [
     "client.BetterCombatTargetFinderMixin",

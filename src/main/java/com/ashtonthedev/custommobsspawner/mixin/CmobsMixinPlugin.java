@@ -59,6 +59,9 @@ public class CmobsMixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
+        if (mixinClassName.endsWith("IceAndFireDragonAttributesMixin") || mixinClassName.endsWith("IceAndFireConfiguredAttributesMixin")) {
+            return FabricLoader.getInstance().isModLoaded("iceandfire");
+        }
         if (BETTER_TRIMS_DEV_BRIDGE.equals(mixinClassName)) {
             FabricLoader loader = FabricLoader.getInstance();
             return loader.isDevelopmentEnvironment() && loader.isModLoaded("bettertrims");
