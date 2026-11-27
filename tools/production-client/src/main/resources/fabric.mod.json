@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "id": "cmobs_ci_client_probe",
+  "version": "1.0.0",
+  "name": "CMobs CI client probe",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "ci.cmobs.ClientSmoke"
+    ]
+  },
+  "depends": {
+    "cmobs": "*",
+    "fabricloader": ">=0.15.0",
+    "fabric-api": "*",
+    "minecraft": "1.20.1"
+  }
+}
