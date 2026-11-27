@@ -19,6 +19,10 @@ public final class ClientSmoke implements ClientModInitializer {
         if (!FabricLoader.getInstance().isModLoaded("cmobs")) {
             throw new IllegalStateException("CMobs production mod was not loaded");
         }
+        if (System.getProperty("cmobs.ci.posture") != null) {
+            PostureClientProbe.register();
+            return;
+        }
         System.out.println("CMOBS_CLIENT_PROBE_INITIALIZED");
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             if (finished) return;

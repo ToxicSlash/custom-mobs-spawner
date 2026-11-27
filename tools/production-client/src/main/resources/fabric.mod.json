@@ -3,10 +3,13 @@
   "id": "cmobs_ci_client_probe",
   "version": "1.0.0",
   "name": "CMobs CI client probe",
-  "environment": "client",
+  "environment": "*",
   "entrypoints": {
     "client": [
       "ci.cmobs.ClientSmoke"
+    ],
+    "main": [
+      "ci.cmobs.PostureServerProbe"
     ]
   },
   "depends": {

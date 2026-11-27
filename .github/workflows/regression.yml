@@ -236,9 +236,14 @@ jobs:
           path: ci-desktop
       - name: Production client title screen and framebuffer probe
         run: '"%PYTHON_EXE%" tools/smoke_client.py'
+      - name: Dedicated two-client posture core regression
+        if: ${{ !cancelled() }}
+        run: '"%PYTHON_EXE%" tools/smoke_multiplayer.py'
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: cmobs-stage1-client
-          path: ci-output/client/
+          path: |
+            ci-output/client/
+            ci-output/multiplayer/
           if-no-files-found: warn
