@@ -77,12 +77,14 @@ def main():
         url = "https://meta.fabricmc.net/v2/versions/loader/1.20.1/0.18.6/1.0.3/server/jar"
         with urllib.request.urlopen(url, timeout=90) as response, launcher.open("wb") as f:
             shutil.copyfileobj(response, f)
-        proc = subprocess.Popen(["java", "-Xmx2G", "-jar", str(launcher), "nogui"], cwd=run,
+        def launch():
+            return subprocess.Popen(["java", "-Xmx2G", "-jar", str(launcher), "nogui"], cwd=run,
                                 stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
                                 text=True, encoding="utf-8", errors="replace", bufsize=1)
+        proc = launch()
         messages = queue.Queue()
-        def collect():
-            with (OUT / "server.log").open("w", encoding="utf-8") as log:
+        def collect(name="server.log"):
+            with (OUT / name).open("w", encoding="utf-8") as log:
                 for line in proc.stdout:
                     log.write(line)
                     log.flush()
@@ -116,10 +118,32 @@ def main():
             wait(r"\[Server\] CMOBS_PROBE_PRESENT")
             cmd("attribute @e[tag=cmobs_ci_probe,limit=1] minecraft:generic.max_health base get")
             wait(r"(?i)base value.*60(?:\.0+)?\b")
+            cmd("data get entity @e[tag=cmobs_ci_probe,limit=1] Health")
+            wait(r"(?i)following entity data: 60(?:\.0+)?f")
+            cmd("reload")
+            wait(r"(?i)reload(?:ing|ed)")
+            cmd("attribute @e[tag=cmobs_ci_probe,limit=1] minecraft:generic.max_health base get")
+            wait(r"(?i)base value.*60(?:\.0+)?\b")
+            cmd("save-all flush")
+            wait(r"Saved the game")
             cmd("stop")
             if proc.wait(timeout=90):
                 raise RuntimeError("Server did not exit cleanly")
-            print("CMOBS_SERVER_SUMMON_OK")
+            reader.join(timeout=10)
+            print("CMOBS_SERVER_SUMMON_RELOAD_OK")
+            proc = launch()
+            messages = queue.Queue()
+            reader = threading.Thread(target=collect, args=("server-restart.log",), daemon=True)
+            reader.start()
+            wait(r'Done \(', 600)
+            cmd("attribute @e[tag=cmobs_ci_probe,limit=1] minecraft:generic.max_health base get")
+            wait(r"(?i)base value.*60(?:\.0+)?\b")
+            cmd("data get entity @e[tag=cmobs_ci_probe,limit=1] Health")
+            wait(r"(?i)following entity data: 60(?:\.0+)?f")
+            cmd("stop")
+            if proc.wait(timeout=90):
+                raise RuntimeError("Restarted server did not exit cleanly")
+            print("CMOBS_SERVER_RESTART_OK")
         finally:
             if proc.poll() is None:
                 proc.terminate()
