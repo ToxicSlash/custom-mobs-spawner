@@ -3,7 +3,7 @@ build/
 
 # Local backups / nested scratch repositories
 .cmobs-backup/
-cmobs/
+/cmobs/
 
 # Local Minecraft/Fabric run output
 run/
