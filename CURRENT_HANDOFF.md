@@ -3,9 +3,9 @@ Baseline main/dev 4ccd122, Fabric 1.20.1, Java 17, Gradle 8.8. Main must remain 
 ## Stage 1 (active)
 - Confirmed baseline and inspected source/build/docs. No CI or tests in baseline.
 - Fixed unanchored cmobs/ .gitignore; all assets/cmobs, data/cmobs and cmobs/default_configs absent in baseline. Restore authoritative original source or matching JAR, not recreated tooltip content.
-- Nine exact local compile JARs in run/mods are untracked. Resolve from runner's authoritative checkout or pack, record versions/hashes. Botania is used unconditionally by ModItems but not declared as required; audit runtime dependency metadata.
-- Sibling cozy CI uses Windows labels background and visual-test (ADADV_BACKGROUND_RUNNER_LABEL / ADADV_VISUAL_RUNNER_LABEL overrides). Actual cmobs assignment not confirmed: runner API denied.
-- Acceptance: clean build, dedicated server boot + custom mob datapack probe, client boot + screenshots, automated gameplay tests. No live result yet. Do not count skipped/queued as passes.
+- Ten exact local compile JARs in run/mods are untracked. Resolve from runner's authoritative checkout or pack, record versions/hashes. Botania is used unconditionally by ModItems but not declared as required; audit runtime dependency metadata.
+- Verified DevHub assignments from job logs: DESKTOP-KU9JOTA-custom-mobs-spawner-bg (Windows/background) and DESKTOP-KU9JOTA-custom-mobs-spawner-visual (Windows/visual-test). Visual interactive check passed on run 45971830417.
+- Acceptance: clean build, dedicated server boot + custom mob datapack probe, client boot + screenshots, automated gameplay tests. CI added: tests/test_resources.py, tools/prepare_ci.py (hashes and resource candidate artifacts), tools/smoke_server.py (isolated server probe), dev-only regression workflow. First run 45971747371 failed Windows script policy (including Python installer); corrected cmd shell and portable Python setup in 783d43c. Latest corrected run 45971856513: pending at last check; compilation/server/client not verified. Do not count skipped/queued as passes.
 ## Stages
 1. Infrastructure above; isolated runtimes and reproducible dependencies.
 2. Mobs: attributes/health, NBT/equipment/loot/passengers, replacement/group/spawn stand/cap, reload, unload/restart. Investigate Ice and Fire Dragons, Cyclopes, Trolls initialization/tick attribute reset without overwriting external modifiers.
