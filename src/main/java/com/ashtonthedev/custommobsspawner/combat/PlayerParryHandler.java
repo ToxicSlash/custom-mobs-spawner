@@ -38,6 +38,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.network.PacketByteBuf;
 
 import java.util.Set;
+import java.util.HashSet;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -70,6 +71,7 @@ public final class PlayerParryHandler {
     private static final ConcurrentHashMap<UUID, Double> POSTURE_DAMAGE = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<UUID, Double> POSTURE_HEALTH = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<UUID, PostureSyncState> LAST_SELF_POSTURE_SYNC = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<UUID, Integer> LAST_SELF_POSTURE_SYNC_TICKS = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<UUID, EntityPostureSyncState> LAST_ENTITY_POSTURE_SYNC = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<UUID, Long> LAST_ENTITY_POSTURE_SYNC_TIMES = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<UUID, Double> LAST_CONFIGURED_PVP_TAKEN_POSTURE_DAMAGE_BASES = new ConcurrentHashMap<>();
@@ -873,8 +875,17 @@ public final class PlayerParryHandler {
         return Math.abs(left - right) <= EPSILON;
     }
 
+    // Connection lifecycle invalidates presentation caches only, not combat mechanics.
+    public static void invalidatePostureSync(UUID uuid) {
+        LAST_SELF_POSTURE_SYNC.remove(uuid);
+        LAST_SELF_POSTURE_SYNC_TICKS.remove(uuid);
+        LAST_ENTITY_POSTURE_SYNC.remove(uuid);
+        LAST_ENTITY_POSTURE_SYNC_TIMES.remove(uuid);
+    }
+
     private static void syncPosture(MinecraftServer server) {
         LAST_SELF_POSTURE_SYNC.keySet().removeIf(uuid -> server.getPlayerManager().getPlayer(uuid) == null);
+        LAST_SELF_POSTURE_SYNC_TICKS.keySet().removeIf(uuid -> server.getPlayerManager().getPlayer(uuid) == null);
         LAST_ENTITY_POSTURE_SYNC.keySet().removeIf(uuid -> server.getPlayerManager().getPlayer(uuid) == null);
         LAST_ENTITY_POSTURE_SYNC_TIMES.keySet().removeIf(uuid -> server.getPlayerManager().getPlayer(uuid) == null);
         for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
@@ -888,7 +899,6 @@ public final class PlayerParryHandler {
                     || POSTURE_REGEN_DELAYS.containsKey(uuid)
                     || isStaggered(player));
             boolean showSelfPosture = isCombatPostureVisible;
-            boolean showTrackedPosture = isCombatPostureVisible;
             if (isCombatPostureVisible && postureHealth <= 0.0D) {
                 postureHealth = getPlayerPostureHealth(player, getEquippedPostureItem(player));
             }
@@ -896,24 +906,26 @@ public final class PlayerParryHandler {
                     ? 1.0F
                     : (float) Math.max(0.0D, Math.min(1.0D, 1.0D - postureDamage / postureHealth));
             spawnPostureSweat(player, postureFraction);
-            int posturePercent = Math.round(postureFraction * 100.0F);
-            boolean staggered = showTrackedPosture && isStaggered(player);
-            boolean vulnerable = showTrackedPosture && player.hasStatusEffect(ModStatusEffects.VULNERABLE);
-            int staggerDamagePercent = staggered ? 100 - posturePercent : 0;
-            int selfPosturePercent = staggered ? 0 : posturePercent;
-            syncSelfPosture(player, selfPosturePercent, showSelfPosture);
-            syncTrackedPlayerPosture(player, posturePercent, showTrackedPosture, staggered, staggerDamagePercent, vulnerable);
+            PostureDisplaySnapshot snapshot = PostureDisplaySnapshot.of(postureFraction,
+                    showSelfPosture, isStaggered(player), player.hasStatusEffect(ModStatusEffects.VULNERABLE));
+            syncSelfPosture(player, snapshot.posturePercent(), snapshot.visible());
+            syncTrackedPlayerPosture(player, snapshot.posturePercent(), snapshot.visible(),
+                    snapshot.staggered(), snapshot.staggerPercent(), snapshot.vulnerable());
         }
     }
 
     private static void syncSelfPosture(ServerPlayerEntity player, int posturePercent, boolean showPosture) {
         UUID uuid = player.getUuid();
-        PostureSyncState syncState = new PostureSyncState(posturePercent, showPosture);
-        if (syncState.equals(LAST_SELF_POSTURE_SYNC.get(uuid))) {
+        if (!ServerPlayNetworking.canSend(player, POSTURE_SYNC_PACKET)) return;
+        PostureSyncState syncState = new PostureSyncState(player.getId(), player.getWorld().getRegistryKey().getValue(), posturePercent, showPosture);
+        int tick = player.getServer().getTicks();
+        if (syncState.equals(LAST_SELF_POSTURE_SYNC.get(uuid))
+                && (!showPosture || tick - LAST_SELF_POSTURE_SYNC_TICKS.getOrDefault(uuid, tick) < ENTITY_POSTURE_SYNC_REFRESH_TICKS)) {
             return;
         }
 
         LAST_SELF_POSTURE_SYNC.put(uuid, syncState);
+        LAST_SELF_POSTURE_SYNC_TICKS.put(uuid, tick);
         PacketByteBuf buf = PacketByteBufs.create();
         buf.writeByte(Math.max(0, Math.min(100, posturePercent)));
         buf.writeBoolean(showPosture);
@@ -929,49 +941,46 @@ public final class PlayerParryHandler {
             boolean vulnerable
     ) {
         UUID uuid = player.getUuid();
-        if (!showPosture) {
-            if (LAST_ENTITY_POSTURE_SYNC.remove(uuid) != null) {
-                LAST_ENTITY_POSTURE_SYNC_TIMES.remove(uuid);
-                sendTrackedPlayerPosture(player, 100, false, false, 0, false);
+        EntityPostureSyncState previous = LAST_ENTITY_POSTURE_SYNC.get(uuid);
+        Set<UUID> viewers = new HashSet<>();
+        boolean showSelf = showPosture && CustomMobsSpawnerConfig.get().showSelfOverheadPostureDebugBar;
+        if (showPosture) {
+            if (showSelf && ServerPlayNetworking.canSend(player, MobPostureHandler.MOB_POSTURE_SYNC_PACKET)) {
+                viewers.add(uuid);
             }
+            for (ServerPlayerEntity viewer : PlayerLookup.tracking(player)) {
+                if (viewer == player || viewer.squaredDistanceTo(player) > TRACKED_PLAYER_POSTURE_SYNC_DISTANCE_SQUARED
+                        || !isNameTagVisibleFor(player, viewer)
+                        || !ServerPlayNetworking.canSend(viewer, MobPostureHandler.MOB_POSTURE_SYNC_PACKET)) continue;
+                viewers.add(viewer.getUuid());
+            }
+        }
+        Identifier dimension = player.getWorld().getRegistryKey().getValue();
+        if (previous != null && previous.entityId() == player.getId() && previous.dimension().equals(dimension)) {
+            for (UUID viewerId : previous.viewers()) {
+                if (viewers.contains(viewerId)) continue;
+                ServerPlayerEntity viewer = player.getServer().getPlayerManager().getPlayer(viewerId);
+                if (viewer != null && viewer.getWorld() == player.getWorld()) {
+                    sendTrackedPlayerPostureToViewer(viewer, player, 100, false, false, 0, false);
+                }
+            }
+        }
+        if (!showPosture) {
+            LAST_ENTITY_POSTURE_SYNC.remove(uuid);
+            LAST_ENTITY_POSTURE_SYNC_TIMES.remove(uuid);
             return;
         }
-
-        EntityPostureSyncState syncState = new EntityPostureSyncState(
-                player.getId(),
-                posturePercent,
-                true,
-                staggered,
-                staggerDamagePercent,
-                vulnerable
-        );
-        long time = player.getWorld().getTime();
-        if (syncState.equals(LAST_ENTITY_POSTURE_SYNC.get(uuid))
-                && time - LAST_ENTITY_POSTURE_SYNC_TIMES.getOrDefault(uuid, Long.MIN_VALUE) < ENTITY_POSTURE_SYNC_REFRESH_TICKS) {
-            return;
-        }
-
+        EntityPostureSyncState syncState = new EntityPostureSyncState(player.getId(), dimension, posturePercent,
+                staggered, staggerDamagePercent, vulnerable, Set.copyOf(viewers));
+        long time = player.getServer().getTicks();
+        if (syncState.equals(previous)
+                && time - LAST_ENTITY_POSTURE_SYNC_TIMES.getOrDefault(uuid, time) < ENTITY_POSTURE_SYNC_REFRESH_TICKS) return;
         LAST_ENTITY_POSTURE_SYNC.put(uuid, syncState);
         LAST_ENTITY_POSTURE_SYNC_TIMES.put(uuid, time);
-        sendTrackedPlayerPosture(player, posturePercent, true, staggered, staggerDamagePercent, vulnerable);
-    }
-
-    private static void sendTrackedPlayerPosture(
-            ServerPlayerEntity player,
-            int posturePercent,
-            boolean showPosture,
-            boolean staggered,
-            int staggerDamagePercent,
-            boolean vulnerable
-    ) {
-        boolean showSelfDebugBar = showPosture && CustomMobsSpawnerConfig.get().showSelfOverheadPostureDebugBar;
-        sendTrackedPlayerPostureToViewer(player, player, posturePercent, showSelfDebugBar, staggered, staggerDamagePercent, vulnerable);
-        for (ServerPlayerEntity viewer : PlayerLookup.tracking(player)) {
-            if (viewer.squaredDistanceTo(player) > TRACKED_PLAYER_POSTURE_SYNC_DISTANCE_SQUARED || !isNameTagVisibleFor(player, viewer)) {
-                continue;
-            }
-
-            sendTrackedPlayerPostureToViewer(viewer, player, posturePercent, showPosture, staggered, staggerDamagePercent, vulnerable);
+        for (UUID viewerId : viewers) {
+            ServerPlayerEntity viewer = player.getServer().getPlayerManager().getPlayer(viewerId);
+            if (viewer != null) sendTrackedPlayerPostureToViewer(viewer, player, posturePercent, true,
+                    staggered, staggerDamagePercent, vulnerable);
         }
     }
 
@@ -984,6 +993,7 @@ public final class PlayerParryHandler {
             int staggerDamagePercent,
             boolean vulnerable
     ) {
+        if (!ServerPlayNetworking.canSend(viewer, MobPostureHandler.MOB_POSTURE_SYNC_PACKET)) return;
         PacketByteBuf buf = PacketByteBufs.create();
         buf.writeVarInt(player.getId());
         buf.writeByte(Math.max(0, Math.min(100, posturePercent)));
@@ -1009,16 +1019,17 @@ public final class PlayerParryHandler {
         };
     }
 
-    private record PostureSyncState(int posturePercent, boolean showPosture) {
+    private record PostureSyncState(int entityId, Identifier dimension, int posturePercent, boolean showPosture) {
     }
 
     private record EntityPostureSyncState(
             int entityId,
+            Identifier dimension,
             int posturePercent,
-            boolean showPosture,
             boolean staggered,
             int staggerDamagePercent,
-            boolean vulnerable
+            boolean vulnerable,
+            Set<UUID> viewers
     ) {
     }
 

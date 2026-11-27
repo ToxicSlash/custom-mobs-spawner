@@ -80,3 +80,11 @@ java {
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
 }
+
+// No external test framework needed for this deterministic packet-display contract.
+tasks.register('postureDisplayRegression', JavaExec) {
+    dependsOn testClasses
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'com.ashtonthedev.custommobsspawner.combat.PostureDisplaySnapshotTest'
+}
+tasks.named('check') { dependsOn tasks.named('postureDisplayRegression') }

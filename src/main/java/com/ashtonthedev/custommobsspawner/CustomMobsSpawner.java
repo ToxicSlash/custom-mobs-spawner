@@ -66,8 +66,11 @@ public class CustomMobsSpawner implements ModInitializer {
         ServerPlayNetworking.registerGlobalReceiver(CustomSkillRegistry.FAILED_ATTACK_PACKET, (server, player, handler, buf, responseSender) ->
                 server.execute(() -> CustomSkillRegistry.queueFailedPlayerAttack(player))
         );
+        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) ->
+                PlayerParryHandler.invalidatePostureSync(handler.player.getUuid()));
         ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
             UUID uuid = handler.player.getUuid();
+            PlayerParryHandler.invalidatePostureSync(uuid);
             ComboHandler.clearPlayer(uuid);
             SpellComboHandler.clearPlayer(uuid);
         });
