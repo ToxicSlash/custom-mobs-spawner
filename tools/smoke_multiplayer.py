@@ -112,6 +112,8 @@ def main():
                     continue
                 if line is None:
                     raise RuntimeError("Server quit before " + pattern)
+                if "CMOBS_PROBE_FAILURE " in line:
+                    raise RuntimeError(line.strip())
                 match = re.search(pattern, line)
                 if match:
                     return match
@@ -285,9 +287,20 @@ def main():
             time.sleep(1.1)
             cmd("cmobs_ci_skill CMobsB CMobsA startblock")
             wait_log(r"CMOBS_SKILL_PROBE startblock")
-            time.sleep(1.5)
+            (coord / "phase.txt").write_text("hold-block")
+            wait_files([coord / "hold-block-CMobsB.ok"], 25)
+            for _ in range(30):
+                cmd("cmobs_ci_skill CMobsB CMobsA blockstate")
+                match = wait_log(r"CMOBS_BLOCK_STATE (true|false) (\d+) (\d+)")
+                if match[1] == "true" and int(match[2]) > int(match[3]) + 2:
+                    break
+                time.sleep(.2)
+            else:
+                raise AssertionError("Client-held shield never reached sustained server block")
             cmd("cmobs_ci_skill CMobsB CMobsA block")
             wait_log(r"CMOBS_COMBAT_PROBE block", 30)
+            (coord / "phase.txt").write_text("release-block")
+            wait_files([coord / "block-released-CMobsB.ok"], 20)
             state = truth("CMobsB", "snapshot")
             if not 0 < state[0] < 100:
                 raise AssertionError("Real block posture not reduced")
@@ -300,7 +313,7 @@ def main():
             # assuming the runner sustains precisely 20 TPS.
             for _ in range(30):
                 state = truth("CMobsB", "snapshot")
-                if state[0] == 100 and state[2] == "false":
+                if state == (100, "false", "false"):
                     break
                 time.sleep(.5)
             else:

@@ -115,11 +115,13 @@ public final class PostureServerProbe implements ModInitializer {
                     player.setHealth(player.getMaxHealth());
                 }
                 case "startblock" -> {
+                    player.stopUsingItem();
                     player.setStackInHand(Hand.OFF_HAND, new ItemStack(Items.SHIELD));
-                    player.setCurrentHand(Hand.OFF_HAND);
-                    handler.getMethod("armParryBlock", PlayerEntity.class, ItemStack.class)
-                            .invoke(null, player, player.getOffHandStack());
-                    if (!player.isUsingItem()) throw new IllegalStateException("Shield use did not start");
+                }
+                case "blockstate" -> {
+                    double window = ((Number)config.getClass().getField("shieldParryWindowTicks").get(config)).doubleValue();
+                    System.out.println("CMOBS_BLOCK_STATE " + player.isUsingItem() + " "
+                            + player.getItemUseTime() + " " + Math.round(window));
                 }
                 case "parry", "block", "unblocked" -> {
                     if (action.equals("parry")) {
@@ -134,9 +136,15 @@ public final class PostureServerProbe implements ModInitializer {
                     double attackerBefore = number("POSTURE_DAMAGE", living.getUuid());
                     float health = player.getHealth();
                     int durability = player.getOffHandStack().getDamage();
+                    System.out.println("CMOBS_COMBAT_BEFORE " + action + " using=" + player.isUsingItem()
+                            + " useTicks=" + player.getItemUseTime() + " posture=" + before
+                            + " health=" + health + " durability=" + durability);
                     boolean applied = player.damage(living instanceof PlayerEntity attacker ? player.getWorld().getDamageSources().playerAttack(attacker) : player.getWorld().getDamageSources().mobAttack(living), 6);
                     double after = number("POSTURE_DAMAGE", player.getUuid());
                     double attackerAfter = number("POSTURE_DAMAGE", living.getUuid());
+                    System.out.println("CMOBS_COMBAT_AFTER " + action + " applied=" + applied
+                            + " posture=" + after + " health=" + player.getHealth()
+                            + " durability=" + player.getOffHandStack().getDamage());
                     if (action.equals("parry")) {
                         if (applied || player.getHealth() != health || !contains("PARRY_COUNTER_WINDOWS", player.getUuid())
                                 || !contains("POSTURE_INVULNERABILITY_WINDOWS", player.getUuid())
@@ -151,7 +159,7 @@ public final class PostureServerProbe implements ModInitializer {
                     }
                     System.out.println("CMOBS_COMBAT_PROBE " + action + " " + before + " " + after
                             + " " + health + " " + player.getHealth());
-                    player.stopUsingItem();
+                    if (!action.equals("block")) player.stopUsingItem();
                 }
                 case "snapshot" -> {}
                 default -> throw new IllegalArgumentException(action);
@@ -160,7 +168,11 @@ public final class PostureServerProbe implements ModInitializer {
                     + " " + amp(player, StatusEffects.STRENGTH) + " " + amp(player, StatusEffects.HASTE)
                     + " " + amp(living, StatusEffects.RESISTANCE));
             return 1;
-        } catch (Exception e) { throw new IllegalStateException("Skill test command failed", e); }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("CMOBS_PROBE_FAILURE " + action + " " + e);
+            throw new IllegalStateException("Skill test command failed", e);
+        }
     }
     private static int amp(LivingEntity entity, StatusEffect effect) {
         StatusEffectInstance instance = entity.getStatusEffect(effect);

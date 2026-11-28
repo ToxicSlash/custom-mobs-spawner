@@ -4,6 +4,8 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Hand;
+import net.minecraft.item.Items;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.Perspective;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
@@ -21,6 +23,8 @@ public final class PostureClientProbe {
     private static final Path COORD = Path.of(System.getProperty("cmobs.ci.posture"));
     private static String completed = "", active = "";
     private static int ticks;
+    private static boolean holdingBlock;
+    private static int blockAttempts;
     private static String lastScreen = "";
     private static Object field(Class<?> owner, String name) throws Exception {
         Field f = owner.getDeclaredField(name);
@@ -50,6 +54,31 @@ public final class PostureClientProbe {
             String me = client.player.getName().getString();
             Path phaseFile = COORD.resolve("phase.txt");
             String phase = Files.exists(phaseFile) ? Files.readString(phaseFile).trim() : "";
+            // Hold actual client input until the server has observed the hit.
+            if (phase.equals("hold-block") && me.equals("CMobsB")) {
+                if (!holdingBlock) {
+                    holdingBlock = true;
+                    blockAttempts = 0;
+                    if (client.currentScreen != null) client.setScreen(null);
+                }
+                client.options.useKey.setPressed(true);
+                if (!client.player.isUsingItem() && client.player.getOffHandStack().isOf(Items.SHIELD)
+                        && client.interactionManager != null && blockAttempts++ % 5 == 0) {
+                    client.interactionManager.interactItem(client.player, Hand.OFF_HAND);
+                }
+                if (client.player.isUsingItem() && client.player.getItemUseTime() >= 10
+                        && !Files.exists(COORD.resolve("hold-block-" + me + ".ok"))) {
+                    Files.writeString(COORD.resolve("hold-block-" + me + ".ok"), "shield held");
+                }
+                return;
+            }
+            if (holdingBlock) {
+                holdingBlock = false;
+                client.options.useKey.setPressed(false);
+                if (client.player.isUsingItem() && client.interactionManager != null)
+                    client.interactionManager.stopUsingItem(client.player);
+                Files.writeString(COORD.resolve("block-released-" + me + ".ok"), "released");
+            }
             if (phase.equals("stop")) { client.scheduleStop(); return; }
             if (phase.equals("miss-packet") && !phase.equals(completed)) {
                 if (me.equals("CMobsA")) {
