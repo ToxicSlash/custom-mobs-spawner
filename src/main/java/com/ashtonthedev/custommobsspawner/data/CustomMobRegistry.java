@@ -655,6 +655,11 @@ public final class CustomMobRegistry {
         return "custom_mob_" + id.toString().toLowerCase().replaceAll("[^a-z0-9_]", "_");
     }
 
+    /** Native dragon base sampled immediately after IaF's age calculation, before CMobs overrides. */
+    public interface IafDragonHealthBaseline {
+        double cmobs$getNativeDragonHealth();
+    }
+
     private static boolean isIafSpecies(Entity entity) {
         Identifier type = Registries.ENTITY_TYPE.getId(entity.getType());
         return "iceandfire".equals(type.getNamespace()) && IAF_SPECIES.contains(type.getPath());
@@ -676,14 +681,29 @@ public final class CustomMobRegistry {
         for (JsonElement element : json.getAsJsonArray("attributes")) {
             if (!element.isJsonObject()) continue;
             JsonObject entry = element.getAsJsonObject();
-            if (!entry.has("id") || !entry.has("base")) continue;
+            if (!entry.has("id") || (!entry.has("base") && !entry.has("age_multiplier"))) continue;
             Identifier id = Identifier.tryParse(entry.get("id").getAsString());
             if (id == null) continue;
             EntityAttribute attribute = Registries.ATTRIBUTE.getOrEmpty(id).orElse(null);
             if (attribute == null || !IAF_RECALCULATED.contains(attribute)) continue;
             EntityAttributeInstance instance = mob.getAttributeInstance(attribute);
-            double requested = entry.get("base").getAsDouble();
-            if (instance == null || !Double.isFinite(requested)) continue;
+            if (instance == null) continue;
+            double requested;
+            // Existing base definitions always retain fixed semantics. Opt in with
+            // age_multiplier instead of base, only on a dragon's maximum health.
+            if (entry.has("base")) {
+                requested = entry.get("base").getAsDouble();
+            } else {
+                if (attribute != EntityAttributes.GENERIC_MAX_HEALTH ||
+                        !(entity instanceof IafDragonHealthBaseline dragon) ||
+                        !isNumber(entry.get("age_multiplier"))) continue;
+                double nativeHealth = dragon.cmobs$getNativeDragonHealth();
+                double multiplier = entry.get("age_multiplier").getAsDouble();
+                if (!Double.isFinite(nativeHealth) || nativeHealth <= 0 ||
+                        !Double.isFinite(multiplier) || multiplier <= 0) continue;
+                requested = nativeHealth * multiplier;
+            }
+            if (!Double.isFinite(requested)) continue;
             if (Double.compare(instance.getBaseValue(), requested) != 0) instance.setBaseValue(requested);
             if (attribute == EntityAttributes.GENERIC_MAX_HEALTH) maxHealthExplicit = true;
         }
