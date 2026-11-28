@@ -46,6 +46,7 @@ public final class PostureServerProbe implements ModInitializer {
                 System.out.println("CMOBS_POSTURE_SERVER_READY");
             } catch (Exception e) { throw new IllegalStateException(e); }
         });
+        ServerLifecycleEvents.SERVER_STOPPED.register(server -> System.out.println("CMOBS_POSTURE_SERVER_STOPPED"));
         CommandRegistrationCallback.EVENT.register((dispatcher, access, env) ->
             dispatcher.register(CommandManager.literal("cmobs_ci_posture").requires(source -> source.hasPermissionLevel(4))
                 .then(CommandManager.argument("target", EntityArgumentType.player())

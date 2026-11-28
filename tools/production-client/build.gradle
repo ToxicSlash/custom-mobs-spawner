@@ -29,5 +29,6 @@ tasks.register('runCmobsClient', ClientProductionRunTask) {
         programArgs.addAll(['--quickPlayMultiplayer', multiplayer])
         jvmArgs.addAll(['-Dcmobs.ci.posture=' + providers.gradleProperty('cmobsPostureCoordinator').get()])
     }
+    outputs.upToDateWhen { false }
     useXVFB = false
 }

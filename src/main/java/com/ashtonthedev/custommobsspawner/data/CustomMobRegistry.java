@@ -111,6 +111,9 @@ public final class CustomMobRegistry {
         }
 
         applyDefinition(entity, definition);
+        // An explicitly selected custom definition is already the final spawn target.
+        // Natural replacement rules must not roll again on it (including passengers).
+        entity.addCommandTag(com.ashtonthedev.custommobsspawner.CustomMobsSpawner.CHECKED_TAG);
         applyPassengers(entity, definition, world, pos, yaw, passengerDepth);
         return entity;
     }

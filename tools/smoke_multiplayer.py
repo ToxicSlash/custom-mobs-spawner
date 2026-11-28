@@ -63,7 +63,7 @@ def main():
                                       "chance": 1, "interval_ticks": 5, "attempts_per_player": 12,
                                       "min_distance": 12, "max_distance": 22, "mob_cap": 1,
                                       "blocks": ["minecraft:grass_block"], "dimensions": ["minecraft:overworld"],
-                                      "obey_do_mob_spawning": False})
+                                      "obey_do_mob_spawning": True})
         fixture("custom_mobs", "stand", {"entity": "minecraft:chicken", "tags": ["cmobs_ci_stand_result"],
                                          "nbt": "{NoAI:1b,PersistenceRequired:1b}"})
         fixture("spawn_stands", "stand", {"tag": "cmobs_ci_spawn_stand", "custom_mob": "cmobs_ci_mp:stand",
@@ -142,7 +142,10 @@ def main():
                     "-PcmobsPostureCoordinator=" + str(coord), "runCmobsClient"],
                     cwd=ROOT, stdout=output, stderr=subprocess.STDOUT)
                 processes.append(proc)
-            wait_files([coord / (name + ".ready") for name in ("CMobsA", "CMobsB")], 240)
+                # Launch clients serially until each has joined; concurrent login
+                # previously failed on the loaded desktop during handshake.
+                wait_log(name + r" joined the game", 300)
+            wait_files([coord / (name + ".ready") for name in ("CMobsA", "CMobsB")], 90)
             # Flat worlds in 1.20.1 start at -64; build a known platform
             # instead of assuming y=4 is ground. Keep combat damage enabled.
             cmd("fill -8 -61 -8 8 -61 8 minecraft:stone")
@@ -173,6 +176,7 @@ def main():
             phase("hidden-name", "CMobsB", broken, view="back", remote=False)
             cmd("team leave CMobsB")
             phase("visible-again", "CMobsB", broken)
+            print("CMOBS_MULTIPLAYER_POSTURE_PHASES_OK")
             # Separate Stage 2 checks with two real players and many extra-spawn
             # attempts per tick. A cap of one must remain one across both players.
             def exact_count(selector, count):
@@ -181,10 +185,23 @@ def main():
                     wait_log(r"Test failed")
                 else:
                     wait_log(rf"Test passed, count: {count}\b")
-            exact_count("@e[tag=cmobs_ci_cap]", 1)
+            cmd("gamerule doMobSpawning true")
+            wait_log(r"Gamerule doMobSpawning is now set to: true")
+            # Confirm a successful spawn rather than treating zero as a cap pass.
+            for _ in range(30):
+                cmd("execute if entity @e[tag=cmobs_ci_cap]")
+                match = wait_log(r"Test failed|Test passed, count: (\d+)")
+                if match[1]:
+                    if int(match[1]) != 1:
+                        raise AssertionError("Extra spawn cap exceeded: " + match[1])
+                    break
+                time.sleep(1)
+            else:
+                raise AssertionError("Extra spawn fixture never spawned")
             time.sleep(3)
             exact_count("@e[tag=cmobs_ci_cap]", 1)
             print("CMOBS_MULTIPLAYER_SPAWN_CAP_OK")
+            cmd("gamerule doMobSpawning false")
             cmd("gamerule cmobsDisableSpawnStands true")
             cmd('summon minecraft:armor_stand 1 -60 5 {Tags:["cmobs_ci_spawn_stand"],NoGravity:1b}')
             wait_log(r"Summoned new")
@@ -203,8 +220,17 @@ def main():
                 if proc.wait(timeout=45):
                     raise RuntimeError("Client did not exit cleanly")
             cmd("stop")
-            if server.wait(timeout=60):
-                raise RuntimeError("Server did not exit cleanly")
+            wait_log(r"All dimensions are saved", 90)
+            try:
+                if server.wait(timeout=90):
+                    raise RuntimeError("Server did not exit cleanly")
+            except subprocess.TimeoutExpired:
+                # Diagnose the post-save process hang rather than silently passing.
+                jcmd = Path(os.environ["JAVA_HOME"]) / "bin/jcmd.exe"
+                with (evidence / "server-shutdown-threads.log").open("w", encoding="utf-8") as dump:
+                    subprocess.run([str(jcmd), str(server.pid), "Thread.print", "-l"],
+                                   stdout=dump, stderr=subprocess.STDOUT, timeout=30)
+                raise RuntimeError("Server saved all dimensions but JVM failed to exit; see thread dump")
             print("CMOBS_MULTIPLAYER_POSTURE_CORE_OK")
         finally:
             for proc in reversed(processes):

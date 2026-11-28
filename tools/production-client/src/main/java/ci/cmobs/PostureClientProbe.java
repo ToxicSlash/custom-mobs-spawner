@@ -18,6 +18,7 @@ public final class PostureClientProbe {
     private static final Path COORD = Path.of(System.getProperty("cmobs.ci.posture"));
     private static String completed = "", active = "";
     private static int ticks;
+    private static String lastScreen = "";
     private static Object field(Class<?> owner, String name) throws Exception {
         Field f = owner.getDeclaredField(name);
         f.setAccessible(true);
@@ -36,6 +37,11 @@ public final class PostureClientProbe {
         ClientTickEvents.END_CLIENT_TICK.register(PostureClientProbe::tick);
     }
     private static void tick(MinecraftClient client) {
+        String screen = client.currentScreen == null ? "none" : client.currentScreen.getClass().getName();
+        if (!screen.equals(lastScreen)) {
+            System.out.println("CMOBS_POSTURE_SCREEN " + screen + " connected=" + (client.player != null));
+            lastScreen = screen;
+        }
         if (client.player == null || client.world == null) return;
         try {
             String me = client.player.getName().getString();

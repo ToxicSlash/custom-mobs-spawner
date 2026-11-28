@@ -82,7 +82,7 @@ def main():
         (pack / "pack.mcmeta").write_text(json.dumps({"pack": {"pack_format": 15, "description": "CMobs CI fixture"}}))
         fixture.write_text(json.dumps({"entity": "minecraft:zombie", "tags": ["cmobs_ci_probe"],
                                        "attributes": [{"id": "minecraft:generic.max_health", "base": 60}],
-                                       "health": 60, "nbt": "{NoAI:1b,PersistenceRequired:1b}"}))
+                                       "health": 60, "nbt": "{NoAI:1b,NoGravity:1b,PersistenceRequired:1b}"}))
         def mob_fixture(name, entity, health, **extra):
             (fixture.parent / (name + ".json")).write_text(json.dumps({
                 "entity": entity, "tags": ["cmobs_ci_" + name],
@@ -99,12 +99,13 @@ def main():
             path.write_text(json.dumps(value))
         mob_fixture("replacement", "minecraft:sheep", 42)
         mob_fixture("group_a", "minecraft:chicken", 33)
+        mob_fixture("explicit", "minecraft:polar_bear", 71)
         mob_fixture("group_b", "minecraft:chicken", 34)
-        data_fixture("replacements", "ci_rabbit", {"source": "minecraft:rabbit", "chance": 1,
+        data_fixture("replacements", "ci_rabbit", {"source": "minecraft:polar_bear", "chance": 1,
                      "custom_mob": "cmobs_ci:replacement", "dimensions": ["minecraft:overworld"]})
-        data_fixture("replacements", "ci_pig", {"source": "minecraft:pig", "chance": 1,
+        data_fixture("replacements", "ci_pig", {"source": "minecraft:goat", "chance": 1,
                      "group": "cmobs_ci:pair"})
-        data_fixture("replacements", "ci_cow", {"source": "minecraft:cow", "chance": 1,
+        data_fixture("replacements", "ci_cow", {"source": "minecraft:mooshroom", "chance": 1,
                      "custom_mob": "cmobs_ci:replacement", "dimensions": ["minecraft:the_nether"]})
         data_fixture("groups", "pair", {"members": [{"custom_mob": "cmobs_ci:group_a"},
                      {"custom_mob": "cmobs_ci:group_b", "x": 2}], "pools": []})
@@ -149,6 +150,8 @@ def main():
             proc.stdin.flush()
         try:
             wait(r'Done \(', 600)
+            cmd("gamerule doMobSpawning false")
+            wait(r"Gamerule doMobSpawning is now set to: false")
             cmd("gamerule doDaylightCycle false")
             wait(r"Gamerule doDaylightCycle is now set to: false")
             cmd("time set midnight")
@@ -180,24 +183,32 @@ def main():
             print("CMOBS_EQUIPMENT_NBT_LOOT_PASSENGER_OK")
             def count(selector, expected):
                 cmd("execute if entity " + selector)
-                if expected == 0:
-                    wait(r"Test failed", 20)
-                else:
-                    wait(rf"Test passed, count: {expected}\b", 20)
-            cmd('summon minecraft:rabbit 6 100 6 {Tags:["cmobs_ci_source"],NoAI:1b,PersistenceRequired:1b,CustomName:\'{"text":"CI Rabbit"}\'}')
+                line = wait(r"Test failed|Test passed, count: \d+", 20)
+                match = re.search(r"count: (\d+)", line)
+                actual = int(match.group(1)) if match else 0
+                if actual != expected:
+                    raise AssertionError(f"{selector}: expected {expected}, actual {actual}")
+            cmd('summon minecraft:polar_bear 6 100 6 {Tags:["cmobs_ci_source"],NoAI:1b,PersistenceRequired:1b,CustomName:\'{"text":"CI Rabbit"}\'}')
             wait(r"Summoned new", 20)
             count("@e[tag=cmobs_ci_source]", 0)
             count("@e[tag=cmobs_ci_replacement]", 1)
             cmd("attribute @e[tag=cmobs_ci_replacement,limit=1] minecraft:generic.max_health base get")
             wait(r"(?i)base value.*42(?:\.0+)?\b")
-            cmd('summon minecraft:pig 6 100 8 {Tags:["cmobs_ci_group_source"],NoAI:1b,PersistenceRequired:1b}')
+            cmd('summon minecraft:goat 6 100 8 {Tags:["cmobs_ci_group_source"],NoAI:1b,PersistenceRequired:1b}')
             wait(r"Summoned new", 20)
             count("@e[tag=cmobs_ci_group_source]", 0)
             count("@e[tag=cmobs_ci_group_a]", 1)
             count("@e[tag=cmobs_ci_group_b]", 1)
-            cmd('summon minecraft:cow 6 100 10 {Tags:["cmobs_ci_wrong_dimension"],NoAI:1b,NoGravity:1b,PersistenceRequired:1b}')
+            cmd('summon minecraft:mooshroom 6 100 10 {Tags:["cmobs_ci_wrong_dimension"],NoAI:1b,NoGravity:1b,PersistenceRequired:1b}')
             wait(r"Summoned new", 20)
             count("@e[tag=cmobs_ci_wrong_dimension]", 1)
+            cmd("csummon cmobs_ci:explicit 8 100 4")
+            wait(r"Summoned custom mob cmobs_ci:explicit")
+            count("@e[tag=cmobs_ci_explicit]", 1)
+            count("@e[tag=cmobs_ci_replacement]", 1)
+            cmd("attribute @e[tag=cmobs_ci_explicit,limit=1] minecraft:generic.max_health base get")
+            wait(r"(?i)base value.*71(?:\.0+)?\b")
+            print("CMOBS_EXPLICIT_CUSTOM_NOT_REROLLED_OK")
             print("CMOBS_REPLACEMENT_GROUP_DIMENSION_OK")
             errors = []
             def check_species(name, hp, stage, health=None):
@@ -289,6 +300,7 @@ def main():
             count("@e[tag=cmobs_ci_group_a]", 1)
             count("@e[tag=cmobs_ci_group_b]", 1)
             count("@e[tag=cmobs_ci_wrong_dimension]", 1)
+            count("@e[tag=cmobs_ci_explicit]", 1)
             print("CMOBS_REPLACEMENT_GROUP_RESTART_OK")
             for name, hp in species.items():
                 check_species(name, hp, "restart", hp-11)
