@@ -239,6 +239,7 @@ def main():
             wait(r"(?i)base value.*71(?:\.0+)?\b")
             print("CMOBS_EXPLICIT_CUSTOM_NOT_REROLLED_OK")
             print("CMOBS_REPLACEMENT_GROUP_DIMENSION_OK")
+            errors = []
             if not ice:
                 def spawn_skill(name, x, z):
                     cmd(f"csummon cmobs_ci:{name} {x} 110 {z}")
@@ -250,112 +251,144 @@ def main():
                     if not match or abs(float(match[1])-expected) > .01:
                         raise AssertionError(f"{name} expected health {expected}: {line}")
                 def amplifier(name, effect_id, expected):
-                    cmd(f"data get entity @e[tag=cmobs_ci_{name},limit=1] ActiveEffects[{{Id:{effect_id}b}}].Amplifier")
-                    line = wait(r"following entity data: (-?\d+)b|Found no elements matching|No entity was found|No matching elements", 20)
-                    match = re.search(r"following entity data: (-?\d+)b", line)
-                    actual = int(match[1]) if match else None
+                    cmd(f"data get entity @e[tag=cmobs_ci_{name},limit=1] ActiveEffects")
+                    line = wait(r"following entity data: \[|Found no elements matching|No entity was found|No matching elements", 20)
+                    if "No entity was found" in line:
+                        raise AssertionError(f"{name} missing")
+                    matches = {}
+                    for record in re.findall(r"\{[^{}]*\}", line):
+                        ident = re.search(r"\bId:\s*(-?\d+)[bBsSlL]?\b", record)
+                        amp = re.search(r"\bAmplifier:\s*(-?\d+)[bBsSlL]?\b", record)
+                        if ident and amp:
+                            matches[int(ident[1])] = int(amp[1])
+                    actual = matches.get(effect_id)
                     if actual != expected:
-                        raise AssertionError(f"{name} effect {effect_id}: expected {expected}, got {actual}")
+                        raise AssertionError(f"{name} effect {effect_id}: expected {expected}, got {actual}; raw NBT: {line.strip()}")
                 def hurt(name, amount, source=None):
                     suffix = f" by @e[tag=cmobs_ci_{source},limit=1]" if source else ""
                     cmd(f"damage @e[tag=cmobs_ci_{name},limit=1] {amount} minecraft:generic" + suffix)
                     wait(r"Applied .*damage|Target is invulnerable", 20)
-                spawn_skill("hurt", 2, 12)
-                hurt("hurt", 5)
-                hp("hurt", 97)
-                amplifier("hurt", 5, 0)
-                amplifier("hurt", 24, None)
-                amplifier("hurt", 1, None)
-                time.sleep(1.1)
-                hurt("hurt", 5)
-                hp("hurt", 92)
-                amplifier("hurt", 5, 0)
-                print("CMOBS_SKILL_HURT_CONDITIONS_COOLDOWN_OK")
-                spawn_skill("cancel", 5, 12)
-                hurt("cancel", 5)
-                hp("cancel", 100)
-                amplifier("cancel", 11, 0)
-                print("CMOBS_SKILL_CANCEL_OK")
-                spawn_skill("timed", 8, 12)
-                cmd("data merge entity @e[tag=cmobs_ci_timed,limit=1] {Health:40.0f}")
-                wait(r"Modified entity data", 20)
-                time.sleep(1.8)
-                hp("timed", 50)
-                amplifier("timed", 3, 0)
-                print("CMOBS_SKILL_TIMED_DELAY_OK")
-                spawn_skill("death", 11, 12)
-                hurt("death", 200)
-                count("@e[tag=cmobs_ci_death_result]", 1)
-                print("CMOBS_SKILL_DEATH_SUMMON_OK")
-                spawn_skill("cycle_a", 11, 3)
-                spawn_skill("cycle_b", 12, 3)
-                hurt("cycle_b", 1, "cycle_a")
-                amplifier("cycle_a", 5, 0)
-                amplifier("cycle_b", 5, 0)
-                hp("cycle_a", 99)
-                hp("cycle_b", 98)
-                print("CMOBS_SKILL_DAMAGE_REENTRY_OK")
+                try:
+                    spawn_skill("hurt", 2, 12)
+                    hurt("hurt", 5)
+                    hp("hurt", 97)
+                    amplifier("hurt", 5, 0)
+                    amplifier("hurt", 24, None)
+                    amplifier("hurt", 1, None)
+                    time.sleep(1.1)
+                    hurt("hurt", 5)
+                    hp("hurt", 92)
+                    amplifier("hurt", 5, 0)
+                    print("CMOBS_SKILL_HURT_CONDITIONS_COOLDOWN_OK")
+                except (AssertionError, RuntimeError) as exc:
+                    errors.append("hurt: " + str(exc))
+                    print("CMOBS_SKILL_TEST_FAILED hurt", exc, flush=True)
+                try:
+                    spawn_skill("cancel", 5, 12)
+                    hurt("cancel", 5)
+                    hp("cancel", 100)
+                    amplifier("cancel", 11, 0)
+                    print("CMOBS_SKILL_CANCEL_OK")
+                except (AssertionError, RuntimeError) as exc:
+                    errors.append("cancel: " + str(exc))
+                    print("CMOBS_SKILL_TEST_FAILED cancel", exc, flush=True)
+                try:
+                    spawn_skill("timed", 8, 12)
+                    cmd("data merge entity @e[tag=cmobs_ci_timed,limit=1] {Health:40.0f}")
+                    wait(r"Modified entity data", 20)
+                    time.sleep(1.8)
+                    hp("timed", 50)
+                    amplifier("timed", 3, 0)
+                    print("CMOBS_SKILL_TIMED_DELAY_OK")
+                except (AssertionError, RuntimeError) as exc:
+                    errors.append("timed: " + str(exc))
+                    print("CMOBS_SKILL_TEST_FAILED timed", exc, flush=True)
+                try:
+                    spawn_skill("death", 11, 12)
+                    hurt("death", 200)
+                    count("@e[tag=cmobs_ci_death_result]", 1)
+                    print("CMOBS_SKILL_DEATH_SUMMON_OK")
+                except (AssertionError, RuntimeError) as exc:
+                    errors.append("death: " + str(exc))
+                    print("CMOBS_SKILL_TEST_FAILED death", exc, flush=True)
+                try:
+                    spawn_skill("cycle_a", 11, 3)
+                    spawn_skill("cycle_b", 12, 3)
+                    hurt("cycle_b", 1, "cycle_a")
+                    amplifier("cycle_a", 5, 0)
+                    amplifier("cycle_b", 5, 0)
+                    hp("cycle_a", 99)
+                    hp("cycle_b", 98)
+                    print("CMOBS_SKILL_DAMAGE_REENTRY_OK")
+                except (AssertionError, RuntimeError) as exc:
+                    errors.append("cycle_a: " + str(exc))
+                    print("CMOBS_SKILL_TEST_FAILED cycle_a", exc, flush=True)
 
             # Explicit chunk unload/reload outside the world's spawn tickets.
             # Keep the same UUID and persisted NBT, not a newly summoned replacement.
             if not ice:
-                cmd("forceload add 512 512 559 559")
-                wait(r"Marked .*chunk", 30)
-                # forceload acknowledges tickets, not entity loading. Wait for a
-                # vanilla marker to be visible to the server's entity selector.
-                for attempt in range(60):
-                    cmd('summon minecraft:marker 536 100 536 {Tags:["cmobs_ci_ready"]}')
-                    wait(r"Summoned new|That position is not loaded|Unable to summon entity", 20)
-                    cmd("execute if entity @e[tag=cmobs_ci_ready]")
-                    line = wait(r"Test failed|Test passed, count: \d+", 20)
-                    if "Test passed" in line:
-                        break
+                try:
+                    cmd("forceload add 512 512 559 559")
+                    wait(r"Marked .*chunk", 30)
+                    # forceload acknowledges tickets, not entity loading. Wait for a
+                    # vanilla marker to be visible to the server's entity selector.
+                    for attempt in range(60):
+                        cmd('summon minecraft:marker 536 100 536 {Tags:["cmobs_ci_ready"]}')
+                        wait(r"Summoned new|That position is not loaded|Unable to summon entity", 20)
+                        cmd("execute if entity @e[tag=cmobs_ci_ready]")
+                        line = wait(r"Test failed|Test passed, count: \d+", 20)
+                        if "Test passed" in line:
+                            break
+                        time.sleep(1)
+                    else:
+                        raise AssertionError("Remote chunk never became entity-ready")
+                    cmd("kill @e[tag=cmobs_ci_ready]")
+                    wait(r"Killed", 20)
+                    cmd("csummon cmobs_ci:unload 536 100 536")
+                    wait(r"Summoned custom mob cmobs_ci:unload|Unknown or invalid custom mob", 30)
+                    count("@e[tag=cmobs_ci_unload]", 1)
+                    cmd("data get entity @e[tag=cmobs_ci_unload,limit=1] UUID")
+                    uuid_line = wait(r"following entity data: \[I;.*\]", 20)
+                    uuid = uuid_line.split("following entity data: ", 1)[1].strip()
+                    cmd("save-all flush")
+                    wait(r"Saved the game", 60)
+                    cmd("forceload remove 512 512 559 559")
+                    wait(r"Unmarked .*chunk", 30)
+                    for _ in range(45):
+                        cmd("execute if entity @e[tag=cmobs_ci_unload]")
+                        line = wait(r"Test failed|Test passed, count: \d+", 20)
+                        if "Test failed" in line:
+                            break
+                        time.sleep(1)
+                    else:
+                        raise AssertionError("Remote custom mob never unloaded")
+                    cmd("forceload add 512 512 559 559")
+                    wait(r"Marked .*chunk", 30)
+                    for _ in range(30):
+                        cmd("execute if entity @e[tag=cmobs_ci_unload]")
+                        line = wait(r"Test failed|Test passed, count: \d+", 20)
+                        if "Test passed, count: 1" in line:
+                            break
+                        time.sleep(1)
+                    else:
+                        raise AssertionError("Remote custom mob failed to reload")
+                    cmd("data get entity @e[tag=cmobs_ci_unload,limit=1] UUID")
+                    line = wait(r"following entity data: \[I;.*\]", 20)
+                    if line.split("following entity data: ", 1)[1].strip() != uuid:
+                        raise AssertionError("Custom mob UUID changed across chunk reload")
+                    cmd("attribute @e[tag=cmobs_ci_unload,limit=1] minecraft:generic.max_health base get")
+                    wait(r"(?i)base value.*71(?:\.0+)?\b", 20)
+                    cmd("kill @e[tag=cmobs_ci_unload]")
+                    wait(r"Killed", 20)
+                    cmd("forceload remove 512 512 559 559")
+                    wait(r"Unmarked .*chunk", 30)
+                    print("CMOBS_CUSTOM_MOB_CHUNK_RELOAD_OK")
+                except (AssertionError, RuntimeError) as exc:
+                    errors.append('chunk reload: ' + str(exc))
+                    print('CMOBS_CHUNK_RELOAD_FAILED', exc, flush=True)
+                    # Restore the fixture's chunk tickets before proceeding.
+                    cmd('forceload remove 512 512 559 559')
                     time.sleep(1)
-                else:
-                    raise AssertionError("Remote chunk never became entity-ready")
-                cmd("kill @e[tag=cmobs_ci_ready]")
-                wait(r"Killed", 20)
-                cmd("csummon cmobs_ci:unload 536 100 536")
-                wait(r"Summoned custom mob cmobs_ci:unload|Unknown or invalid custom mob", 30)
-                count("@e[tag=cmobs_ci_unload]", 1)
-                cmd("data get entity @e[tag=cmobs_ci_unload,limit=1] UUID")
-                uuid_line = wait(r"following entity data: \[I;.*\]", 20)
-                uuid = uuid_line.split("following entity data: ", 1)[1].strip()
-                cmd("save-all flush")
-                wait(r"Saved the game", 60)
-                cmd("forceload remove 512 512 559 559")
-                wait(r"Unmarked .*chunk", 30)
-                for _ in range(45):
-                    cmd("execute if entity @e[tag=cmobs_ci_unload]")
-                    line = wait(r"Test failed|Test passed, count: \d+", 20)
-                    if "Test failed" in line:
-                        break
-                    time.sleep(1)
-                else:
-                    raise AssertionError("Remote custom mob never unloaded")
-                cmd("forceload add 512 512 559 559")
-                wait(r"Marked .*chunk", 30)
-                for _ in range(30):
-                    cmd("execute if entity @e[tag=cmobs_ci_unload]")
-                    line = wait(r"Test failed|Test passed, count: \d+", 20)
-                    if "Test passed, count: 1" in line:
-                        break
-                    time.sleep(1)
-                else:
-                    raise AssertionError("Remote custom mob failed to reload")
-                cmd("data get entity @e[tag=cmobs_ci_unload,limit=1] UUID")
-                line = wait(r"following entity data: \[I;.*\]", 20)
-                if line.split("following entity data: ", 1)[1].strip() != uuid:
-                    raise AssertionError("Custom mob UUID changed across chunk reload")
-                cmd("attribute @e[tag=cmobs_ci_unload,limit=1] minecraft:generic.max_health base get")
-                wait(r"(?i)base value.*71(?:\.0+)?\b", 20)
-                cmd("kill @e[tag=cmobs_ci_unload]")
-                wait(r"Killed", 20)
-                cmd("forceload remove 512 512 559 559")
-                wait(r"Unmarked .*chunk", 30)
-                print("CMOBS_CUSTOM_MOB_CHUNK_RELOAD_OK")
-
-            errors = []
             def check_species(name, hp, stage, health=None):
                 target = f"@e[tag=cmobs_ci_{name},limit=1]"
                 cmd(f"attribute {target} minecraft:generic.max_health base get")
@@ -455,7 +488,7 @@ def main():
                 raise RuntimeError("Restarted server did not exit cleanly")
             print("CMOBS_SERVER_RESTART_OK")
             if errors:
-                raise AssertionError("Ice and Fire regression failures:\n" + "\n".join(errors))
+                raise AssertionError("Gameplay regression failures:\n" + "\n".join(errors))
             if species:
                 print("CMOBS_IAF_SPECIES_ALL_OK", len(species))
         finally:
