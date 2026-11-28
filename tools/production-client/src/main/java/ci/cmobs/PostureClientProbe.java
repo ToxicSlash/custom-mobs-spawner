@@ -1,6 +1,9 @@
 package ci.cmobs;
 
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.minecraft.util.Identifier;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.Perspective;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
@@ -48,6 +51,16 @@ public final class PostureClientProbe {
             Path phaseFile = COORD.resolve("phase.txt");
             String phase = Files.exists(phaseFile) ? Files.readString(phaseFile).trim() : "";
             if (phase.equals("stop")) { client.scheduleStop(); return; }
+            if (phase.equals("miss-packet") && !phase.equals(completed)) {
+                if (me.equals("CMobsA")) {
+                    Identifier channel = new Identifier("cmobs", "failed_attack");
+                    if (!ClientPlayNetworking.canSend(channel)) throw new IllegalStateException("Missing failed attack channel");
+                    ClientPlayNetworking.send(channel, PacketByteBufs.empty());
+                }
+                Files.writeString(COORD.resolve(phase + "-" + me + ".ok"), "sent");
+                completed = phase;
+                return;
+            }
             if (client.world.getPlayers().size() < 2) return;
             if (!client.player.isAlive()) throw new IllegalStateException("Unexpected fixture player death: " + me);
             if (!Files.exists(COORD.resolve(me + ".ready"))) Files.writeString(COORD.resolve(me + ".ready"), "ready");

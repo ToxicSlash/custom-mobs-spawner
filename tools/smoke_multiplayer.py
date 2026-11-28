@@ -267,6 +267,47 @@ def main():
             skill("spell", (1,0,0,0))
             skill("snapshot", (-1,-1,-1,0), player="CMobsB")
             print("CMOBS_SKILL_SPELL_RELEASE_DISPATCH_OK")
+            # Exercise the actual registered Fabric client-to-server packet.
+            (coord / "phase.txt").write_text("miss-packet")
+            wait_files([coord / ("miss-packet-" + name + ".ok") for name in ("CMobsA", "CMobsB")], 20)
+            time.sleep(.6)
+            skill("snapshot", (1,0,1,0))
+            print("CMOBS_SKILL_FAILED_ATTACK_PACKET_OK")
+            # Real damage pipeline with both connected players. Reset only the
+            # disposable fixture's previous synthetic posture states.
+            for player, peer in (("CMobsA", "CMobsB"), ("CMobsB", "CMobsA")):
+                cmd(f"cmobs_ci_skill {player} {peer} combatreset")
+                wait_log(r"CMOBS_SKILL_PROBE combatreset")
+            cmd("cmobs_ci_skill CMobsB CMobsA parry")
+            wait_log(r"CMOBS_COMBAT_PROBE parry", 30)
+            phase("real-parry-attacker", "CMobsA", truth("CMobsA", "snapshot"))
+            print("CMOBS_COMBAT_REAL_PARRY_OK")
+            time.sleep(1.1)
+            cmd("cmobs_ci_skill CMobsB CMobsA startblock")
+            wait_log(r"CMOBS_SKILL_PROBE startblock")
+            time.sleep(1.5)
+            cmd("cmobs_ci_skill CMobsB CMobsA block")
+            wait_log(r"CMOBS_COMBAT_PROBE block", 30)
+            state = truth("CMobsB", "snapshot")
+            if not 0 < state[0] < 100:
+                raise AssertionError("Real block posture not reduced")
+            print("CMOBS_COMBAT_REAL_BLOCK_OK")
+            time.sleep(1.1)
+            cmd("cmobs_ci_skill CMobsB CMobsA unblocked")
+            wait_log(r"CMOBS_COMBAT_PROBE unblocked", 30)
+            print("CMOBS_COMBAT_REAL_UNBLOCKED_DAMAGE_OK")
+            # Natural configured regeneration; poll server truth rather than
+            # assuming the runner sustains precisely 20 TPS.
+            for _ in range(30):
+                state = truth("CMobsB", "snapshot")
+                if state[0] == 100 and state[2] == "false":
+                    break
+                time.sleep(.5)
+            else:
+                raise AssertionError("Player posture did not recover")
+            phase("real-recovered", "CMobsB", state)
+            print("CMOBS_COMBAT_NATURAL_REGEN_OK")
+
 
             (coord / "phase.txt").write_text("stop")
             for proc in processes[1:]:

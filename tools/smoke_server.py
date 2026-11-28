@@ -157,6 +157,24 @@ def main():
                   {"weight": 0, "action": effect("glowing")},
                   {"weight": 1, "actions": [{"type": "equip", "slot": "head", "item": "minecraft:iron_helmet"},
                                            effect("haste")]}]}], cooldown_ticks=100)
+            # Real Spell Engine registry and SpellHelper impacts, not a direct CMobs dispatcher call.
+            spell_path = pack / "data/cmobs_ci/spells/impact_test.json"
+            spell_path.parent.mkdir(parents=True, exist_ok=True)
+            spell_path.write_text(json.dumps({"school": "FIRE", "range": 4,
+                "learn": {"tier": 1}, "cast": {"duration": 0},
+                "release": {"target": {"type": "AREA", "area": {}}},
+                "impact": [{"action": {"type": "DAMAGE", "damage": {"spell_power_coefficient": 1}}}],
+                "cost": {"durability": 0}}))
+            skill("spell_impact", "when_hurt", [{"type": "spell_engine_impact",
+                  "spell": "cmobs_ci:impact_test", "radius": 4, "target": "target",
+                  "damage_override": 6, "play_release_effects": False}], cooldown_ticks=100)
+            skilled("spell_impact", "spell_impact")
+            skilled("spell_target")
+            skilled("spell_far")
+            skill("telegraph", "when_hurt", [effect("haste")],
+                  telegraph=[{"delay_ticks": 0, "actions": [effect("glowing")]},
+                             {"delay_ticks": 20, "actions": [effect("speed")]}], cooldown_ticks=100)
+            skilled("telegraph", "telegraph")
             skilled("projectile", "projectile")
             skilled("expiry", "expiry")
             skilled("aura", "aura")
@@ -413,6 +431,32 @@ def main():
                 except (AssertionError, RuntimeError) as exc:
                     errors.append("aura reload: " + str(exc))
                     print("CMOBS_SKILL_TEST_FAILED aura_reload", exc, flush=True)
+
+            if not ice:
+                try:
+                    spawn_at("spell_impact", 2, 230, 2)
+                    spawn_at("spell_target", 5, 230, 2)
+                    spawn_at("spell_far", 9, 230, 2)
+                    hurt("spell_impact", 1, "spell_target")
+                    hp("spell_target", 94)
+                    hp("spell_far", 100)
+                    print("CMOBS_SKILL_SPELL_ENGINE_REAL_IMPACT_OK")
+                except (AssertionError, RuntimeError) as exc:
+                    errors.append("Spell Engine impact: " + str(exc))
+                    print("CMOBS_SKILL_TEST_FAILED spell_engine", exc, flush=True)
+                try:
+                    spawn_at("telegraph", 2, 250, 2)
+                    hurt("telegraph", 1)
+                    amplifier("telegraph", 24, 0)
+                    amplifier("telegraph", 1, None)
+                    amplifier("telegraph", 3, None)
+                    time.sleep(1.5)
+                    amplifier("telegraph", 1, 0)
+                    amplifier("telegraph", 3, 0)
+                    print("CMOBS_SKILL_TELEGRAPH_ORDER_OK")
+                except (AssertionError, RuntimeError) as exc:
+                    errors.append("telegraph: " + str(exc))
+                    print("CMOBS_SKILL_TEST_FAILED telegraph", exc, flush=True)
 
             # Explicit chunk unload/reload outside the world's spawn tickets.
             # Keep the same UUID and persisted NBT, not a newly summoned replacement.

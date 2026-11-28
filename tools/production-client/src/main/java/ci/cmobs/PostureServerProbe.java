@@ -12,6 +12,9 @@ import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Hand;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import java.util.List;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.command.argument.EntityArgumentType;
@@ -94,6 +97,62 @@ public final class PostureServerProbe implements ModInitializer {
                         .invoke(null, player, new Identifier("cmobs_ci_mp", "spell_test"), List.of(living));
                 case "wrongspell" -> registry.getMethod("runSpellCast", ServerPlayerEntity.class, Identifier.class, List.class)
                         .invoke(null, player, new Identifier("cmobs_ci_mp", "wrong_spell"), List.of(living));
+                case "combatreset" -> {
+                    // Isolate the real combat cases from the intentionally long display fixture.
+                    configure("playerPostureRegenDelayTicks", 60);
+                    configure("playerStaggerTicks", 40);
+                    for (String name : List.of("POSTURE_HEALTH", "POSTURE_DAMAGE", "POSTURE_REGEN_DELAYS",
+                            "STAGGER_WINDOWS", "STAGGER_COOLDOWNS", "COMBAT_WINDOWS",
+                            "POSTURE_INVULNERABILITY_WINDOWS", "PARRY_COUNTER_WINDOWS",
+                            "LAST_TAKEN_POSTURE_DAMAGE_TICKS")) {
+                        ((Map<?,?>)getField(handler, name, null)).remove(player.getUuid());
+                    }
+                    for (String name : List.of("STAGGERED_BLOCKS", "SUCCESSFUL_BLOCKS", "ACTIVE_PARRY_BLOCKS", "ARMED_WEAPON_BLOCKS")) {
+                        ((java.util.Set<?>)getField(handler, name, null)).remove(player.getUuid());
+                    }
+                    player.clearStatusEffects();
+                    player.stopUsingItem();
+                    player.setHealth(player.getMaxHealth());
+                }
+                case "startblock" -> {
+                    player.setStackInHand(Hand.OFF_HAND, new ItemStack(Items.SHIELD));
+                    player.setCurrentHand(Hand.OFF_HAND);
+                    handler.getMethod("armParryBlock", PlayerEntity.class, ItemStack.class)
+                            .invoke(null, player, player.getOffHandStack());
+                    if (!player.isUsingItem()) throw new IllegalStateException("Shield use did not start");
+                }
+                case "parry", "block", "unblocked" -> {
+                    if (action.equals("parry")) {
+                        player.setStackInHand(Hand.OFF_HAND, new ItemStack(Items.SHIELD));
+                        player.setCurrentHand(Hand.OFF_HAND);
+                        handler.getMethod("armParryBlock", PlayerEntity.class, ItemStack.class)
+                                .invoke(null, player, player.getOffHandStack());
+                    } else if (action.equals("unblocked")) {
+                        player.stopUsingItem();
+                    }
+                    double before = number("POSTURE_DAMAGE", player.getUuid());
+                    double attackerBefore = number("POSTURE_DAMAGE", living.getUuid());
+                    float health = player.getHealth();
+                    int durability = player.getOffHandStack().getDamage();
+                    boolean applied = player.damage(living instanceof PlayerEntity attacker ? player.getWorld().getDamageSources().playerAttack(attacker) : player.getWorld().getDamageSources().mobAttack(living), 6);
+                    double after = number("POSTURE_DAMAGE", player.getUuid());
+                    double attackerAfter = number("POSTURE_DAMAGE", living.getUuid());
+                    if (action.equals("parry")) {
+                        if (applied || player.getHealth() != health || !contains("PARRY_COUNTER_WINDOWS", player.getUuid())
+                                || !contains("POSTURE_INVULNERABILITY_WINDOWS", player.getUuid())
+                                || attackerAfter <= attackerBefore)
+                            throw new IllegalStateException("Parry did not cancel damage and punish attacker");
+                    } else if (action.equals("block")) {
+                        if (applied || player.getHealth() != health || after <= before
+                                || player.getOffHandStack().getDamage() <= durability)
+                            throw new IllegalStateException("Block did not absorb damage and consume posture/durability");
+                    } else if (!applied || player.getHealth() >= health || after <= before) {
+                        throw new IllegalStateException("Unblocked hit did not damage health and posture");
+                    }
+                    System.out.println("CMOBS_COMBAT_PROBE " + action + " " + before + " " + after
+                            + " " + health + " " + player.getHealth());
+                    player.stopUsingItem();
+                }
                 case "snapshot" -> {}
                 default -> throw new IllegalArgumentException(action);
             }

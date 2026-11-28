@@ -536,7 +536,7 @@ public final class PlayerParryHandler {
         }
 
         UUID uuid = player.getUuid();
-        long time = player.getWorld().getTime();
+        long time = player.getServer() == null ? player.getWorld().getTime() : player.getServer().getTicks();
         Long lastTime = LAST_TAKEN_POSTURE_DAMAGE_TICKS.get(uuid);
         if (lastTime != null && time - lastTime < graceTicks) {
             return true;
