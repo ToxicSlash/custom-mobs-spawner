@@ -69,6 +69,22 @@ def main():
         fixture("spawn_stands", "stand", {"tag": "cmobs_ci_spawn_stand", "custom_mob": "cmobs_ci_mp:stand",
                                          "chance": 1, "required_items": [{"item": "minecraft:gold_ingot",
                                          "count": 2, "distance": 2, "consume": True}]})
+        # Explicit skill tags on only one player; the peer is an untagged control.
+        for name, trigger, effect, target in (
+                ("melee", "when_attacks", "speed", "self"),
+                ("ranged", "on_ranged_hit", "strength", "self"),
+                ("miss", "failed_attack", "haste", "self"),
+                ("cast", "when_spell_cast", "resistance", "target")):
+            definition = {"trigger": trigger, "chance": 1, "actions": [
+                {"type": "effect", "id": "minecraft:" + effect, "duration": 1200,
+                 "target": target, "stack": True, "max_amplifier": 10}]}
+            if name == "cast":
+                definition["spell"] = "cmobs_ci_mp:spell_test"
+            fixture("skills", name, definition)
+        fixture("custom_mobs", "skill_target", {"entity": "minecraft:sheep",
+                "tags": ["cmobs_ci_skill_target"], "health": 100,
+                "attributes": [{"id": "minecraft:generic.max_health", "base": 100}],
+                "nbt": "{NoAI:1b,NoGravity:1b,PersistenceRequired:1b}"})
         launcher = server_dir / "server.jar"
         with urllib.request.urlopen("https://meta.fabricmc.net/v2/versions/loader/1.20.1/0.18.6/1.0.3/server/jar", timeout=90) as r, launcher.open("wb") as file:
             shutil.copyfileobj(r, file)
@@ -133,7 +149,7 @@ def main():
                 p, run = root / ("p-" + name), root / ("game-" + name)
                 shutil.copytree(ROOT / "tools/production-client", p, ignore=shutil.ignore_patterns("build", ".gradle"))
                 run.mkdir()
-                (run / "options.txt").write_text("version:3465\nonboardAccessibility:false\npauseOnLostFocus:false\nfullscreen:false\n")
+                (run / "options.txt").write_text("version:3465\nonboardAccessibility:false\npauseOnLostFocus:false\nfullscreen:false\ntutorialStep:none\n")
                 output = (evidence / (name + ".log")).open("w", encoding="utf-8")
                 logs.append(output)
                 client_runs.append((name, run))
@@ -158,7 +174,11 @@ def main():
                 raise AssertionError("Unexpected partial posture: " + str(partial))
             phase("partial-first", "CMobsB", partial, view="first")
             phase("partial-back", "CMobsB", partial, view="back")
+            cmd("tp CMobsA -4 -60 0 -90 0")
+            cmd("tp CMobsB 4 -60 0 90 0")
             phase("partial-front", "CMobsB", partial, view="front")
+            cmd("tp CMobsA 0 -60 0 -90 0")
+            cmd("tp CMobsB 3 -60 0 90 0")
             phase("partial-inventory", "CMobsB", partial, view="inventory")
             phase("self-toggle-off", "CMobsB", truth("CMobsB", "hideSelf"), False, "back")
             phase("self-toggle-on", "CMobsB", truth("CMobsB", "showSelf"), True, "back")
@@ -215,6 +235,39 @@ def main():
             exact_count("@e[tag=cmobs_ci_spawn_stand]", 0)
             exact_count("@e[tag=cmobs_ci_payment]", 0)
             print("CMOBS_MULTIPLAYER_SPAWN_STAND_OK")
+            # Real melee and arrow DamageSource paths; spell and failed-swing
+            # dispatch are invoked directly by the test-only server command.
+            cmd("csummon cmobs_ci_mp:skill_target 1 -60 2")
+            wait_log(r"Summoned custom mob cmobs_ci_mp:skill_target")
+            for name in ("melee", "ranged", "miss", "cast"):
+                cmd("tag CMobsA add custom_skill_cmobs_ci_mp_" + name)
+                wait_log(r"Added tag")
+            def skill(action, expected, player="CMobsA"):
+                cmd(f"cmobs_ci_skill {player} @e[tag=cmobs_ci_skill_target,limit=1] {action}")
+                match = wait_log(r"CMOBS_SKILL_PROBE " + action + r" (-?\d+) (-?\d+) (-?\d+) (-?\d+)", 30)
+                actual = tuple(map(int, match.groups()))
+                if actual != expected:
+                    raise AssertionError(f"{player} {action}: {actual}, expected {expected}")
+            cmd("item replace entity CMobsA weapon.mainhand with minecraft:iron_sword")
+            time.sleep(1)
+            skill("melee", (0,-1,-1,-1))
+            print("CMOBS_SKILL_PLAYER_MELEE_OK")
+            time.sleep(1.2)
+            cmd("item replace entity CMobsA weapon.mainhand with minecraft:bow")
+            skill("ranged", (1,0,-1,-1))
+            print("CMOBS_SKILL_RANGED_DAMAGE_CALLBACK_OK")
+            skill("success", (1,0,-1,-1))
+            time.sleep(.5)
+            skill("snapshot", (1,0,-1,-1))
+            skill("miss", (1,0,-1,-1))
+            time.sleep(.5)
+            skill("snapshot", (1,0,0,-1))
+            print("CMOBS_SKILL_FAILED_ATTACK_DISPATCH_OK")
+            skill("wrongspell", (1,0,0,-1))
+            skill("spell", (1,0,0,0))
+            skill("snapshot", (-1,-1,-1,0), player="CMobsB")
+            print("CMOBS_SKILL_SPELL_RELEASE_DISPATCH_OK")
+
             (coord / "phase.txt").write_text("stop")
             for proc in processes[1:]:
                 if proc.wait(timeout=45):

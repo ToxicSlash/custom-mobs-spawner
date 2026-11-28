@@ -71,7 +71,7 @@ public final class PostureClientProbe {
                 });
                 if (view.equals("inventory")) client.setScreen(new InventoryScreen(client.player));
             }
-            if (++ticks < 12) return;
+            if (++ticks < 12 || client.getOverlay() != null) return;
             PlayerEntity target = client.world.getPlayers().stream()
                     .filter(p -> p.getName().getString().equals(targetName)).findFirst().orElse(null);
             if (target == null) return;

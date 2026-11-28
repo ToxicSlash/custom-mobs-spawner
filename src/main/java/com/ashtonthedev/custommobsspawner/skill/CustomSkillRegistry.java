@@ -385,7 +385,7 @@ public final class CustomSkillRegistry {
     }
 
     public static void markSuccessfulPlayerAttack(ServerPlayerEntity player) {
-        SUCCESSFUL_PLAYER_ATTACK_TICKS.put(player.getUuid(), player.getWorld().getTime());
+        SUCCESSFUL_PLAYER_ATTACK_TICKS.put(player.getUuid(), (long) player.getServer().getTicks());
     }
 
     private static LivingEntity firstLivingTarget(LivingEntity owner, List<Entity> targets) {
@@ -441,7 +441,7 @@ public final class CustomSkillRegistry {
 
     public static void queueFailedPlayerAttack(ServerPlayerEntity player) {
         attachPlayerSkills(player);
-        PENDING_FAILED_ATTACK_TICKS.put(player.getUuid(), player.getWorld().getTime());
+        PENDING_FAILED_ATTACK_TICKS.put(player.getUuid(), (long) player.getServer().getTicks());
     }
 
     public static void runHurt(LivingEntity entity, DamageSource source, float amount) {
@@ -585,7 +585,7 @@ public final class CustomSkillRegistry {
     }
 
     private static void tickFailedAttacks(MinecraftServer server) {
-        long currentTick = server.getOverworld().getTime();
+        long currentTick = server.getTicks();
         PENDING_FAILED_ATTACK_TICKS.entrySet().removeIf(entry -> {
             UUID playerId = entry.getKey();
             long swingTick = entry.getValue();
@@ -660,7 +660,7 @@ public final class CustomSkillRegistry {
         }
 
         LivingEntity owner = findLivingEntity(world.getServer(), state.ownerId());
-        if (owner == null || !owner.isAlive()) {
+        if (owner == null || !owner.isAlive() || owner.getWorld() != world) {
             return;
         }
 
@@ -795,7 +795,7 @@ public final class CustomSkillRegistry {
     }
 
     private static boolean withTargetContext(LivingEntity owner, LivingEntity target, Supplier<Boolean> action) {
-        if (target == null || !isValidSkillTarget(target) || target == owner) {
+        if (target == null || !isValidSkillTarget(target) || target == owner || target.getWorld() != owner.getWorld()) {
             return action.get();
         }
 
@@ -1436,7 +1436,7 @@ public final class CustomSkillRegistry {
         }
 
         LivingEntity target = findLivingEntity(entity.getServer(), context.targetId());
-        if (target == entity || !isValidSkillTarget(target)) {
+        if (target == entity || !isValidSkillTarget(target) || target.getWorld() != entity.getWorld()) {
             return null;
         }
         return target;

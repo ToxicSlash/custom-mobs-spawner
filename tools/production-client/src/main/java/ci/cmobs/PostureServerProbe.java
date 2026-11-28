@@ -5,6 +5,14 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.projectile.ArrowEntity;
+import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.util.Identifier;
+import java.util.List;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.server.command.CommandManager;
@@ -48,11 +56,56 @@ public final class PostureServerProbe implements ModInitializer {
         });
         ServerLifecycleEvents.SERVER_STOPPED.register(server -> System.out.println("CMOBS_POSTURE_SERVER_STOPPED"));
         CommandRegistrationCallback.EVENT.register((dispatcher, access, env) ->
+            dispatcher.register(CommandManager.literal("cmobs_ci_skill").requires(source -> source.hasPermissionLevel(4))
+                .then(CommandManager.argument("player", EntityArgumentType.player())
+                    .then(CommandManager.argument("target", EntityArgumentType.entity())
+                        .then(CommandManager.argument("action", StringArgumentType.word())
+                            .executes(context -> skill(EntityArgumentType.getPlayer(context, "player"),
+                                    EntityArgumentType.getEntity(context, "target"),
+                                    StringArgumentType.getString(context, "action"))))))));
+        CommandRegistrationCallback.EVENT.register((dispatcher, access, env) ->
             dispatcher.register(CommandManager.literal("cmobs_ci_posture").requires(source -> source.hasPermissionLevel(4))
                 .then(CommandManager.argument("target", EntityArgumentType.player())
                     .then(CommandManager.argument("action", StringArgumentType.word())
                         .executes(context -> execute(EntityArgumentType.getPlayer(context, "target"),
                                   StringArgumentType.getString(context, "action")))))));
+    }
+    private static int skill(ServerPlayerEntity player, Entity target, String action) {
+        if (!(target instanceof LivingEntity living)) throw new IllegalArgumentException("Living fixture target required");
+        try {
+            Class<?> registry = Class.forName(PREFIX + "skill.CustomSkillRegistry");
+            switch (action) {
+                case "melee" -> {
+                    float before = living.getHealth();
+                    player.attack(living);
+                    if (!(living.getHealth() < before)) throw new IllegalStateException("Melee caused no damage");
+                }
+                case "ranged" -> {
+                    ArrowEntity arrow = new ArrowEntity(player.getWorld(), player);
+                    if (!living.damage(player.getWorld().getDamageSources().arrow(arrow, player), 4))
+                        throw new IllegalStateException("Arrow damage rejected");
+                }
+                case "miss" -> registry.getMethod("queueFailedPlayerAttack", ServerPlayerEntity.class).invoke(null, player);
+                case "success" -> {
+                    registry.getMethod("queueFailedPlayerAttack", ServerPlayerEntity.class).invoke(null, player);
+                    registry.getMethod("markSuccessfulPlayerAttack", ServerPlayerEntity.class).invoke(null, player);
+                }
+                case "spell" -> registry.getMethod("runSpellCast", ServerPlayerEntity.class, Identifier.class, List.class)
+                        .invoke(null, player, new Identifier("cmobs_ci_mp", "spell_test"), List.of(living));
+                case "wrongspell" -> registry.getMethod("runSpellCast", ServerPlayerEntity.class, Identifier.class, List.class)
+                        .invoke(null, player, new Identifier("cmobs_ci_mp", "wrong_spell"), List.of(living));
+                case "snapshot" -> {}
+                default -> throw new IllegalArgumentException(action);
+            }
+            System.out.println("CMOBS_SKILL_PROBE " + action + " " + amp(player, StatusEffects.SPEED)
+                    + " " + amp(player, StatusEffects.STRENGTH) + " " + amp(player, StatusEffects.HASTE)
+                    + " " + amp(living, StatusEffects.RESISTANCE));
+            return 1;
+        } catch (Exception e) { throw new IllegalStateException("Skill test command failed", e); }
+    }
+    private static int amp(LivingEntity entity, StatusEffect effect) {
+        StatusEffectInstance instance = entity.getStatusEffect(effect);
+        return instance == null ? -1 : instance.getAmplifier();
     }
     private static int execute(ServerPlayerEntity player, String action) {
         try {
