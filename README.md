@@ -856,3 +856,13 @@ vulnerable posture damage = posture_damage * (1 + vulnerablePostureDamageMultipl
 pvp posture damage = min(playerMaxPostureDamagePerHit, posture_damage * playerPvpPostureDamageMultiplier)
 stagger hit damage = damage * baseStaggerDamageMultiplier * weapon_stagger_bonus_factor
 ```
+
+### Optional Ice and Fire dragon age scaling
+
+For fire, ice and lightning dragon custom definitions, replace the maximum-health attribute `base` with a positive finite `age_multiplier` to multiply the native age-dependent health base. For example:
+
+```json
+{"id":"minecraft:generic.max_health","age_multiplier":2.0}
+```
+
+Existing `base` definitions remain fixed and take precedence if both keys are supplied. Other attributes and Cyclops/Troll are unchanged. Omit both to retain native health. Initial `health` is still independent; the multiplier does not heal a damaged dragon or replace other attribute modifiers. The definition remains the source of truth across reload/restart. Test evidence pending.
