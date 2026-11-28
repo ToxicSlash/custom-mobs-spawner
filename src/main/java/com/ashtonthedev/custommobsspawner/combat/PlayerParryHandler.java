@@ -269,10 +269,13 @@ public final class PlayerParryHandler {
         }
         double scaledDamage = amount * TAKEN_DAMAGE_POSTURE_SCALE * config.playerTakenDamagePostureMultiplier;
         double postureDamage = vulnerablePostureDamage(player, Math.min(config.playerMaxTakenDamagePostureDamage, Math.max(0.0D, scaledDamage)));
-        if (postureDamage > 0.0D) POSTURE_REGEN_DELAYS.put(uuid, config.playerPostureRegenDelayTicks);
+        double previousPostureDamage = POSTURE_DAMAGE.getOrDefault(uuid, 0.0D);
         double totalPostureDamage = attacker instanceof PlayerEntity
                 ? applyPvpPostureDamage(player, postureDamage, config)
                 : POSTURE_DAMAGE.merge(uuid, postureDamage, Double::sum);
+        if (totalPostureDamage > previousPostureDamage && config.playerPostureRegenDelayTicks > 0) {
+            POSTURE_REGEN_DELAYS.put(uuid, config.playerPostureRegenDelayTicks);
+        }
         if (totalPostureDamage >= postureHealth && !isOnStaggerCooldown(player)) {
             staggerFromDamage(player, postureHealth);
         }
@@ -302,10 +305,13 @@ public final class PlayerParryHandler {
             double blockedPostureDamage = Math.min(config.playerMaxTakenDamagePostureDamage, Math.max(0.0D,
                     amount * config.playerTakenDamagePostureMultiplier * config.playerBlockedDamagePostureMultiplier));
             double vulnerableBlockedPostureDamage = vulnerablePostureDamage(player, blockedPostureDamage);
-            if (vulnerableBlockedPostureDamage > 0.0D) POSTURE_REGEN_DELAYS.put(uuid, config.playerPostureRegenDelayTicks);
+            double previousPostureDamage = postureDamage;
             postureDamage = attacker instanceof PlayerEntity
                     ? applyPvpPostureDamage(player, vulnerableBlockedPostureDamage, config)
                     : POSTURE_DAMAGE.merge(uuid, vulnerableBlockedPostureDamage, Double::sum);
+            if (postureDamage > previousPostureDamage && config.playerPostureRegenDelayTicks > 0) {
+                POSTURE_REGEN_DELAYS.put(uuid, config.playerPostureRegenDelayTicks);
+            }
         }
         playBlockImpactSound(player, activeItem);
         damageBlockedItem(player, amount);

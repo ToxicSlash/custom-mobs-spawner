@@ -152,17 +152,32 @@ def main():
                 shutil.copytree(ROOT / "tools/production-client", p, ignore=shutil.ignore_patterns("build", ".gradle"))
                 run.mkdir()
                 (run / "options.txt").write_text("version:3465\nonboardAccessibility:false\npauseOnLostFocus:false\nfullscreen:false\ntutorialStep:none\n")
-                output = (evidence / (name + ".log")).open("w", encoding="utf-8")
-                logs.append(output)
                 client_runs.append((name, run))
-                proc = subprocess.Popen(gradle_cmd(p, run) + [
-                    "-PcmobsUsername=" + name, f"-PcmobsMultiplayer=127.0.0.1:{port}",
-                    "-PcmobsPostureCoordinator=" + str(coord), "runCmobsClient"],
-                    cwd=ROOT, stdout=output, stderr=subprocess.STDOUT)
-                processes.append(proc)
-                # Launch clients serially until each has joined; concurrent login
-                # previously failed on the loaded desktop during handshake.
-                wait_log(name + r" joined the game", 300)
+                for attempt in range(2):
+                    output = (evidence / (name + (".log" if attempt == 0 else "-retry.log"))).open("w", encoding="utf-8")
+                    logs.append(output)
+                    proc = subprocess.Popen(gradle_cmd(p, run) + [
+                        "-PcmobsUsername=" + name, f"-PcmobsMultiplayer=127.0.0.1:{port}",
+                        "-PcmobsPostureCoordinator=" + str(coord), "runCmobsClient"],
+                        cwd=ROOT, stdout=output, stderr=subprocess.STDOUT)
+                    processes.append(proc)
+                    # Retry ONLY the verified pre-join null-profile handshake failure.
+                    # No gameplay phase or assertion is eligible for retry.
+                    result = wait_log(name + r" joined the game|id=<null>,name=" + name + r",.*lost connection: Disconnected", 300)
+                    if "joined the game" in result[0]:
+                        break
+                    if attempt or server.poll() is not None or (coord / "phase.txt").exists():
+                        raise RuntimeError("Pre-join handshake failed: " + result[0])
+                    print("CMOBS_PREJOIN_RETRY", name, result[0], flush=True)
+                    if proc.poll() is None:
+                        subprocess.run(["taskkill", "/PID", str(proc.pid), "/T", "/F"],
+                                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=30)
+                        proc.wait(timeout=30)
+                    processes.remove(proc)
+                    output.close()
+                    if (run / "logs/latest.log").is_file():
+                        shutil.copy2(run / "logs/latest.log", evidence / (name + "-prejoin-first.log"))
+                    time.sleep(2)
             wait_files([coord / (name + ".ready") for name in ("CMobsA", "CMobsB")], 90)
             # Flat worlds in 1.20.1 start at -64; build a known platform
             # instead of assuming y=4 is ground. Keep combat damage enabled.
@@ -199,6 +214,15 @@ def main():
             cmd("team leave CMobsB")
             phase("visible-again", "CMobsB", broken)
             print("CMOBS_MULTIPLAYER_POSTURE_PHASES_OK")
+            # Leave the observer's actual tracking range, then re-enter it.
+            # The owner remains damaged throughout (long fixture regen delay).
+            cmd("tp CMobsA 112 -60 0 -90 0")
+            (coord / "phase.txt").write_text("tracking-away")
+            wait_files([coord / "tracking-away-CMobsA.ok"], 30)
+            cmd("tp CMobsA 0 -60 0 -90 0")
+            phase("tracking-return", "CMobsB", broken)
+            print("CMOBS_MULTIPLAYER_TRACKING_REENTRY_OK")
+
             # Separate Stage 2 checks with two real players and many extra-spawn
             # attempts per tick. A cap of one must remain one across both players.
             def exact_count(selector, count):

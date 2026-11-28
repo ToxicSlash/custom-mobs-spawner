@@ -194,8 +194,8 @@ public final class PostureServerProbe implements ModInitializer {
             double health = number("POSTURE_HEALTH", id);
             double damage = number("POSTURE_DAMAGE", id);
             boolean stagger = contains("STAGGER_WINDOWS", id);
-            boolean visible = stagger || health > 0 || contains("COMBAT_WINDOWS", id)
-                    || contains("POSTURE_REGEN_DELAYS", id);
+            boolean visible = player.isAlive() && !player.isSpectator() && (stagger || health > 0 || contains("COMBAT_WINDOWS", id)
+                    || contains("POSTURE_REGEN_DELAYS", id));
             int percent = stagger ? 0 : health > 0 ? (int)Math.round(Math.max(0, Math.min(1, 1 - damage / health)) * 100) : 100;
             System.out.println("CMOBS_POSTURE_TRUTH " + player.getName().getString() + " "
                     + percent + " " + visible + " " + stagger);
