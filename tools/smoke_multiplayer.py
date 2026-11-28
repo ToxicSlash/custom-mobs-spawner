@@ -1,5 +1,6 @@
 """Two real graphical clients on an isolated loopback dedicated server."""
 import os
+import json
 from pathlib import Path
 import queue
 import re
@@ -48,6 +49,26 @@ def main():
         (server_dir / "server.properties").write_text(
             f"server-ip=127.0.0.1\nserver-port={port}\nonline-mode=false\nlevel-type=minecraft:flat\n"
             "view-distance=4\nsimulation-distance=3\nspawn-protection=0\n")
+        pack = server_dir / "world/datapacks/cmobs_ci_mp"
+        datapath = pack / "data/cmobs_ci_mp/cmobs"
+        datapath.mkdir(parents=True)
+        (pack / "pack.mcmeta").write_text(json.dumps({"pack": {"pack_format": 15, "description": "CI multiplayer spawn fixtures"}}))
+        def fixture(folder, name, value):
+            p = datapath / folder / (name + ".json")
+            p.parent.mkdir(parents=True, exist_ok=True)
+            p.write_text(json.dumps(value))
+        fixture("custom_mobs", "cap", {"entity": "minecraft:chicken", "tags": ["cmobs_ci_cap"],
+                                       "nbt": "{NoAI:1b,PersistenceRequired:1b}"})
+        fixture("spawn_rules", "cap", {"custom_mob": "cmobs_ci_mp:cap", "extra_spawn": True,
+                                      "chance": 1, "interval_ticks": 5, "attempts_per_player": 12,
+                                      "min_distance": 12, "max_distance": 22, "mob_cap": 1,
+                                      "blocks": ["minecraft:grass_block"], "dimensions": ["minecraft:overworld"],
+                                      "obey_do_mob_spawning": False})
+        fixture("custom_mobs", "stand", {"entity": "minecraft:chicken", "tags": ["cmobs_ci_stand_result"],
+                                         "nbt": "{NoAI:1b,PersistenceRequired:1b}"})
+        fixture("spawn_stands", "stand", {"tag": "cmobs_ci_spawn_stand", "custom_mob": "cmobs_ci_mp:stand",
+                                         "chance": 1, "required_items": [{"item": "minecraft:gold_ingot",
+                                         "count": 2, "distance": 2, "consume": True}]})
         launcher = server_dir / "server.jar"
         with urllib.request.urlopen("https://meta.fabricmc.net/v2/versions/loader/1.20.1/0.18.6/1.0.3/server/jar", timeout=90) as r, launcher.open("wb") as file:
             shutil.copyfileobj(r, file)
@@ -152,6 +173,31 @@ def main():
             phase("hidden-name", "CMobsB", broken, view="back", remote=False)
             cmd("team leave CMobsB")
             phase("visible-again", "CMobsB", broken)
+            # Separate Stage 2 checks with two real players and many extra-spawn
+            # attempts per tick. A cap of one must remain one across both players.
+            def exact_count(selector, count):
+                cmd("execute if entity " + selector)
+                if count == 0:
+                    wait_log(r"Test failed")
+                else:
+                    wait_log(rf"Test passed, count: {count}\b")
+            exact_count("@e[tag=cmobs_ci_cap]", 1)
+            time.sleep(3)
+            exact_count("@e[tag=cmobs_ci_cap]", 1)
+            print("CMOBS_MULTIPLAYER_SPAWN_CAP_OK")
+            cmd("gamerule cmobsDisableSpawnStands true")
+            cmd('summon minecraft:armor_stand 1 -60 5 {Tags:["cmobs_ci_spawn_stand"],NoGravity:1b}')
+            wait_log(r"Summoned new")
+            cmd('summon minecraft:item 1 -60 5 {Tags:["cmobs_ci_payment"],PickupDelay:32767s,NoGravity:1b,Item:{id:"minecraft:gold_ingot",Count:2b}}')
+            wait_log(r"Summoned new")
+            exact_count("@e[tag=cmobs_ci_stand_result]", 0)
+            exact_count("@e[tag=cmobs_ci_payment]", 1)
+            cmd("gamerule cmobsDisableSpawnStands false")
+            time.sleep(2)
+            exact_count("@e[tag=cmobs_ci_stand_result]", 1)
+            exact_count("@e[tag=cmobs_ci_spawn_stand]", 0)
+            exact_count("@e[tag=cmobs_ci_payment]", 0)
+            print("CMOBS_MULTIPLAYER_SPAWN_STAND_OK")
             (coord / "phase.txt").write_text("stop")
             for proc in processes[1:]:
                 if proc.wait(timeout=45):

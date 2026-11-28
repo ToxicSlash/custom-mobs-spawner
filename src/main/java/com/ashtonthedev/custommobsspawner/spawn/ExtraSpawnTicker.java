@@ -59,20 +59,29 @@ public final class ExtraSpawnTicker {
                 continue;
             }
 
-            if (hasCapChecks(rule)) {
-                if (capCache == null) {
-                    capCache = CapCache.create(world);
-                }
-                CapResult capResult = checkCaps(capCache, rule);
-                if (!capResult.allowed()) {
-                    debug(world, rule, capResult.message());
-                    continue;
-                }
-            }
-
+            boolean capped = hasCapChecks(rule);
+            // Recheck after each successful attempt, not just once for the entire
+            // rule. Multiple players and attempts share the same per-world cap.
             for (ServerPlayerEntity player : world.getPlayers()) {
                 for (int attempt = 0; attempt < rule.attemptsPerPlayer(); attempt++) {
+                    if (capped) {
+                        if (capCache == null) capCache = CapCache.create(world);
+                        CapResult capResult = checkCaps(capCache, rule);
+                        if (!capResult.allowed()) {
+                            debug(world, rule, capResult.message());
+                            break;
+                        }
+                    }
                     SpawnAttemptResult result = trySpawn(world, player, entityType.orElse(null), rule, random);
+                    if (result.success() && capCache != null) {
+                        if (result.spawned() != null && !result.spawned().isRemoved()) {
+                            capCache.addTree(result.spawned());
+                        } else {
+                            // A function or replacement can change arbitrary entities.
+                            // Rebuild lazily before the next capped attempt.
+                            capCache = null;
+                        }
+                    }
                     if (isDebugging(player)) {
                         player.sendMessage(Text.literal("[CustomSpawn] " + rule.displayTarget() + " near " + player.getName().getString() + " -> " + result.message()), false);
                     }
@@ -134,7 +143,7 @@ public final class ExtraSpawnTicker {
         if (rule.targetKind() == SpawnTargetKind.CUSTOM_MOB) {
             CustomMobRegistry.applyPostSpawn(mob);
         }
-        return SpawnAttemptResult.success("spawned at " + format(pos));
+        return SpawnAttemptResult.success("spawned at " + format(pos), mob);
     }
 
     private static Optional<EntityType<?>> getEntityType(SpawnRule rule) {
@@ -234,13 +243,17 @@ public final class ExtraSpawnTicker {
         return pos.getX() + " " + pos.getY() + " " + pos.getZ();
     }
 
-    private record SpawnAttemptResult(boolean success, String message) {
+    private record SpawnAttemptResult(boolean success, String message, Entity spawned) {
         private static SpawnAttemptResult success(String message) {
-            return new SpawnAttemptResult(true, message);
+            return new SpawnAttemptResult(true, message, null);
+        }
+
+        private static SpawnAttemptResult success(String message, Entity spawned) {
+            return new SpawnAttemptResult(true, message, spawned);
         }
 
         private static SpawnAttemptResult fail(String message) {
-            return new SpawnAttemptResult(false, message);
+            return new SpawnAttemptResult(false, message, null);
         }
     }
 
@@ -260,30 +273,27 @@ public final class ExtraSpawnTicker {
             Map<SpawnGroup, Integer> vanillaGroupCounts
     ) {
         private static CapCache create(ServerWorld world) {
-            Map<String, Integer> ruleCounts = new HashMap<>();
-            Map<String, Integer> customGroupCounts = new HashMap<>();
-            Map<SpawnGroup, Integer> vanillaGroupCounts = new HashMap<>();
+            CapCache cache = new CapCache(new HashMap<>(), new HashMap<>(), new HashMap<>());
+            for (Entity entity : world.iterateEntities()) cache.add(entity);
+            return cache;
+        }
 
-            for (Entity entity : world.iterateEntities()) {
-                if (!(entity instanceof MobEntity mob) || !entity.isAlive()) {
-                    continue;
-                }
+        private void addTree(Entity entity) {
+            add(entity);
+            for (Entity passenger : entity.getPassengerList()) addTree(passenger);
+        }
 
-                boolean customSpawned = mob.getCommandTags().contains("custom_spawned");
-                for (String tag : mob.getCommandTags()) {
-                    if (tag.startsWith("custom_spawn_rule_")) {
-                        ruleCounts.merge(tag, 1, Integer::sum);
-                    } else if (tag.startsWith("custom_spawn_group_")) {
-                        customGroupCounts.merge(tag, 1, Integer::sum);
-                    }
-                }
-
-                if (!customSpawned) {
-                    vanillaGroupCounts.merge(mob.getType().getSpawnGroup(), 1, Integer::sum);
+        private void add(Entity entity) {
+            if (!(entity instanceof MobEntity mob) || !entity.isAlive() || entity.isRemoved()) return;
+            boolean customSpawned = mob.getCommandTags().contains("custom_spawned");
+            for (String tag : mob.getCommandTags()) {
+                if (tag.startsWith("custom_spawn_rule_")) {
+                    ruleCounts.merge(tag, 1, Integer::sum);
+                } else if (tag.startsWith("custom_spawn_group_")) {
+                    customGroupCounts.merge(tag, 1, Integer::sum);
                 }
             }
-
-            return new CapCache(ruleCounts, customGroupCounts, vanillaGroupCounts);
+            if (!customSpawned) vanillaGroupCounts.merge(mob.getType().getSpawnGroup(), 1, Integer::sum);
         }
     }
 }

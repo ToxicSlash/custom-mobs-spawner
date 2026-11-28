@@ -39,13 +39,12 @@ public final class PostureClientProbe {
         if (client.player == null || client.world == null) return;
         try {
             String me = client.player.getName().getString();
+            Path phaseFile = COORD.resolve("phase.txt");
+            String phase = Files.exists(phaseFile) ? Files.readString(phaseFile).trim() : "";
+            if (phase.equals("stop")) { client.scheduleStop(); return; }
             if (client.world.getPlayers().size() < 2) return;
             if (!client.player.isAlive()) throw new IllegalStateException("Unexpected fixture player death: " + me);
-            Files.writeString(COORD.resolve(me + ".ready"), "ready");
-            Path phaseFile = COORD.resolve("phase.txt");
-            if (!Files.exists(phaseFile)) return;
-            String phase = Files.readString(phaseFile).trim();
-            if (phase.equals("stop")) { client.scheduleStop(); return; }
+            if (!Files.exists(COORD.resolve(me + ".ready"))) Files.writeString(COORD.resolve(me + ".ready"), "ready");
             if (phase.equals(completed)) return;
             String[] args = phase.split("\\|");
             if (args.length != 8) return;

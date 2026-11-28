@@ -93,6 +93,21 @@ def main():
                                "mainhand": {"id": "minecraft:diamond_sword", "nbt": "{Unbreakable:1b}"}},
                     loot_table="minecraft:entities/cow", passengers=["cmobs_ci:passenger"])
         mob_fixture("passenger", "minecraft:chicken", 40)
+        def data_fixture(folder, name, value):
+            path = fixture.parent.parent / folder / (name + ".json")
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(json.dumps(value))
+        mob_fixture("replacement", "minecraft:sheep", 42)
+        mob_fixture("group_a", "minecraft:chicken", 33)
+        mob_fixture("group_b", "minecraft:chicken", 34)
+        data_fixture("replacements", "ci_rabbit", {"source": "minecraft:rabbit", "chance": 1,
+                     "custom_mob": "cmobs_ci:replacement", "dimensions": ["minecraft:overworld"]})
+        data_fixture("replacements", "ci_pig", {"source": "minecraft:pig", "chance": 1,
+                     "group": "cmobs_ci:pair"})
+        data_fixture("replacements", "ci_cow", {"source": "minecraft:cow", "chance": 1,
+                     "custom_mob": "cmobs_ci:replacement", "dimensions": ["minecraft:the_nether"]})
+        data_fixture("groups", "pair", {"members": [{"custom_mob": "cmobs_ci:group_a"},
+                     {"custom_mob": "cmobs_ci:group_b", "x": 2}], "pools": []})
         species = {"fire_dragon": 173, "ice_dragon": 179, "lightning_dragon": 181,
                    "cyclops": 137, "troll": 143} if ice else {}
         for name, hp in species.items():
@@ -163,6 +178,27 @@ def main():
             cmd("attribute @e[tag=cmobs_ci_passenger,limit=1] minecraft:generic.max_health base get")
             wait(r"(?i)base value.*40(?:\.0+)?\b")
             print("CMOBS_EQUIPMENT_NBT_LOOT_PASSENGER_OK")
+            def count(selector, expected):
+                cmd("execute if entity " + selector)
+                if expected == 0:
+                    wait(r"Test failed", 20)
+                else:
+                    wait(rf"Test passed, count: {expected}\b", 20)
+            cmd('summon minecraft:rabbit 6 100 6 {Tags:["cmobs_ci_source"],NoAI:1b,PersistenceRequired:1b,CustomName:\'{"text":"CI Rabbit"}\'}')
+            wait(r"Summoned new", 20)
+            count("@e[tag=cmobs_ci_source]", 0)
+            count("@e[tag=cmobs_ci_replacement]", 1)
+            cmd("attribute @e[tag=cmobs_ci_replacement,limit=1] minecraft:generic.max_health base get")
+            wait(r"(?i)base value.*42(?:\.0+)?\b")
+            cmd('summon minecraft:pig 6 100 8 {Tags:["cmobs_ci_group_source"],NoAI:1b,PersistenceRequired:1b}')
+            wait(r"Summoned new", 20)
+            count("@e[tag=cmobs_ci_group_source]", 0)
+            count("@e[tag=cmobs_ci_group_a]", 1)
+            count("@e[tag=cmobs_ci_group_b]", 1)
+            cmd('summon minecraft:cow 6 100 10 {Tags:["cmobs_ci_wrong_dimension"],NoAI:1b,NoGravity:1b,PersistenceRequired:1b}')
+            wait(r"Summoned new", 20)
+            count("@e[tag=cmobs_ci_wrong_dimension]", 1)
+            print("CMOBS_REPLACEMENT_GROUP_DIMENSION_OK")
             errors = []
             def check_species(name, hp, stage, health=None):
                 target = f"@e[tag=cmobs_ci_{name},limit=1]"
@@ -249,6 +285,11 @@ def main():
             wait(r"(?i)base value.*60(?:\.0+)?\b")
             cmd("data get entity @e[tag=cmobs_ci_probe,limit=1] Health")
             wait(r"(?i)following entity data: 60(?:\.0+)?f")
+            count("@e[tag=cmobs_ci_replacement]", 1)
+            count("@e[tag=cmobs_ci_group_a]", 1)
+            count("@e[tag=cmobs_ci_group_b]", 1)
+            count("@e[tag=cmobs_ci_wrong_dimension]", 1)
+            print("CMOBS_REPLACEMENT_GROUP_RESTART_OK")
             for name, hp in species.items():
                 check_species(name, hp, "restart", hp-11)
             cmd("stop")
