@@ -95,6 +95,7 @@ public final class CustomSkillRegistry {
     private static final Map<PendingSkillKey, Long> LAST_SPELL_PROC_ROLL_TICKS = new ConcurrentHashMap<>();
     private static final Map<UUID, StanceState> ACTIVE_STANCES = new ConcurrentHashMap<>();
     private static final Map<UUID, AuraState> ACTIVE_AURAS = new ConcurrentHashMap<>();
+    private static final Set<UUID> RETIRED_AURAS = ConcurrentHashMap.newKeySet();
     private static final Map<PendingSkillKey, PendingSkillState> PENDING_SKILLS = new ConcurrentHashMap<>();
     private static final Map<UUID, ScheduledActionState> SCHEDULED_ACTIONS = new ConcurrentHashMap<>();
     private static final Map<UUID, SkillProjectileState> SKILL_PROJECTILES = new ConcurrentHashMap<>();
@@ -165,6 +166,7 @@ public final class CustomSkillRegistry {
         SKILL_COOLDOWNS.clear();
         LAST_SPELL_PROC_ROLL_TICKS.clear();
         ACTIVE_STANCES.clear();
+        RETIRED_AURAS.addAll(ACTIVE_AURAS.keySet());
         ACTIVE_AURAS.clear();
         PENDING_SKILLS.clear();
         SCHEDULED_ACTIONS.clear();
@@ -214,6 +216,15 @@ public final class CustomSkillRegistry {
 
     public static Float currentSpellProjectileDamageOverride() {
         return SPELL_PROJECTILE_DAMAGE_OVERRIDE.get();
+    }
+
+    // Transient aura state is not persisted. Never leave a saved, inactive anchor behind.
+    public static boolean discardOrphanedAura(Entity entity) {
+        if (entity.getCommandTags().contains("cmobs_projectile_aura") && !ACTIVE_AURAS.containsKey(entity.getUuid())) {
+            entity.discard();
+            return true;
+        }
+        return false;
     }
 
     public static void attachSkill(Entity entity, Identifier skillId) {
@@ -530,6 +541,11 @@ public final class CustomSkillRegistry {
     }
 
     public static void tickCooldowns(MinecraftServer server) {
+        RETIRED_AURAS.removeIf(id -> {
+            Entity entity = findEntityDirect(server, id);
+            if (entity != null && entity.getCommandTags().contains("cmobs_projectile_aura")) entity.discard();
+            return true;
+        });
         tickFailedAttacks(server);
         cleanupTimedSkillEntities(server);
         tickPendingSkills(server);
@@ -693,6 +709,10 @@ public final class CustomSkillRegistry {
         SkillProjectileState updatedState = state.withTick(ageTicks, worldTime);
         SKILL_PROJECTILES.put(projectile.getUuid(), updatedState);
         applyGroundedProjectileImpact(world, projectile, updatedState);
+        if (ageTicks >= state.maxAgeTicks() && SKILL_PROJECTILES.containsKey(projectile.getUuid())) {
+            consumeSkillProjectile(projectile);
+            projectile.discard();
+        }
     }
 
     private static boolean runSkill(ServerWorld world, LivingEntity entity, CustomSkillDefinition skill) {
@@ -2464,7 +2484,7 @@ public final class CustomSkillRegistry {
                 continue;
             }
             roll -= randomChoiceWeight(choice);
-            if (roll > 0.0D) {
+            if (roll >= 0.0D) {
                 continue;
             }
             applyRandomChoice(world, entity, choice, source, sourceDamageAmount, lockedDirection);
@@ -2716,7 +2736,7 @@ public final class CustomSkillRegistry {
         consumeSkillProjectile(projectile);
 
         LivingEntity owner = findLivingEntity(world.getServer(), state.ownerId());
-        if (owner == null || !owner.isAlive()) {
+        if (owner == null || !owner.isAlive() || owner.getWorld() != world) {
             return;
         }
         applyProjectileHitActions(world, owner, owner, state.config(), "hit_ground", projectile.getPos());
@@ -4430,10 +4450,12 @@ public final class CustomSkillRegistry {
         anchorNbt.putBoolean("Invulnerable", true);
         anchorNbt.putBoolean("Silent", true);
         anchor.readNbt(anchorNbt);
-        world.spawnEntity(anchor);
-
-        applyActionSet(world, anchor, action, "aura_start", 0);
         ACTIVE_AURAS.put(anchor.getUuid(), new AuraState(durationTicks, tickIntervalTicks, tickIntervalTicks, 0, action));
+        if (!world.spawnEntity(anchor)) {
+            ACTIVE_AURAS.remove(anchor.getUuid());
+            return;
+        }
+        applyActionSet(world, anchor, action, "aura_start", 0);
     }
 
     private static int auraSchedulerTickIntervalTicks(JsonObject aura) {

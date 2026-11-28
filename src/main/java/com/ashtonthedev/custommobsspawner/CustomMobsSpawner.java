@@ -74,7 +74,9 @@ public class CustomMobsSpawner implements ModInitializer {
             ComboHandler.clearPlayer(uuid);
             SpellComboHandler.clearPlayer(uuid);
         });
-        ServerEntityEvents.ENTITY_LOAD.register((entity, world) -> CustomMobData.tryReplace(entity, world));
+        ServerEntityEvents.ENTITY_LOAD.register((entity, world) -> {
+            if (!CustomSkillRegistry.discardOrphanedAura(entity)) CustomMobData.tryReplace(entity, world);
+        });
         ServerTickEvents.START_SERVER_TICK.register(ModStatusEffects::tickServer);
         ServerTickEvents.END_WORLD_TICK.register(world -> {
             ExtraSpawnTicker.tick(world);

@@ -138,6 +138,33 @@ def main():
             skilled("cycle_a", "cycle")
             skilled("cycle_b", "cycle")
             mob_fixture("death_result", "minecraft:chicken", 25)
+            skill("projectile", "when_hurt", [{"type": "projectile", "projectile_type": "minecraft:snowball",
+                  "target": "target", "velocity": 1.5, "no_gravity": True, "spread": 0,
+                  "y_offset": 0.6, "forward_offset": 0, "max_age_ticks": 40,
+                  "hit_enemy": [{"type": "damage", "amount": 7, "knockback": False,
+                                 "bypass_invulnerability": True},
+                                effect("glowing", stack=True, max_amplifier=10)]}], cooldown_ticks=100)
+            skill("expiry", "when_hurt", [{"type": "projectile", "projectile_type": "minecraft:snowball",
+                  "target": "forward", "velocity": 0.1, "no_gravity": True,
+                  "max_age_ticks": 10, "hit_enemy": [effect("glowing")]}], cooldown_ticks=100)
+            skill("aura", "when_hurt", [{"type": "aura", "duration_ticks": 20,
+                  "tick_interval_ticks": 5, "tick_radius": 2, "tick_target": "mobs",
+                  "aura_nearby": [effect("speed", stack=True, max_amplifier=10)]}], cooldown_ticks=100)
+            skill("long_aura", "when_hurt", [{"type": "aura", "duration_ticks": 1200,
+                  "tick_interval_ticks": 20, "tick_radius": 2, "tick_target": "mobs",
+                  "aura_nearby": [effect("speed")]}], cooldown_ticks=1200)
+            skill("random_equip", "when_hurt", [{"type": "random", "actions": [
+                  {"weight": 0, "action": effect("glowing")},
+                  {"weight": 1, "actions": [{"type": "equip", "slot": "head", "item": "minecraft:iron_helmet"},
+                                           effect("haste")]}]}], cooldown_ticks=100)
+            skilled("projectile", "projectile")
+            skilled("expiry", "expiry")
+            skilled("aura", "aura")
+            skilled("long_aura", "long_aura")
+            skilled("random_equip", "random_equip")
+            for name in ("projectile_target", "aura_near", "aura_far"):
+                skilled(name)
+
         species = {"fire_dragon": 173, "ice_dragon": 179, "lightning_dragon": 181,
                    "cyclops": 137, "troll": 143} if ice else {}
         for name, hp in species.items():
@@ -323,6 +350,69 @@ def main():
                 except (AssertionError, RuntimeError) as exc:
                     errors.append("cycle_a: " + str(exc))
                     print("CMOBS_SKILL_TEST_FAILED cycle_a", exc, flush=True)
+
+            if not ice:
+                def spawn_at(name, x, y, z):
+                    cmd(f"csummon cmobs_ci:{name} {x} {y} {z}")
+                    wait(f"Summoned custom mob cmobs_ci:{name}", 20)
+                try:
+                    spawn_at("projectile", 2, 130, 2)
+                    spawn_at("projectile_target", 7, 130, 2)
+                    hurt("projectile", 1, "projectile_target")
+                    time.sleep(1.2)
+                    hp("projectile_target", 93)
+                    amplifier("projectile_target", 24, 0)
+                    count("@e[tag=cmobs_skill_projectile]", 0)
+                    print("CMOBS_SKILL_PROJECTILE_FLIGHT_EXACTLY_ONCE_OK")
+                except (AssertionError, RuntimeError) as exc:
+                    errors.append("projectile flight: " + str(exc))
+                    print("CMOBS_SKILL_TEST_FAILED projectile", exc, flush=True)
+                try:
+                    spawn_at("expiry", 2, 150, 2)
+                    hurt("expiry", 1)
+                    time.sleep(1.5)
+                    count("@e[type=minecraft:snowball,y=150,dy=4,x=0,dx=15,z=0,dz=15]", 0)
+                    print("CMOBS_SKILL_PROJECTILE_EXPIRY_OK")
+                except (AssertionError, RuntimeError) as exc:
+                    errors.append("projectile expiry: " + str(exc))
+                    print("CMOBS_SKILL_TEST_FAILED expiry", exc, flush=True)
+                try:
+                    spawn_at("aura", 3, 170, 3)
+                    spawn_at("aura_near", 4, 170, 3)
+                    spawn_at("aura_far", 8, 170, 3)
+                    hurt("aura", 1)
+                    count("@e[tag=cmobs_projectile_aura]", 1)
+                    time.sleep(1.6)
+                    amplifier("aura_near", 1, 3)
+                    amplifier("aura_far", 1, None)
+                    count("@e[tag=cmobs_projectile_aura]", 0)
+                    print("CMOBS_SKILL_AURA_INTERVAL_RANGE_EXPIRY_OK")
+                except (AssertionError, RuntimeError) as exc:
+                    errors.append("aura: " + str(exc))
+                    print("CMOBS_SKILL_TEST_FAILED aura", exc, flush=True)
+                try:
+                    spawn_at("random_equip", 3, 190, 3)
+                    hurt("random_equip", 1)
+                    amplifier("random_equip", 3, 0)
+                    amplifier("random_equip", 24, None)
+                    cmd("data get entity @e[tag=cmobs_ci_random_equip,limit=1] ArmorItems[3].id")
+                    wait(r'following entity data: "minecraft:iron_helmet"', 20)
+                    print("CMOBS_SKILL_RANDOM_EQUIPMENT_OK")
+                except (AssertionError, RuntimeError) as exc:
+                    errors.append("random/equipment: " + str(exc))
+                    print("CMOBS_SKILL_TEST_FAILED random_equip", exc, flush=True)
+                try:
+                    spawn_at("long_aura", 3, 210, 3)
+                    hurt("long_aura", 1)
+                    count("@e[tag=cmobs_projectile_aura]", 1)
+                    cmd("reload")
+                    wait(r"(?i)reload(?:ing|ed)")
+                    time.sleep(3)
+                    count("@e[tag=cmobs_projectile_aura]", 0)
+                    print("CMOBS_SKILL_AURA_RELOAD_CLEANUP_OK")
+                except (AssertionError, RuntimeError) as exc:
+                    errors.append("aura reload: " + str(exc))
+                    print("CMOBS_SKILL_TEST_FAILED aura_reload", exc, flush=True)
 
             # Explicit chunk unload/reload outside the world's spawn tickets.
             # Keep the same UUID and persisted NBT, not a newly summoned replacement.
