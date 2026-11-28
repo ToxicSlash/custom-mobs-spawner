@@ -76,7 +76,7 @@ public final class CustomMobRegistry {
         if (!SpawnSafety.isLoaded(world, entity)) {
             return null;
         }
-        world.spawnEntityAndPassengers(entity);
+        if (!world.spawnNewEntityAndPassengers(entity)) return null;
         applyPostSpawn(entity);
         return entity;
     }

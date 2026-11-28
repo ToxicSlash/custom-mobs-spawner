@@ -100,6 +100,7 @@ def main():
         mob_fixture("replacement", "minecraft:sheep", 42)
         mob_fixture("group_a", "minecraft:chicken", 33)
         mob_fixture("explicit", "minecraft:polar_bear", 71)
+        mob_fixture("unload", "minecraft:polar_bear", 71)
         mob_fixture("group_b", "minecraft:chicken", 34)
         data_fixture("replacements", "ci_rabbit", {"source": "minecraft:polar_bear", "chance": 1,
                      "custom_mob": "cmobs_ci:replacement", "dimensions": ["minecraft:overworld"]})
@@ -238,52 +239,6 @@ def main():
             wait(r"(?i)base value.*71(?:\.0+)?\b")
             print("CMOBS_EXPLICIT_CUSTOM_NOT_REROLLED_OK")
             print("CMOBS_REPLACEMENT_GROUP_DIMENSION_OK")
-            # Explicit chunk unload/reload outside the world's spawn tickets.
-            # Keep the same UUID and persisted NBT, not a newly summoned replacement.
-            if not ice:
-                cmd("forceload add 512 512 559 559")
-                wait(r"Marked .*chunk", 30)
-                cmd("csummon cmobs_ci:explicit 536 100 536")
-                wait(r"Summoned custom mob cmobs_ci:explicit", 30)
-                cmd('tag @e[tag=cmobs_ci_explicit,x=536,y=100,z=536,distance=..2,limit=1] add cmobs_ci_unload')
-                wait(r"Added tag", 20)
-                cmd("data get entity @e[tag=cmobs_ci_unload,limit=1] UUID")
-                uuid_line = wait(r"following entity data: \[I;.*\]", 20)
-                uuid = uuid_line.split("following entity data: ", 1)[1].strip()
-                cmd("save-all flush")
-                wait(r"Saved the game", 60)
-                cmd("forceload remove 512 512 559 559")
-                wait(r"Unmarked .*chunk", 30)
-                for _ in range(45):
-                    cmd("execute if entity @e[tag=cmobs_ci_unload]")
-                    line = wait(r"Test failed|Test passed, count: \d+", 20)
-                    if "Test failed" in line:
-                        break
-                    time.sleep(1)
-                else:
-                    raise AssertionError("Remote custom mob never unloaded")
-                cmd("forceload add 512 512 559 559")
-                wait(r"Marked .*chunk", 30)
-                for _ in range(30):
-                    cmd("execute if entity @e[tag=cmobs_ci_unload]")
-                    line = wait(r"Test failed|Test passed, count: \d+", 20)
-                    if "Test passed, count: 1" in line:
-                        break
-                    time.sleep(1)
-                else:
-                    raise AssertionError("Remote custom mob failed to reload")
-                cmd("data get entity @e[tag=cmobs_ci_unload,limit=1] UUID")
-                line = wait(r"following entity data: \[I;.*\]", 20)
-                if line.split("following entity data: ", 1)[1].strip() != uuid:
-                    raise AssertionError("Custom mob UUID changed across chunk reload")
-                cmd("attribute @e[tag=cmobs_ci_unload,limit=1] minecraft:generic.max_health base get")
-                wait(r"(?i)base value.*71(?:\.0+)?\b", 20)
-                cmd("kill @e[tag=cmobs_ci_unload]")
-                wait(r"Killed", 20)
-                cmd("forceload remove 512 512 559 559")
-                wait(r"Unmarked .*chunk", 30)
-                print("CMOBS_CUSTOM_MOB_CHUNK_RELOAD_OK")
-
             if not ice:
                 def spawn_skill(name, x, z):
                     cmd(f"csummon cmobs_ci:{name} {x} 110 {z}")
@@ -340,6 +295,65 @@ def main():
                 hp("cycle_a", 99)
                 hp("cycle_b", 98)
                 print("CMOBS_SKILL_DAMAGE_REENTRY_OK")
+
+            # Explicit chunk unload/reload outside the world's spawn tickets.
+            # Keep the same UUID and persisted NBT, not a newly summoned replacement.
+            if not ice:
+                cmd("forceload add 512 512 559 559")
+                wait(r"Marked .*chunk", 30)
+                # forceload acknowledges tickets, not entity loading. Wait for a
+                # vanilla marker to be visible to the server's entity selector.
+                for attempt in range(60):
+                    cmd('summon minecraft:marker 536 100 536 {Tags:["cmobs_ci_ready"]}')
+                    wait(r"Summoned new|That position is not loaded|Unable to summon entity", 20)
+                    cmd("execute if entity @e[tag=cmobs_ci_ready]")
+                    line = wait(r"Test failed|Test passed, count: \d+", 20)
+                    if "Test passed" in line:
+                        break
+                    time.sleep(1)
+                else:
+                    raise AssertionError("Remote chunk never became entity-ready")
+                cmd("kill @e[tag=cmobs_ci_ready]")
+                wait(r"Killed", 20)
+                cmd("csummon cmobs_ci:unload 536 100 536")
+                wait(r"Summoned custom mob cmobs_ci:unload|Unknown or invalid custom mob", 30)
+                count("@e[tag=cmobs_ci_unload]", 1)
+                cmd("data get entity @e[tag=cmobs_ci_unload,limit=1] UUID")
+                uuid_line = wait(r"following entity data: \[I;.*\]", 20)
+                uuid = uuid_line.split("following entity data: ", 1)[1].strip()
+                cmd("save-all flush")
+                wait(r"Saved the game", 60)
+                cmd("forceload remove 512 512 559 559")
+                wait(r"Unmarked .*chunk", 30)
+                for _ in range(45):
+                    cmd("execute if entity @e[tag=cmobs_ci_unload]")
+                    line = wait(r"Test failed|Test passed, count: \d+", 20)
+                    if "Test failed" in line:
+                        break
+                    time.sleep(1)
+                else:
+                    raise AssertionError("Remote custom mob never unloaded")
+                cmd("forceload add 512 512 559 559")
+                wait(r"Marked .*chunk", 30)
+                for _ in range(30):
+                    cmd("execute if entity @e[tag=cmobs_ci_unload]")
+                    line = wait(r"Test failed|Test passed, count: \d+", 20)
+                    if "Test passed, count: 1" in line:
+                        break
+                    time.sleep(1)
+                else:
+                    raise AssertionError("Remote custom mob failed to reload")
+                cmd("data get entity @e[tag=cmobs_ci_unload,limit=1] UUID")
+                line = wait(r"following entity data: \[I;.*\]", 20)
+                if line.split("following entity data: ", 1)[1].strip() != uuid:
+                    raise AssertionError("Custom mob UUID changed across chunk reload")
+                cmd("attribute @e[tag=cmobs_ci_unload,limit=1] minecraft:generic.max_health base get")
+                wait(r"(?i)base value.*71(?:\.0+)?\b", 20)
+                cmd("kill @e[tag=cmobs_ci_unload]")
+                wait(r"Killed", 20)
+                cmd("forceload remove 512 512 559 559")
+                wait(r"Unmarked .*chunk", 30)
+                print("CMOBS_CUSTOM_MOB_CHUNK_RELOAD_OK")
 
             errors = []
             def check_species(name, hp, stage, health=None):
@@ -414,6 +428,7 @@ def main():
             cmd("save-all flush")
             wait(r"Saved the game")
             cmd("stop")
+            proc.stdin.close()
             if proc.wait(timeout=90):
                 raise RuntimeError("Server did not exit cleanly")
             reader.join(timeout=10)

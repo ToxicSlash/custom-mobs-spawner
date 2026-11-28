@@ -220,7 +220,9 @@ def main():
                 if proc.wait(timeout=45):
                     raise RuntimeError("Client did not exit cleanly")
             cmd("stop")
+            server.stdin.close()
             wait_log(r"All dimensions are saved", 90)
+            wait_log(r"CMOBS_POSTURE_SERVER_STOPPED", 30)
             try:
                 if server.wait(timeout=90):
                     raise RuntimeError("Server did not exit cleanly")
@@ -230,6 +232,11 @@ def main():
                 with (evidence / "server-shutdown-threads.log").open("w", encoding="utf-8") as dump:
                     subprocess.run([str(jcmd), str(server.pid), "Thread.print", "-l"],
                                    stdout=dump, stderr=subprocess.STDOUT, timeout=30)
+                dump_text = (evidence / "server-shutdown-threads.log").read_text(encoding="utf-8", errors="replace")
+                # Keep all non-daemon thread headers/stacks in the workflow log, not just the tail.
+                for block in re.split(r"\n\s*\n", dump_text):
+                    if re.match(r'"[^"]+"', block) and " daemon " not in block.splitlines()[0]:
+                        print("CMOBS_SHUTDOWN_THREAD", block, flush=True)
                 raise RuntimeError("Server saved all dimensions but JVM failed to exit; see thread dump")
             print("CMOBS_MULTIPLAYER_POSTURE_CORE_OK")
         finally:
