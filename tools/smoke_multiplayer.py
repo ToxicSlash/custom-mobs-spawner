@@ -95,13 +95,13 @@ def main():
             cmd(f"cmobs_ci_posture {target} {action}")
             match = wait_log(r"CMOBS_POSTURE_TRUTH " + target + r" (\d+) (true|false) (true|false)")
             return int(match[1]), match[2], match[3]
-        def phase(label, target, state, selfbar=True, view="back"):
+        def phase(label, target, state, selfbar=True, view="back", remote=True):
             percent, visible, staggered = state
-            content = "|".join([label, target, str(percent), visible, staggered, str(selfbar).lower(), view])
+            content = "|".join([label, target, str(percent), visible, staggered, str(selfbar).lower(), view, str(remote).lower()])
             temp = coord / "phase.tmp"
             temp.write_text(content, encoding="utf-8")
             os.replace(temp, coord / "phase.txt")
-            wait_files([coord / f"{label}-{name}.ok" for name in ("CMobsA", "CMobsB")], 14)
+            wait_files([coord / f"{label}-{name}.ok" for name in ("CMobsA", "CMobsB")], 25)
             print("CMOBS_MULTIPLAYER_PHASE_OK", content)
         try:
             wait_log(r"CMOBS_POSTURE_SERVER_READY", 180)
@@ -122,8 +122,12 @@ def main():
                     cwd=ROOT, stdout=output, stderr=subprocess.STDOUT)
                 processes.append(proc)
             wait_files([coord / (name + ".ready") for name in ("CMobsA", "CMobsB")], 240)
-            cmd("tp CMobsA 0 4 0 -90 0")
-            cmd("tp CMobsB 3 4 0 90 0")
+            # Flat worlds in 1.20.1 start at -64; build a known platform
+            # instead of assuming y=4 is ground. Keep combat damage enabled.
+            cmd("fill -8 -61 -8 8 -61 8 minecraft:stone")
+            wait_log(r"Successfully filled")
+            cmd("tp CMobsA 0 -60 0 -90 0")
+            cmd("tp CMobsB 3 -60 0 90 0")
             phase("idle", "CMobsB", truth("CMobsB", "snapshot"))
             partial = truth("CMobsB", "partial")
             if not 0 < partial[0] < 100 or partial[1:] != ("true", "false"):
@@ -142,6 +146,12 @@ def main():
             if broken != (0, "true", "true"):
                 raise AssertionError("Expected broken posture, got " + str(broken))
             phase("stagger", "CMobsB", broken)
+            cmd("team add ci_hidden")
+            cmd("team modify ci_hidden nametagVisibility never")
+            cmd("team join ci_hidden CMobsB")
+            phase("hidden-name", "CMobsB", broken, view="back", remote=False)
+            cmd("team leave CMobsB")
+            phase("visible-again", "CMobsB", broken)
             (coord / "phase.txt").write_text("stop")
             for proc in processes[1:]:
                 if proc.wait(timeout=45):

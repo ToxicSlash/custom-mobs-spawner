@@ -41,7 +41,7 @@ public final class PostureServerProbe implements ModInitializer {
                 config = Class.forName(PREFIX + "config.CustomMobsSpawnerConfig").getMethod("get").invoke(null);
                 // Only this disposable fixture: hold states long enough for two clients to capture them.
                 configure("playerPostureRegenDelayTicks", 1200);
-                configure("playerStaggerTicks", 400);
+                configure("playerStaggerTicks", 1800);
                 configure("showSelfOverheadPostureDebugBar", true);
                 System.out.println("CMOBS_POSTURE_SERVER_READY");
             } catch (Exception e) { throw new IllegalStateException(e); }

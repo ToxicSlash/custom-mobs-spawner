@@ -87,7 +87,7 @@ def main():
             (fixture.parent / (name + ".json")).write_text(json.dumps({
                 "entity": entity, "tags": ["cmobs_ci_" + name],
                 "attributes": [{"id": "minecraft:generic.max_health", "base": health}],
-                "health": health, "nbt": "{NoAI:1b,PersistenceRequired:1b,Silent:1b}", **extra}))
+                "health": health, "nbt": "{NoAI:1b,NoGravity:1b,PersistenceRequired:1b,Silent:1b}", **extra}))
         mob_fixture("equipment", "minecraft:zombie", 80,
                     equipment={"head": "minecraft:iron_helmet",
                                "mainhand": {"id": "minecraft:diamond_sword", "nbt": "{Unbreakable:1b}"}},
@@ -134,6 +134,10 @@ def main():
             proc.stdin.flush()
         try:
             wait(r'Done \(', 600)
+            cmd("gamerule doDaylightCycle false")
+            wait(r"Gamerule doDaylightCycle is now set to: false")
+            cmd("time set midnight")
+            wait(r"Set the time")
             cmd("forceload add 0 0")
             wait(r"Marked chunk")
             cmd("csummon cmobs_ci:probe 0 100 0")
@@ -175,7 +179,10 @@ def main():
                     match = re.search(r"following entity data: ([\d.]+)f", line)
                     actual = float(match.group(1)) if match else None
                     print("CMOBS_SPECIES_HEALTH", stage, name, "expected", health, "actual", actual)
-                    if actual is None or abs(actual-health) > .01:
+                    # Trolls naturally regenerate; allow a bounded amount of real healing
+                    # after saving/restarting, but never an unintended full health reset.
+                    tolerance = 4.0 if name == "troll" and stage == "restart" else .01
+                    if actual is None or actual < health - .01 or actual > health + tolerance:
                         errors.append(f"{stage} {name}: health {actual}, expected {health}")
             for index, (name, hp) in enumerate(species.items()):
                 cmd(f"csummon cmobs_ci:{name} {index * 3} 120 0")
@@ -185,6 +192,20 @@ def main():
                 time.sleep(12)
                 for name, hp in species.items():
                     check_species(name, hp, "delayed", hp)
+                # Verify an untagged dragon still follows native age scaling.
+                cmd('summon iceandfire:fire_dragon 4 130 4 {Tags:["cmobs_ci_native"],NoAI:1b,NoGravity:1b,PersistenceRequired:1b,AgeTicks:24000}')
+                wait(r"Summoned new Fire Dragon", 20)
+                def native_base():
+                    cmd("attribute @e[tag=cmobs_ci_native,limit=1] minecraft:generic.max_health base get")
+                    line = wait(r"(?i)base value.* is [\d.]+", 20)
+                    return float(re.search(r" is ([\d.]+)", line).group(1))
+                native_young = native_base()
+                cmd("data merge entity @e[tag=cmobs_ci_native,limit=1] {AgeTicks:2400000}")
+                wait(r"Modified entity data", 20)
+                native_old = native_base()
+                print("CMOBS_IAF_NATIVE_AGE", native_young, native_old)
+                if native_old <= native_young:
+                    errors.append("Native dragon no longer scales with age")
                 # Force IaF's NBT/age recalculation and an actual damaged save state.
                 for name, hp in species.items():
                     target = f"@e[tag=cmobs_ci_{name},limit=1]"
@@ -208,6 +229,10 @@ def main():
             wait(r"(?i)reload(?:ing|ed)")
             cmd("attribute @e[tag=cmobs_ci_probe,limit=1] minecraft:generic.max_health base get")
             wait(r"(?i)base value.*60(?:\.0+)?\b")
+            if species:
+                # Troll's own regeneration is legitimate; set damaged health just before saving.
+                cmd('data merge entity @e[tag=cmobs_ci_troll,limit=1] {Health:132.0f}')
+                wait(r"Modified entity data", 20)
             cmd("save-all flush")
             wait(r"Saved the game")
             cmd("stop")

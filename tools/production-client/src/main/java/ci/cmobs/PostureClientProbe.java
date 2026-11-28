@@ -40,6 +40,7 @@ public final class PostureClientProbe {
         try {
             String me = client.player.getName().getString();
             if (client.world.getPlayers().size() < 2) return;
+            if (!client.player.isAlive()) throw new IllegalStateException("Unexpected fixture player death: " + me);
             Files.writeString(COORD.resolve(me + ".ready"), "ready");
             Path phaseFile = COORD.resolve("phase.txt");
             if (!Files.exists(phaseFile)) return;
@@ -47,12 +48,13 @@ public final class PostureClientProbe {
             if (phase.equals("stop")) { client.scheduleStop(); return; }
             if (phase.equals(completed)) return;
             String[] args = phase.split("\\|");
-            if (args.length != 7) return;
+            if (args.length != 8) return;
             String label = args[0], targetName = args[1], view = args[6];
             int expected = Integer.parseInt(args[2]);
             boolean visible = Boolean.parseBoolean(args[3]), staggered = Boolean.parseBoolean(args[4]);
             boolean selfBar = Boolean.parseBoolean(args[5]);
             boolean owner = me.equals(targetName);
+            boolean remoteBar = Boolean.parseBoolean(args[7]);
             if (!phase.equals(active)) {
                 active = phase;
                 ticks = 0;
@@ -70,7 +72,13 @@ public final class PostureClientProbe {
             if (target == null) return;
             Class<?> overhead = Class.forName(PREFIX + "MobPostureBarRenderer");
             Object state = ((Map<?,?>)field(overhead, "POSTURE_STATES")).get(target.getId());
-            boolean wantOverhead = visible && (!owner || selfBar);
+            boolean wantOverhead = visible && (owner ? selfBar : remoteBar);
+            if (ticks % 60 == 0) {
+                System.out.println("CMOBS_POSTURE_PHASE_DIAGNOSTIC " + label + " " + me
+                        + " alive=" + client.player.isAlive() + " expected=" + expected
+                        + " overhead=" + state + " wantOverhead=" + wantOverhead
+                        + " screen=" + client.currentScreen);
+            }
             if ((state != null) != wantOverhead) return;
             if (state != null) {
                 if (percent(member(state, "fraction")) != expected ||
