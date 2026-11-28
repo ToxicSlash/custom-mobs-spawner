@@ -124,6 +124,11 @@ public final class CustomSkillRegistry {
     private static final Identifier DAGGER_FINISHER_SPELL = new Identifier("cmobs", "dagger_finisher");
     private static final Identifier ZENITH_DRAW_SPEED = new Identifier("zenith_attributes", "draw_speed");
     private static boolean applyingReflectedDamage = false;
+    // Damage/actions can synchronously invoke another hurt/attack trigger before
+    // the outer skill has committed its cooldown. Block cycles, not distinct procs.
+    private static final int MAX_NESTED_SKILLS = 32;
+    private static final ThreadLocal<Set<PendingSkillKey>> EXECUTING_SKILLS =
+            ThreadLocal.withInitial(java.util.HashSet::new);
 
     private CustomSkillRegistry() {
     }
@@ -455,7 +460,7 @@ public final class CustomSkillRegistry {
     }
 
     public static boolean runCancelableHurt(LivingEntity entity, DamageSource source, float amount) {
-        if (!(entity.getWorld() instanceof ServerWorld world)) {
+        if (!(entity.getWorld() instanceof ServerWorld world) || applyingReflectedDamage) {
             return false;
         }
         attachPlayerSkills(entity);
@@ -703,7 +708,15 @@ public final class CustomSkillRegistry {
     }
 
     private static boolean runSkill(ServerWorld world, LivingEntity entity, CustomSkillDefinition skill, DamageSource source, float sourceDamageAmount, LivingEntity target) {
-        return withTargetContext(entity, target, () -> runSkillInContext(world, entity, skill, source, sourceDamageAmount));
+        Set<PendingSkillKey> active = EXECUTING_SKILLS.get();
+        PendingSkillKey key = new PendingSkillKey(entity.getUuid(), skill.id());
+        if (active.size() >= MAX_NESTED_SKILLS || !active.add(key)) return false;
+        try {
+            return withTargetContext(entity, target, () -> runSkillInContext(world, entity, skill, source, sourceDamageAmount));
+        } finally {
+            active.remove(key);
+            if (active.isEmpty()) EXECUTING_SKILLS.remove();
+        }
     }
 
     private static boolean runSkillInContext(ServerWorld world, LivingEntity entity, CustomSkillDefinition skill, DamageSource source, float sourceDamageAmount) {
@@ -730,7 +743,7 @@ public final class CustomSkillRegistry {
             return false;
         }
         float chance = effectiveSkillChance(entity, skill);
-        if (world.random.nextFloat() > chance) {
+        if (chance <= 0.0F || (chance < 1.0F && world.random.nextFloat() >= chance)) {
             debugSkill(skill.json(), () -> "Skill " + skill.id() + " skipped by chance for " + entity.getName().getString());
             return false;
         }
@@ -744,7 +757,11 @@ public final class CustomSkillRegistry {
                 return scheduleDelayedActions(world, entity, skill, source, sourceDamageAmount, json.get("actions"));
             }
 
-            return executeSkillBody(world, entity, skill, source, sourceDamageAmount);
+            boolean executed = executeSkillBody(world, entity, skill, source, sourceDamageAmount);
+            // Immediate skills never enter the delayed/telegraph scheduling path.
+            // Their cooldown_on_start still needs to be applied on success.
+            if (executed && cooldownOnStart(skill)) applyCooldowns(entity, skill);
+            return executed;
         }));
     }
 
@@ -1544,7 +1561,7 @@ public final class CustomSkillRegistry {
     private static void applyCooldowns(LivingEntity entity, CustomSkillDefinition skill) {
         UUID uuid = entity.getUuid();
         if (skill.globalCooldownTicks() > 0) {
-            GLOBAL_COOLDOWNS.put(uuid, skill.globalCooldownTicks());
+            GLOBAL_COOLDOWNS.merge(uuid, skill.globalCooldownTicks(), Math::max);
         }
         int cooldownTicks = effectiveCooldownTicks(skill);
         if (cooldownTicks > 0) {
@@ -1795,11 +1812,12 @@ public final class CustomSkillRegistry {
         boolean knockback = !json.has("knockback") || json.get("knockback").getAsBoolean();
         DamageSource reflectSource = damageSourceForOwner(world, entity);
 
+        boolean previousReflection = applyingReflectedDamage;
         applyingReflectedDamage = true;
         try {
             damage(attacker, reflectSource, reflectedDamage, knockback);
         } finally {
-            applyingReflectedDamage = false;
+            applyingReflectedDamage = previousReflection;
         }
         return true;
     }

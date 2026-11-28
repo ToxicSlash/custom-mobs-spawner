@@ -109,6 +109,34 @@ def main():
                      "custom_mob": "cmobs_ci:replacement", "dimensions": ["minecraft:the_nether"]})
         data_fixture("groups", "pair", {"members": [{"custom_mob": "cmobs_ci:group_a"},
                      {"custom_mob": "cmobs_ci:group_b", "x": 2}], "pools": []})
+        if not ice:
+            def skill(name, trigger, actions, **extra):
+                data_fixture("skills", name, {"trigger": trigger, "chance": 1,
+                             "actions": actions, **extra})
+            def effect(name, **extra):
+                return {"type": "effect", "id": "minecraft:" + name, "duration": 600, **extra}
+            skill("hurt", "when_hurt", [effect("strength", stack=True, max_amplifier=10),
+                  {"type": "heal", "amount": 2}], cooldown_ticks=100, cooldown_on_start=True)
+            skill("never", "when_hurt", [effect("glowing")], chance=0)
+            skill("condition", "when_hurt", [effect("speed")],
+                  conditions=[{"type": "health", "max": 5}])
+            skill("cancel", "when_hurt", [effect("resistance")], cancel_damage=True)
+            skill("timed", "timed", [{"type": "heal", "amount": 10},
+                  {"type": "delay", "ticks": 20}, effect("haste")], interval_ticks=5,
+                  cooldown_ticks=100, conditions=[{"type": "health", "max": 45}])
+            skill("death", "when_killed", [{"type": "summon_custom_mob", "id": "cmobs_ci:death_result"}])
+            skill("cycle", "when_hurt", [effect("strength", stack=True, max_amplifier=10),
+                  {"type": "damage", "target": "target", "radius": 4, "amount": 1,
+                   "bypass_invulnerability": True, "knockback": False}])
+            def skilled(name, *skills):
+                mob_fixture(name, "minecraft:sheep", 100, skills=["cmobs_ci:" + x for x in skills])
+            skilled("hurt", "hurt", "never", "condition")
+            skilled("cancel", "cancel")
+            skilled("timed", "timed")
+            skilled("death", "death")
+            skilled("cycle_a", "cycle")
+            skilled("cycle_b", "cycle")
+            mob_fixture("death_result", "minecraft:chicken", 25)
         species = {"fire_dragon": 173, "ice_dragon": 179, "lightning_dragon": 181,
                    "cyclops": 137, "troll": 143} if ice else {}
         for name, hp in species.items():
@@ -210,6 +238,63 @@ def main():
             wait(r"(?i)base value.*71(?:\.0+)?\b")
             print("CMOBS_EXPLICIT_CUSTOM_NOT_REROLLED_OK")
             print("CMOBS_REPLACEMENT_GROUP_DIMENSION_OK")
+            if not ice:
+                def spawn_skill(name, x, z):
+                    cmd(f"csummon cmobs_ci:{name} {x} 110 {z}")
+                    wait(f"Summoned custom mob cmobs_ci:{name}", 20)
+                def hp(name, expected):
+                    cmd(f"data get entity @e[tag=cmobs_ci_{name},limit=1] Health")
+                    line = wait(r"following entity data: ([\d.]+)f|No entity was found", 20)
+                    match = re.search(r"following entity data: ([\d.]+)f", line)
+                    if not match or abs(float(match[1])-expected) > .01:
+                        raise AssertionError(f"{name} expected health {expected}: {line}")
+                def amplifier(name, effect_id, expected):
+                    cmd(f"data get entity @e[tag=cmobs_ci_{name},limit=1] ActiveEffects[{{Id:{effect_id}}}].Amplifier")
+                    line = wait(r"following entity data: (-?\d+)b|Found no elements matching|No entity was found|No matching elements", 20)
+                    match = re.search(r"following entity data: (-?\d+)b", line)
+                    actual = int(match[1]) if match else None
+                    if actual != expected:
+                        raise AssertionError(f"{name} effect {effect_id}: expected {expected}, got {actual}")
+                def hurt(name, amount, source=None):
+                    suffix = f" by @e[tag=cmobs_ci_{source},limit=1]" if source else ""
+                    cmd(f"damage @e[tag=cmobs_ci_{name},limit=1] {amount} minecraft:generic" + suffix)
+                    wait(r"Applied .*damage|Target is invulnerable", 20)
+                spawn_skill("hurt", 2, 12)
+                hurt("hurt", 5)
+                hp("hurt", 97)
+                amplifier("hurt", 5, 0)
+                amplifier("hurt", 24, None)
+                amplifier("hurt", 1, None)
+                time.sleep(1.1)
+                hurt("hurt", 5)
+                hp("hurt", 92)
+                amplifier("hurt", 5, 0)
+                print("CMOBS_SKILL_HURT_CONDITIONS_COOLDOWN_OK")
+                spawn_skill("cancel", 5, 12)
+                hurt("cancel", 5)
+                hp("cancel", 100)
+                amplifier("cancel", 11, 0)
+                print("CMOBS_SKILL_CANCEL_OK")
+                spawn_skill("timed", 8, 12)
+                cmd("data merge entity @e[tag=cmobs_ci_timed,limit=1] {Health:40.0f}")
+                wait(r"Modified entity data", 20)
+                time.sleep(1.8)
+                hp("timed", 50)
+                amplifier("timed", 3, 0)
+                print("CMOBS_SKILL_TIMED_DELAY_OK")
+                spawn_skill("death", 11, 12)
+                hurt("death", 200)
+                count("@e[tag=cmobs_ci_death_result]", 1)
+                print("CMOBS_SKILL_DEATH_SUMMON_OK")
+                spawn_skill("cycle_a", 11, 3)
+                spawn_skill("cycle_b", 12, 3)
+                hurt("cycle_b", 1, "cycle_a")
+                amplifier("cycle_a", 5, 0)
+                amplifier("cycle_b", 5, 0)
+                hp("cycle_a", 99)
+                hp("cycle_b", 98)
+                print("CMOBS_SKILL_DAMAGE_REENTRY_OK")
+
             errors = []
             def check_species(name, hp, stage, health=None):
                 target = f"@e[tag=cmobs_ci_{name},limit=1]"
