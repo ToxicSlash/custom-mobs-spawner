@@ -169,6 +169,10 @@ def main():
                    "cyclops": 137, "troll": 143} if ice else {}
         for name, hp in species.items():
             mob_fixture(name, "iceandfire:" + name, hp)
+        if species:
+            mob_fixture("scaled_dragon", "iceandfire:fire_dragon", 20,
+                        attributes=[{"id": "minecraft:generic.max_health", "age_multiplier": 2.0}],
+                        nbt="{NoAI:1b,NoGravity:1b,PersistenceRequired:1b,AgeTicks:24000}")
         launcher = run / "server.jar"
         url = "https://meta.fabricmc.net/v2/versions/loader/1.20.1/0.18.6/1.0.3/server/jar"
         with urllib.request.urlopen(url, timeout=90) as response, launcher.open("wb") as f:
@@ -515,9 +519,15 @@ def main():
                     line = wait(r"(?i)base value.* is [\d.]+", 20)
                     return float(re.search(r" is ([\d.]+)", line).group(1))
                 native_young = native_base()
+                cmd("csummon cmobs_ci:scaled_dragon 4 130 8")
+                wait(r"Summoned custom mob cmobs_ci:scaled_dragon", 20)
+                check_species("scaled_dragon", native_young*2, "scaled-young", 20)
                 cmd("data merge entity @e[tag=cmobs_ci_native,limit=1] {AgeTicks:2400000}")
                 wait(r"Modified entity data", 20)
                 native_old = native_base()
+                cmd("data merge entity @e[tag=cmobs_ci_scaled_dragon,limit=1] {AgeTicks:2400000,Health:17.0f}")
+                wait(r"Modified entity data", 20)
+                check_species("scaled_dragon", native_old*2, "scaled-old", 17)
                 print("CMOBS_IAF_NATIVE_AGE", native_young, native_old)
                 if native_old <= native_young:
                     errors.append("Native dragon no longer scales with age")
@@ -573,6 +583,9 @@ def main():
             print("CMOBS_REPLACEMENT_GROUP_RESTART_OK")
             for name, hp in species.items():
                 check_species(name, hp, "restart", hp-11)
+            if species:
+                check_species("scaled_dragon", native_old*2, "scaled-restart", 17)
+                if not errors: print("CMOBS_IAF_SCALED_HEALTH_OK")
             cmd("stop")
             if proc.wait(timeout=90):
                 raise RuntimeError("Restarted server did not exit cleanly")
