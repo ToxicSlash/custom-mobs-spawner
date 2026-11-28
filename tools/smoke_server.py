@@ -540,7 +540,7 @@ def main():
                     print("CMOBS_SPECIES_HEALTH", stage, name, "expected", health, "actual", actual)
                     # Trolls naturally regenerate; allow a bounded amount of real healing
                     # after saving/restarting, but never an unintended full health reset.
-                    tolerance = 4.0 if name == "troll" and stage == "restart" else .01
+                    tolerance = 4.0 if name == "troll" and stage in ("pre-save", "restart") else .01
                     if actual is None or actual < health - .01 or actual > health + tolerance:
                         errors.append(f"{stage} {name}: health {actual}, expected {health}")
             for index, (name, hp) in enumerate(species.items()):
@@ -591,7 +591,10 @@ def main():
             if species:
                 # Troll's own regeneration is legitimate; set damaged health just before saving.
                 cmd('data merge entity @e[tag=cmobs_ci_troll,limit=1] {Health:132.0f}')
-                wait(r"Modified entity data", 20)
+                # Vanilla reports "Nothing changed" when the previous NBT
+                # already equals this exact value. Verify actual health either way.
+                wait(r"Modified entity data|Nothing changed", 20)
+                check_species("troll", 143, "pre-save", 132)
             cmd("save-all flush")
             wait(r"Saved the game")
             cmd("stop")

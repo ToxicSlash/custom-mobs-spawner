@@ -344,6 +344,31 @@ def main():
                 raise AssertionError("Player posture did not recover")
             phase("real-recovered", "CMobsB", state)
             print("CMOBS_COMBAT_NATURAL_REGEN_OK")
+            # Keep a damaged owner stable during observer dimension transfer.
+            truth("CMobsB", "longDisplay")
+            partial = truth("CMobsB", "partial")
+            if not 0 < partial[0] < 100:
+                raise AssertionError("Dimension fixture did not start with damaged posture")
+            phase("dimension-before", "CMobsB", partial)
+            cmd("execute in minecraft:the_nether run tp CMobsA 0 129 0")
+            (coord / "phase.txt").write_text("dimension-away")
+            wait_files([coord / "dimension-away-CMobsA.ok"], 50)
+            cmd("execute in minecraft:overworld run tp CMobsA 0 -60 0 -90 0")
+            phase("dimension-return", "CMobsB", partial)
+            print("CMOBS_MULTIPLAYER_DIMENSION_REENTRY_OK")
+            # A real death/respawn must clear both HUD and overhead state;
+            # keep the peer connected, and do not reset fixture combat maps.
+            cmd("gamerule doImmediateRespawn true")
+            cmd("spawnpoint CMobsB 3 -60 0")
+            (coord / "phase.txt").write_text("respawn-wait")
+            cmd("kill CMobsB")
+            wait_files([coord / "respawn-wait-CMobsB.ok"], 40)
+            state = truth("CMobsB", "snapshot")
+            if state != (100, "false", "false"):
+                raise AssertionError("Respawn inherited previous combat state: " + str(state))
+            phase("respawn-clean", "CMobsB", state)
+            print("CMOBS_MULTIPLAYER_RESPAWN_CLEAN_OK")
+
 
 
             (coord / "phase.txt").write_text("stop")

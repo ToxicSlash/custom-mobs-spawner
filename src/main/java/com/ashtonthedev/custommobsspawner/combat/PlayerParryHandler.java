@@ -884,6 +884,25 @@ public final class PlayerParryHandler {
     }
 
     // Connection lifecycle invalidates presentation caches only, not combat mechanics.
+    /** A new life must not inherit the previous body's combat state. */
+    public static void clearAfterDeath(UUID uuid) {
+        SUCCESSFUL_BLOCKS.remove(uuid);
+        STAGGERED_BLOCKS.remove(uuid);
+        ARMED_WEAPON_BLOCKS.remove(uuid);
+        ACTIVE_PARRY_BLOCKS.remove(uuid);
+        PARRY_COUNTER_WINDOWS.remove(uuid);
+        STAGGER_WINDOWS.remove(uuid);
+        STAGGER_COOLDOWNS.remove(uuid);
+        COMBAT_WINDOWS.remove(uuid);
+        POSTURE_INVULNERABILITY_WINDOWS.remove(uuid);
+        POSTURE_REGEN_DELAYS.remove(uuid);
+        POSTURE_DAMAGE.remove(uuid);
+        POSTURE_HEALTH.remove(uuid);
+        LAST_TAKEN_POSTURE_DAMAGE_TICKS.remove(uuid);
+        LAST_CONFIGURED_PVP_TAKEN_POSTURE_DAMAGE_BASES.remove(uuid);
+        invalidatePostureSync(uuid);
+    }
+
     public static void invalidatePostureSync(UUID uuid) {
         LAST_SELF_POSTURE_SYNC.remove(uuid);
         LAST_SELF_POSTURE_SYNC_TICKS.remove(uuid);

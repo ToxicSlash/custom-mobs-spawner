@@ -21,6 +21,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
+import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.gamerule.v1.GameRuleFactory;
 import net.fabricmc.fabric.api.gamerule.v1.GameRuleRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
@@ -66,6 +67,17 @@ public class CustomMobsSpawner implements ModInitializer {
         ServerPlayNetworking.registerGlobalReceiver(CustomSkillRegistry.FAILED_ATTACK_PACKET, (server, player, handler, buf, responseSender) ->
                 server.execute(() -> CustomSkillRegistry.queueFailedPlayerAttack(player))
         );
+        ServerPlayerEvents.AFTER_RESPAWN.register((oldPlayer, newPlayer, alive) -> {
+            if (!alive) {
+                UUID uuid = newPlayer.getUuid();
+                PlayerParryHandler.clearAfterDeath(uuid);
+                CustomSkillRegistry.cancelFor(oldPlayer);
+                ComboHandler.clearPlayer(uuid);
+                SpellComboHandler.clearPlayer(uuid);
+            } else {
+                PlayerParryHandler.invalidatePostureSync(newPlayer.getUuid());
+            }
+        });
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) ->
                 PlayerParryHandler.invalidatePostureSync(handler.player.getUuid()));
         ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {

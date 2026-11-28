@@ -185,6 +185,10 @@ public final class PostureServerProbe implements ModInitializer {
                     Method m = handler.getMethod("applySkillPostureDamage", PlayerEntity.class, double.class, boolean.class);
                     m.invoke(null, player, action.equals("partial") ? 15.0 : 100000.0, true);
                 }
+                case "longDisplay" -> {
+                    configure("playerPostureRegenDelayTicks", 1200);
+                    configure("playerStaggerTicks", 1800);
+                }
                 case "hideSelf" -> configure("showSelfOverheadPostureDebugBar", false);
                 case "showSelf" -> configure("showSelfOverheadPostureDebugBar", true);
                 case "snapshot" -> {}

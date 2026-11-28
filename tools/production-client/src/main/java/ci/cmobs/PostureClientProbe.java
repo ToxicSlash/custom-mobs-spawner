@@ -24,6 +24,8 @@ public final class PostureClientProbe {
     private static String completed = "", active = "";
     private static int ticks;
     private static int previousRemoteId = -1;
+    private static int previousOwnId = -1;
+    private static net.minecraft.client.network.ClientPlayerEntity previousOwnPlayer;
     private static boolean holdingBlock;
     private static int blockAttempts;
     private static String lastScreen = "";
@@ -91,14 +93,26 @@ public final class PostureClientProbe {
                 completed = phase;
                 return;
             }
-            if (phase.equals("tracking-away") && me.equals("CMobsA")) {
+            if ((phase.equals("tracking-away") || phase.equals("dimension-away")) && me.equals("CMobsA")) {
                 if (previousRemoteId < 0) throw new IllegalStateException("No previously tracked posture target");
                 boolean remoteLoaded = client.world.getPlayers().stream()
                         .anyMatch(p -> p.getName().getString().equals("CMobsB"));
                 Class<?> overhead = Class.forName(PREFIX + "MobPostureBarRenderer");
                 boolean stale = ((Map<?,?>)field(overhead, "POSTURE_STATES")).containsKey(previousRemoteId);
-                if (!remoteLoaded && !stale && !phase.equals(completed)) {
+                boolean correctDimension = !phase.equals("dimension-away") || client.world.getRegistryKey().getValue().toString().equals("minecraft:the_nether");
+                if (correctDimension && !remoteLoaded && !stale && !phase.equals(completed)) {
                     Files.writeString(COORD.resolve(phase + "-" + me + ".ok"), "old entity unloaded and cache cleared");
+                    completed = phase;
+                }
+                return;
+            }
+            if (phase.equals("respawn-wait") && me.equals("CMobsB")) {
+                if (client.player.isAlive() && previousOwnPlayer != null && previousOwnPlayer != client.player
+                        && client.getOverlay() == null && !phase.equals(completed)) {
+                    Class<?> hud = Class.forName(PREFIX + "PostureHudOverlay");
+                    Class<?> overhead = Class.forName(PREFIX + "MobPostureBarRenderer");
+                    if ((boolean)field(hud, "showPosture") || ((Map<?,?>)field(overhead, "POSTURE_STATES")).containsKey(previousOwnId)) return;
+                    Files.writeString(COORD.resolve(phase + "-" + me + ".ok"), "new player instance and cleared posture");
                     completed = phase;
                 }
                 return;
@@ -131,6 +145,7 @@ public final class PostureClientProbe {
                     .filter(p -> p.getName().getString().equals(targetName)).findFirst().orElse(null);
             if (target == null) return;
             if (!owner) previousRemoteId = target.getId();
+            else { previousOwnId = client.player.getId(); previousOwnPlayer = client.player; }
             Class<?> overhead = Class.forName(PREFIX + "MobPostureBarRenderer");
             Object state = ((Map<?,?>)field(overhead, "POSTURE_STATES")).get(target.getId());
             boolean wantOverhead = visible && (owner ? selfBar : remoteBar);
