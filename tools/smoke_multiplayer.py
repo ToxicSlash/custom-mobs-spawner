@@ -299,6 +299,44 @@ def main():
             time.sleep(.6)
             skill("snapshot", (1,0,1,0))
             print("CMOBS_SKILL_FAILED_ATTACK_PACKET_OK")
+            # Real damage callback and duplicate suppression; verify client HUD
+            # matches server count, then actual miss packet and timeout resets.
+            def combo(action, expected=None):
+                cmd(f"cmobs_ci_skill CMobsA @e[tag=cmobs_ci_skill_target,limit=1] {action}")
+                value = int(wait_log(r"CMOBS_COMBO_STATE (\d+)")[1])
+                if expected is not None and value != expected:
+                    raise AssertionError(f"Combo {action}: {value}, expected {expected}")
+                return value
+            def combo_client(expected, label):
+                phase_name = f"combo-check-{expected}-{label}"
+                (coord / "phase.txt").write_text(phase_name)
+                wait_files([coord / (phase_name + "-CMobsA.ok")], 20)
+            combo("combosnapshot", 0)
+            cmd("item replace entity CMobsA weapon.mainhand with minecraft:iron_sword")
+            time.sleep(1.1)
+            combo("combohit", 1)
+            combo_client(1, "first")
+            time.sleep(1.1)
+            combo("combohit", 2)
+            combo_client(2, "second")
+            (coord / "phase.txt").write_text("miss-packet-combo")
+            wait_files([coord / ("miss-packet-combo-" + name + ".ok") for name in ("CMobsA", "CMobsB")], 20)
+            time.sleep(.4)
+            combo("combosnapshot", 0)
+            combo_client(0, "miss")
+            combo("combohit", 1)
+            for _ in range(30):
+                if combo("combosnapshot") == 0:
+                    break
+                time.sleep(.5)
+            else:
+                raise AssertionError("Combo did not expire")
+            combo_client(0, "expired")
+            print("CMOBS_COMBAT_COMBO_GAIN_MISS_TIMEOUT_SYNC_OK")
+            cmd("cmobs_ci_skill CMobsA @e[tag=cmobs_ci_skill_target,limit=1] mana")
+            wait_log(r"CMOBS_MANA_COMPAT_OK", 30)
+            print("CMOBS_COMBAT_MANA_SPEND_RESTORE_OVERCHARGE_OK")
+
             # Real damage pipeline with both connected players. Reset only the
             # disposable fixture's previous synthetic posture states.
             for player, peer in (("CMobsA", "CMobsB"), ("CMobsB", "CMobsA")):

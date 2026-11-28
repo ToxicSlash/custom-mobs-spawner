@@ -41,7 +41,7 @@ public final class ComboHandler {
             return;
         }
 
-        long time = player.getWorld().getTime();
+        long time = player.getServer().getTicks();
         UUID uuid = player.getUuid();
         if (isSustainedMagicDamage(source)) {
             Long previousMagicGainTick = LAST_SUSTAINED_MAGIC_COMBO_GAIN_TICKS.get(uuid);
@@ -148,6 +148,14 @@ public final class ComboHandler {
         return Math.max(0, combos.getOrDefault(player.getUuid(), 0));
     }
 
+    public static void clearClientCombos() {
+        CLIENT_COMBOS.clear();
+    }
+
+    public static void syncCurrent(ServerPlayerEntity player) {
+        sync(player, getCombo(player), false);
+    }
+
     public static void setClientCombo(UUID uuid, int combo) {
         if (combo <= 0) {
             CLIENT_COMBOS.remove(uuid);
@@ -200,6 +208,7 @@ public final class ComboHandler {
     }
 
     private static void sync(ServerPlayerEntity player, int combo, boolean markCombat) {
+        if (!ServerPlayNetworking.canSend(player, COMBO_SYNC_PACKET)) return;
         PacketByteBuf buf = PacketByteBufs.create();
         buf.writeVarInt(combo);
         buf.writeBoolean(markCombat);

@@ -77,9 +77,12 @@ public class CustomMobsSpawner implements ModInitializer {
             } else {
                 PlayerParryHandler.invalidatePostureSync(newPlayer.getUuid());
             }
+            ComboHandler.syncCurrent(newPlayer);
         });
-        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) ->
-                PlayerParryHandler.invalidatePostureSync(handler.player.getUuid()));
+        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
+            PlayerParryHandler.invalidatePostureSync(handler.player.getUuid());
+            ComboHandler.syncCurrent(handler.player);
+        });
         ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
             UUID uuid = handler.player.getUuid();
             PlayerParryHandler.invalidatePostureSync(uuid);

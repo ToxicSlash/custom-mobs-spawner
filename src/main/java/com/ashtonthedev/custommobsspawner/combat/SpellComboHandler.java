@@ -80,7 +80,7 @@ public final class SpellComboHandler {
             return;
         }
 
-        long time = world.getTime();
+        long time = player.getServer().getTicks();
         cleanupIfNeeded(time);
         if (!markSpellHit(player, livingTarget, source, spellInfo, time)) {
             return;
@@ -122,8 +122,12 @@ public final class SpellComboHandler {
     }
 
     private static void cleanupIfNeeded(long time) {
-        if (lastCleanupTick != Long.MIN_VALUE && time - lastCleanupTick < CACHE_CLEANUP_INTERVAL_TICKS) {
+        if (lastCleanupTick != Long.MIN_VALUE && time >= lastCleanupTick && time - lastCleanupTick < CACHE_CLEANUP_INTERVAL_TICKS) {
             return;
+        }
+        if (time < lastCleanupTick) {
+            RECENT_AREA_HITS.clear();
+            LAST_COMBO_GAIN_TICKS.clear();
         }
         lastCleanupTick = time;
         RECENT_AREA_HITS.entrySet().removeIf(entry -> time - entry.getValue() > CACHE_CLEANUP_INTERVAL_TICKS);

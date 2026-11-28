@@ -2,6 +2,7 @@ package com.ashtonthedev.custommobsspawner.client;
 
 import com.ashtonthedev.custommobsspawner.combat.ComboHandler;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
@@ -23,11 +24,20 @@ public final class ComboHudOverlay {
     private ComboHudOverlay() {
     }
 
+    private static void reset() {
+        combo = 0;
+        lastCombatTimeMs = Long.MIN_VALUE;
+        ComboHandler.clearClientCombos();
+    }
+
     public static void register() {
+        ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> reset());
+        ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> reset());
         ClientPlayNetworking.registerGlobalReceiver(ComboHandler.COMBO_SYNC_PACKET, (client, handler, buf, responseSender) -> {
             int syncedCombo = buf.readVarInt();
             boolean markCombat = buf.readableBytes() > 0 && buf.readBoolean();
             client.execute(() -> {
+                if (client.getNetworkHandler() != handler || client.player == null) return;
                 combo = Math.max(0, syncedCombo);
                 if (client.player != null) {
                     ComboHandler.setClientCombo(client.player.getUuid(), combo);
@@ -42,10 +52,10 @@ public final class ComboHudOverlay {
 
     private static void render(DrawContext context, float tickDelta) {
         MinecraftClient client = MinecraftClient.getInstance();
-        if (client.player == null || client.options.hudHidden) {
+        if (client.player == null || !client.player.isAlive() || client.player.isSpectator() || client.options.hudHidden) {
             return;
         }
-        if (Util.getMeasuringTimeMs() - lastCombatTimeMs > COMBAT_VISIBILITY_MS) {
+        if (lastCombatTimeMs == Long.MIN_VALUE || Util.getMeasuringTimeMs() - lastCombatTimeMs > COMBAT_VISIBILITY_MS) {
             return;
         }
 

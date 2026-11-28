@@ -83,7 +83,16 @@ public final class PostureClientProbe {
                 Files.writeString(COORD.resolve("block-released-" + me + ".ok"), "released");
             }
             if (phase.equals("stop")) { client.scheduleStop(); return; }
-            if (phase.equals("miss-packet") && !phase.equals(completed)) {
+            if (phase.startsWith("combo-check-") && me.equals("CMobsA") && !phase.equals(completed)) {
+                int expected = Integer.parseInt(phase.substring("combo-check-".length()).split("-")[0]);
+                Class<?> hud = Class.forName(PREFIX + "ComboHudOverlay");
+                if ((int)field(hud, "combo") == expected) {
+                    Files.writeString(COORD.resolve(phase + "-" + me + ".ok"), "combo=" + expected);
+                    completed = phase;
+                }
+                return;
+            }
+            if (phase.startsWith("miss-packet") && !phase.equals(completed)) {
                 if (me.equals("CMobsA")) {
                     Identifier channel = new Identifier("cmobs", "failed_attack");
                     if (!ClientPlayNetworking.canSend(channel)) throw new IllegalStateException("Missing failed attack channel");

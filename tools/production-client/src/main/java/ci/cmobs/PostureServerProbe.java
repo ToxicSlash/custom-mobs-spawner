@@ -6,6 +6,7 @@ import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.entity.effect.StatusEffect;
@@ -97,6 +98,54 @@ public final class PostureServerProbe implements ModInitializer {
                         .invoke(null, player, new Identifier("cmobs_ci_mp", "spell_test"), List.of(living));
                 case "wrongspell" -> registry.getMethod("runSpellCast", ServerPlayerEntity.class, Identifier.class, List.class)
                         .invoke(null, player, new Identifier("cmobs_ci_mp", "wrong_spell"), List.of(living));
+                case "combohit" -> {
+                    Class<?> combo = Class.forName(PREFIX + "combat.ComboHandler");
+                    Method get = combo.getMethod("getCombo", ServerPlayerEntity.class);
+                    int before = (int)get.invoke(null, player);
+                    float hp = living.getHealth();
+                    player.attack(living);
+                    if (!(living.getHealth() < hp)) throw new IllegalStateException("Combo fixture melee caused no damage");
+                    // Simulate a duplicate callback for the same tick; it must not grant another combo.
+                    combo.getMethod("recordDamageSuccess", LivingEntity.class, DamageSource.class)
+                            .invoke(null, living, player.getWorld().getDamageSources().playerAttack(player));
+                    int after = (int)get.invoke(null, player);
+                    if (after != before + 1) throw new IllegalStateException("Combo gain not exactly one: " + before + " -> " + after);
+                    System.out.println("CMOBS_COMBO_STATE " + after);
+                }
+                case "combosnapshot" -> {
+                    Class<?> combo = Class.forName(PREFIX + "combat.ComboHandler");
+                    System.out.println("CMOBS_COMBO_STATE " + combo.getMethod("getCombo", ServerPlayerEntity.class).invoke(null, player));
+                }
+                case "mana" -> {
+                    Class<?> api = Class.forName("com.cleannrooster.rpgmana.api.ManaInterface");
+                    Class<?> compat = Class.forName(PREFIX + "compat.AmethystRpgManaCompat");
+                    Method get = api.getMethod("getMana");
+                    Method max = api.getMethod("getMaxMana");
+                    Method spend = api.getMethod("spendMana", double.class);
+                    double maximum = ((Number)max.invoke(player)).doubleValue();
+                    double initial = ((Number)get.invoke(player)).doubleValue();
+                    double startMana = Math.min(30, maximum / 2);
+                    spend.invoke(player, startMana - initial);
+                    Class<?> ctx = Class.forName(PREFIX + "compat.AmethystRpgManaCompat$ItemCostContext");
+                    Object context = ctx.getConstructor(net.minecraft.world.World.class, LivingEntity.class)
+                            .newInstance(player.getWorld(), player);
+                    Method check = compat.getMethod("checkManaCost", int.class, ctx);
+                    if (!(boolean)check.invoke(null, 20, context) || (boolean)check.invoke(null, 1000, context))
+                        throw new IllegalStateException("Mana affordability mismatch");
+                    compat.getMethod("spendMana", int.class, LivingEntity.class).invoke(null, 10, player);
+                    double remaining = ((Number)get.invoke(player)).doubleValue();
+                    if (Math.abs(remaining - (startMana - 10)) > .01) throw new IllegalStateException("Wrong mana spend " + remaining);
+                    compat.getMethod("restoreMana", PlayerEntity.class, int.class).invoke(null, player, 1000);
+                    double restored = ((Number)get.invoke(player)).doubleValue();
+                    if (Math.abs(restored - maximum) > .01) throw new IllegalStateException("Restore exceeds/fails max mana " + restored);
+                    Class<?> overcharge = Class.forName(PREFIX + "compat.RpgManaOverchargeCompat");
+                    double cap = ((Number)overcharge.getMethod("getOverchargeMaxMana", PlayerEntity.class, api).invoke(null, player, player)).doubleValue();
+                    compat.getMethod("restoreMana", PlayerEntity.class, int.class, boolean.class).invoke(null, player, 1000, true);
+                    double charged = ((Number)get.invoke(player)).doubleValue();
+                    if (Math.abs(charged - cap) > .01) throw new IllegalStateException("Overcharge cap mismatch " + charged + " expected " + cap);
+                    spend.invoke(player, initial - charged);
+                    System.out.println("CMOBS_MANA_COMPAT_OK " + startMana + " " + remaining + " " + restored + " " + charged);
+                }
                 case "combatreset" -> {
                     // Isolate the real combat cases from the intentionally long display fixture.
                     configure("playerPostureRegenDelayTicks", 60);
